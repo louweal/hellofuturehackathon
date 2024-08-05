@@ -1,0 +1,45 @@
+.btn,
+.wp-block-button__link,
+.gform_button,
+.woocommerce button.button.alt,
+.wc-block-cart__submit-button,
+.wp-block-woocommerce-mini-cart-cart-button-block.wc-block-mini-cart__footer-cart.outlined,
+.wp-block-woocommerce-mini-cart-checkout-button-block.wc-block-mini-cart__footer-checkout,
+a.button.wc-forward {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    appearance: none;
+    outline: none;
+    text-decoration: none;
+    border: 0;
+    padding: 0 1.4rem;
+    color: var(--color-light);
+    background-color: var(--color-primary);
+    white-space: nowrap;
+    cursor: pointer;
+    height: 2.75rem;
+    transition:
+        background-color 0.3s,
+        color 0.3s;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    /* text-transform: uppercase; */
+    font-family: var(--font-heading);
+    border-radius: 0px;
+
+    @media (--1024) {
+        padding: 0 1.8rem;
+    }
+
+    &:hover,
+    &:active {
+        background-color: var(--color-secondary);
+    }
+
+    &--secondary {
+        background-color: var(--color-secondary);
+    }
+}

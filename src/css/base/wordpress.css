@@ -1,0 +1,28 @@
+.wp-block-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0 !important;
+}
+
+.wp-block-social-link {
+    background-color: var(--color-transparent) !important;
+    display: inline-flex;
+
+    &:hover,
+    &:active {
+        transform: none !important;
+    }
+
+    a {
+        padding: 0 !important;
+
+        svg {
+            fill: var(--color-light) !important;
+        }
+    }
+}
+
+.search-results {
+    padding: 0 0 0 0.9375rem;
+}

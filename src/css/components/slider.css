@@ -1,0 +1,114 @@
+.slider {
+    opacity: 0;
+    width: 100%;
+
+    &--init {
+        opacity: 1;
+        transition-duration: 1s;
+        transition-delay: 0.5s;
+    }
+
+    &__wrapper {
+    }
+
+    &__slide {
+        height: auto;
+    }
+
+    &__pagination {
+        position: relative;
+        top: initial;
+        left: initial;
+        right: initial;
+        bottom: initial;
+        margin-top: 2rem;
+
+        span {
+            background-color: var(--color-dark);
+            transition: 0.3s;
+        }
+
+        span.swiper-pagination-bullet-active {
+            transform: scale(1.375);
+        }
+    }
+
+    &__buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    &__button {
+        position: relative;
+        top: initial;
+        right: initial;
+        left: initial;
+        bottom: initial;
+        margin: 0;
+    }
+
+    &--home {
+        .swiper-wrapper {
+            align-items: center;
+        }
+
+        .swiper-slide {
+            border: 1px solid transparent;
+            opacity: 0;
+            transition: all 0.5s 0.25s cubic-bezier(0.19, 0, 0.22, 1);
+            width: 66vw;
+            margin-left: 20px;
+            border-radius: 4px;
+
+            @media (--sm) {
+                width: calc(50vw - 20px);
+            }
+
+            @media (--lg) {
+                width: calc(40vw - 1rem);
+            }
+
+            @media (--2xl) {
+                width: calc(73rem / 2 - 1rem);
+            }
+
+            img {
+                aspect-ratio: 9/10;
+                object-fit: cover;
+                transition: transform 0.5s 0.5s cubic-bezier(0.19, 0, 0.22, 1);
+                transform-origin: center left;
+            }
+        }
+
+        .swiper-slide-active,
+        .swiper-slide-active + .swiper-slide {
+            opacity: 1;
+        }
+
+        .swiper-slide-active + .swiper-slide {
+            img {
+                transform: scale(0.7);
+            }
+        }
+    }
+
+    &--products {
+        .slider__wrapper {
+            padding-left: 1rem;
+            @media (--lg) {
+                padding-left: 0;
+            }
+        }
+
+        .swiper-slide {
+            /* spaceBetween alternative, looks better on mobile */
+            max-width: min(373px, 82vw);
+
+            &:last-child {
+                margin-right: 2rem;
+            }
+        }
+    }
+}

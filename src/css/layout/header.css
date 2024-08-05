@@ -1,0 +1,46 @@
+.header {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 12;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: var(--header-height);
+    /* text-transform: uppercase; */
+    font-weight: 700;
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    padding: 0 1rem;
+    background-color: var(--color-light);
+
+    .has-scrolled & {
+        box-shadow: var(--shadow);
+    }
+
+    &__logo {
+        width: 80px;
+
+        &:hover {
+            animation: growShrink 0.45s cubic-bezier(0.19, 0, 0.22, 1) forwards;
+        }
+    }
+
+    &__toggle {
+        @media (--lg) {
+            display: none;
+        }
+    }
+}
+
+@keyframes growShrink {
+    70% {
+        transform: scale(0.96);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

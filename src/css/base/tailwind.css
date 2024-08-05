@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 2rem;
+        margin: 0 -1rem;
+        width: 100%;
+    }
+
+    .box {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+
+    .box-1 {
+        flex: 0 0 calc(100% / 12);
+    }
+
+    .box-2 {
+        flex: 0 0 calc(100% / 6);
+    }
+
+    .box-3 {
+        flex: 0 0 25%;
+    }
+
+    .box-4 {
+        flex: 0 0 calc(100% / 3);
+        max-width: calc(100% / 3);
+    }
+
+    .box-5 {
+        flex: 0 0 calc(100% / 12 * 5);
+        max-width: calc(100% / 12 * 5);
+    }
+
+    .box-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .box-7 {
+        flex: 0 0 calc(100% / 12 * 7);
+        max-width: calc(100% / 12 * 7);
+    }
+
+    .box-8 {
+        flex: 0 0 calc(100% / 12 * 8);
+        max-width: calc(100% / 12 * 8);
+    }
+
+    .box-9 {
+        flex: 0 0 calc(100% / 12 * 9);
+        max-width: calc(100% / 12 * 9);
+    }
+    .box-10 {
+        flex: 0 0 calc(100% / 12 * 10);
+        max-width: calc(100% / 12 * 10);
+    }
+
+    .box-11 {
+        flex: 0 0 calc(100% / 12 * 11);
+        max-width: calc(100% / 12 * 11);
+    }
+
+    .box-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .offset-0 {
+        margin-left: 0;
+    }
+
+    .offset-1 {
+        margin-left: calc(100% / 12);
+    }
+
+    .offset-2 {
+        margin-left: calc(100% / 12 * 2);
+    }
+
+    .offset-3 {
+        margin-left: calc(100% / 12 * 3);
+    }
+
+    .offset-4 {
+        margin-left: calc(100% / 12 * 4);
+    }
+
+    .offset-5 {
+        margin-left: calc(100% / 12 * 5);
+    }
+
+    .offset-6 {
+        margin-left: calc(100% / 12 * 6);
+    }
+
+    .offset-7 {
+        margin-left: calc(100% / 12 * 7);
+    }
+
+    .offset-8 {
+        margin-left: calc(100% / 12 * 8);
+    }
+
+    .offset-9 {
+        margin-left: calc(100% / 12 * 9);
+    }
+
+    .offset-10 {
+        margin-left: calc(100% / 12 * 10);
+    }
+
+    .offset-11 {
+        margin-left: calc(100% / 12 * 11);
+    }
+
+    .offset-12 {
+        margin-left: 100%;
+    }
+
+    .aspect-3x1 {
+        aspect-ratio: 3/1;
+    }
+    .aspect-2x1 {
+        aspect-ratio: 2/1;
+    }
+
+    .font-heading {
+        font-family: var(--font-heading);
+        font-weight: bold;
+        font-size: 0.75rem;
+    }
+}

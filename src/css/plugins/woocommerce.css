@@ -1,0 +1,42 @@
+.woocommerce {
+    #customer_details {
+        .col-1 {
+            width: 100%;
+        }
+        .col-2 {
+            display: none;
+        }
+    }
+    .woocommerce-checkout {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        grid-gap: 2rem;
+        gap: 2rem;
+
+        @media (min-width: 48em) {
+            grid-template-columns: 7fr 5fr;
+        }
+    }
+
+    .woocommerce-checkout #order_review_heading {
+        display: none;
+
+        @media (min-width: 48em) {
+            grid-area: 1 / 2 / 1 / 2;
+        }
+    }
+
+    .woocommerce-privacy-policy-text p {
+        font-size: 0.8125rem;
+    }
+
+    .added_to_cart {
+        margin-left: 1rem;
+    }
+
+    section.related,
+    section.products {
+        display: none;
+    }
+}
