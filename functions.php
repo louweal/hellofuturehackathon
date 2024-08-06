@@ -49,3 +49,6 @@ foreach ($classes as $class) {
 }
 
 // do_action('warpdrive_cache_flush'); // This will flush the entire cache
+
+// todo: move to plugins
+require_once get_template_directory() . '/hederapay/main.php';

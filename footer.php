@@ -11,9 +11,11 @@
     <div class="container">
         <div class="flex flex-col lg:grid lg:grid-cols-12 gap-5 pb-8">
             <div class="col-span-7">
-                <h3>About</h3>
-
-                <p class="lg:w-4/5">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia quod laborum possimus nisi nam omnis perferendis hic ad sapiente delectus cum aut consectetur harum quam ex modi soluta, expedita tempora.</p>
+                <?php if (is_active_sidebar('footer-widget-1')) { ?>
+                    <div class="editor editor--footer">
+                        <?php dynamic_sidebar('footer-widget-1'); ?>
+                    </div>
+                <?php } ?>
 
             </div>
             <div class="lg:col-span-2">
@@ -42,8 +44,8 @@
     <div class="footer__bar">
         <div class="container">
             <div class="flex justify-between">
-                <p>Anneloes Louwe © <?php echo date("Y"); ?> All rights reverved</p>
-                <div class="hidden lg:block">hedera</div>
+                <p>Realviews © <?php echo date("Y"); ?> All rights reverved</p>
+                <div class="hidden lg:block"><a href="https://hellofuturehackathon.dev/">Hello Future Hackathon</a></div>
             </div>
         </div>
     </div>

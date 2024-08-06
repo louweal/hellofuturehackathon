@@ -38,6 +38,10 @@
         letter-spacing: 1px;
         font-family: var(--font-heading);
 
+        a {
+            color: var(--color-primary);
+        }
+
         :--text {
             font-weight: 700;
         }

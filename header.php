@@ -40,5 +40,11 @@ if (function_exists('opcache_reset')) {
                 <a href="/shop">Shop</a>
                 <a href="/cart">Cart</a>
             </div>
+
+            <?php if (is_active_sidebar('header-widget')) { ?>
+                <div class="flex gap-5 items-center">
+                    <?php dynamic_sidebar('header-widget'); ?>
+                </div>
+            <?php } ?>
         </div>
     </header>
