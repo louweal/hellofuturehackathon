@@ -13,13 +13,13 @@ export const initConnection = () => {
     let hashconnect;
     let state = HashConnectConnectionState.Disconnected;
     let pairingData;
+    let networkId;
 
     let connectButton = document.querySelector('.hederapay-connect-button');
-    let walletId = document.querySelector('#hederapay-output');
 
     if (connectButton) {
         connectButton.addEventListener('click', async function () {
-            let network = connectButton.dataset.network;
+            networkId = getNetworkId(connectButton.dataset.network);
 
             if (!pairingData) {
                 //connect
@@ -37,7 +37,7 @@ export const initConnection = () => {
     [...payButtons].forEach((payButton) => {
         payButton.addEventListener('click', async function () {
             let tinyBars = payButton.dataset.tinybarAmount;
-            let network = payButton.dataset.network;
+            networkId = getNetworkId(payButton.dataset.network);
 
             console.log(tinyBars);
 
@@ -45,17 +45,17 @@ export const initConnection = () => {
                 await init();
             }
 
-            let amount = payButton.dataset.hbar;
+            let amount = payButton.dataset.tinybarAmount;
 
             let fromAccount = AccountId.fromString(pairingData.accountIds[0]); // assumes paired and takes first paired account id
-            const toAccount = AccountId.fromString(payButton.dataset.receiver); //'0.0.4507369';
+            const toAccount = AccountId.fromString(payButton.dataset.account);
 
             let signer = hashconnect.getSigner(fromAccount);
             let transaction = await new TransferTransaction()
                 .addHbarTransfer(fromAccount, Hbar.fromTinybars(-1 * amount)) //Sending account
                 .addHbarTransfer(toAccount, Hbar.fromTinybars(amount)) //Receiving account
+                .setTransactionMemo('test')
                 .freezeWithSigner(signer);
-            // let response = await hashconnect.sendTransaction(fromAccount, transaction);
 
             let response = await transaction.executeWithSigner(signer);
             console.log(response);
@@ -68,6 +68,24 @@ export const initConnection = () => {
         }); // eventlistener
     }); //foreach
 
+    function getNetworkId(network) {
+        let networkId;
+        switch (network) {
+            case 'testnet':
+                networkId = LedgerId.TESTNET;
+                break;
+            case 'previewnet':
+                networkId = LedgerId.PREVIEWNET;
+                break;
+            case 'mainnet':
+                networkId = LedgerId.MAINNET;
+                break;
+            default:
+                networkId = LedgerId.TESTNET;
+        }
+        return networkId;
+    }
+
     async function init() {
         // Create the hashconnect instance
         hashconnect = new HashConnect(LedgerId.TESTNET, '606201a2da45f68c8084e2eea1f14ad7', appMetadata, true);
@@ -77,11 +95,6 @@ export const initConnection = () => {
 
         // Initialize
         await hashconnect.init();
-
-        // if (pairingData) {
-        //     console.log('Already paired with wallet.');
-        //     return;
-        // }
 
         // Open pairing modal
         hashconnect.openPairingModal();
@@ -95,13 +108,13 @@ export const initConnection = () => {
 
         hashconnect.pairingEvent.on((newPairing) => {
             pairingData = newPairing;
-            connectButton.innerText = 'Disconnect wallet';
+            connectButton.innerText = connectButton.dataset.disconnectText;
             if (walletId) walletId.innerText = pairingData.accountIds[0];
         });
 
         hashconnect.disconnectionEvent.on(() => {
             pairingData = null;
-            connectButton.innerText = 'Connect wallet';
+            connectButton.innerText = connectButton.dataset.connectText; // test
             if (walletId) walletId.innerText = '';
         });
 
@@ -109,17 +122,4 @@ export const initConnection = () => {
             state = connectionStatus;
         });
     }
-
-    // function sendTransaction(accountId, transaction) {
-    //     hashconnect
-    //         .sendTransaction(accountId, transaction)
-    //         .then((response) => {
-    //             // Handle success
-    //             console.log('handle success');
-    //         })
-    //         .catch((err) => {
-    //             // Handle error
-    //             console.log('handle error');
-    //         });
-    // }
 };

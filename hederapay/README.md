@@ -17,13 +17,19 @@ Navigate to the HederaPay tab and set the network and wallet address you want to
 
 ### [hederapay-connect-button]
 
+#### Attributes
+
+connect_text (optional)
+disconnect_text (optional)
+
 ### [hederapay-transaction-button]
 
 #### Attributes
 
 title
 amount
-currency
+currency usd, eur, jpy, gbp, aud, cad, cny, inr, brl, zar, chf, rub, nzd, mxn, sgd
 account
+memo?
 
 Example...

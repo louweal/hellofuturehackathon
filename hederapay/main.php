@@ -24,6 +24,10 @@ $libs = array(
     $path . 'lib/enqueue.php',            // Enqueue CSS and JS
     $path . 'lib/helpers.php',            // Helper functions
     $path . 'lib/shortcodes.php',            // Theme support configuration
+    $path . 'lib/gutenberg.php',            // Custom gutenberg blocks
+    $path . 'lib/acf.php',            // ACF field groups
+
+
 );
 
 /**

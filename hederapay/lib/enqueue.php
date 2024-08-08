@@ -13,7 +13,10 @@ function enqueue_hederapay_script()
     $path =  get_template_directory_uri() . '/hederapay/';
 
     // todo: remove time()
-    wp_enqueue_script('hederapay-script', $path .  'dist/hederapay.bundle.js', array(), time(), array(
+    wp_enqueue_script('hederapay-main-script', $path .  'dist/main.bundle.js', array(), null, array(
+        'strategy'  => 'defer', 'in_footer' => false
+    ));
+    wp_enqueue_script('hederapay-vendor-script', $path .  'dist/vendors.bundle.js', array(), null, array(
         'strategy'  => 'defer', 'in_footer' => false
     ));
 }
