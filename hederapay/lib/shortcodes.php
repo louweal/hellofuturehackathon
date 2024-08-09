@@ -9,7 +9,7 @@
 add_shortcode('hederapay_paired_account', 'hederapay_paired_account_function');
 function hederapay_paired_account_function()
 {
-    return '<span id="hederapay-paired-account"></span>';
+    return '<div class="hederapay-paired-account"></div>';
 }
 
 // Register the hederapay connect wallet shortcode
@@ -39,7 +39,7 @@ function hederapay_connect_button_function($atts)
         $badge = '<span class="hederapay-transaction-button__badge">previewnet</span>';
     }
 
-    return '<div data-network="' . $network . '" data-connect-text="' . $connect_text . '" data-disconnect-text="' . $disconnect_text . '" class="btn hederapay-connect-button">' . $connect_text . $badge . '</div>';
+    return '<div data-network="' . $network . '" data-connect-text="' . $connect_text . '" data-disconnect-text="' . $disconnect_text . '" class="btn hederapay-connect-button"><span class="hederapay-connect-button-text">' . $connect_text . '</span>' . $badge . '</div>';
 }
 
 // Register the hederapay transaction button shortcode

@@ -5,8 +5,6 @@ import { LedgerId } from '@hashgraph/sdk';
 export const initConnection = () => {
     let metadata = document.querySelector('#hederapay-app-metadata');
 
-    console.log(metadata);
-
     let appMetadata = {};
     if (metadata) {
         appMetadata = {
@@ -21,10 +19,14 @@ export const initConnection = () => {
     let state = HashConnectConnectionState.Disconnected;
     let pairingData;
 
-    let connectButton = document.querySelector('.hederapay-connect-button');
+    let connectButtons = document.querySelectorAll('.hederapay-connect-button');
+    let clickedConnectButton;
+    let clickedConnectButtonText;
 
-    if (connectButton) {
+    [...connectButtons].forEach((connectButton) => {
         connectButton.addEventListener('click', async function () {
+            clickedConnectButton = connectButton;
+            clickedConnectButtonText = clickedConnectButton.querySelector('.hederapay-connect-button-text');
             let network = connectButton.dataset.network;
             if (!pairingData) {
                 await init(network); //connect
@@ -32,7 +34,7 @@ export const initConnection = () => {
                 hashconnect.disconnect(); // disconnect wallet
             }
         });
-    }
+    });
 
     let transactionWrappers = document.querySelectorAll('.hederapay-transaction-wrapper');
 
@@ -44,8 +46,7 @@ export const initConnection = () => {
 
         transactionButton.addEventListener('click', async function () {
             let tinybarAmount = transactionButton.dataset.tinybarAmount;
-
-            console.log(tinybarAmount);
+            // console.log(tinybarAmount);
 
             if (!tinybarAmount) {
                 // check for user input
@@ -132,27 +133,39 @@ export const initConnection = () => {
     }
 
     function setUpHashConnectEvents() {
-        let connectButton = document.querySelector('.hederapay-connect-button');
-        let pairedAccount = document.querySelector('#hederapay-paired-account');
-
-        console.log(connectButton);
+        // let connectButtons = document.querySelectorAll('.hederapay-connect-button');
+        let pairedAccountDisplays = document.querySelectorAll('.hederapay-paired-account');
 
         hashconnect.pairingEvent.on((newPairing) => {
             pairingData = newPairing;
-            connectButton.innerText = connectButton.dataset.disconnectText;
-            if (pairedAccount) {
-                pairedAccount.innerText = pairingData.accountIds[0];
-                pairedAccount.style.display = 'inline';
+            clickedConnectButtonText.innerText = clickedConnectButton.dataset.disconnectText;
+            clickedConnectButton.classList.add('is-connected');
+
+            let id = pairingData.accountIds[0];
+            let network = clickedConnectButton.dataset.network;
+
+            let url = ''; // no url for previewnet
+            if (network === 'testnet') {
+                url = 'https://testnet.dragonglass.me/accounts/' + id;
+            } else {
+                url = 'https://app.dragonglass.me/accounts/' + id;
             }
+
+            [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
+                pairedAccountDisplay.innerHTML = `<a target="_blank" href="${url}">${id}</a>`;
+                pairedAccountDisplay.style.display = 'inline';
+            });
         });
 
         hashconnect.disconnectionEvent.on(() => {
             pairingData = null;
-            connectButton.innerText = connectButton.dataset.connectText; // test
-            if (pairedAccount) {
-                pairedAccount.innerText = '';
-                pairedAccount.style.display = 'none';
-            }
+            clickedConnectButtonText.innerText = clickedConnectButton.dataset.connectText;
+            clickedConnectButton.classList.remove('is-connected');
+
+            [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
+                pairedAccountDisplay.innerHTML = '';
+                pairedAccountDisplay.style.display = 'none';
+            });
         });
 
         hashconnect.connectionStatusChangeEvent.on((connectionStatus) => {
