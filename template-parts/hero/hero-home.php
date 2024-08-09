@@ -13,9 +13,12 @@ $visuals = get_field('hero_visuals');
     <div class="hero-home__bg"></div>
     <div class="container hero-home__content order-2 sm:order-1">
         <div class="row">
-            <div class="box sm:box-10 lg:box-8 z-20">
-                <h3 class="hero-home__label">Expedita tempora</h3>
-                <h1 class="hero-home__title"><?php echo $title; ?></h1>
+            <div class="box sm:box-8 lg:box-6">
+                <?php if ($title) { ?>
+                    <div class="editor">
+                        <?php echo $title; ?>
+                    </div> <?php }; //if 
+                            ?>
                 <?php if ($link) { ?>
                     <?php the_link($link, 'btn'); ?>
                 <?php } ?>

@@ -17,8 +17,17 @@
         }
 
         em {
-            color: var(--color-primary);
             font-style: normal;
+            font-family: 'League Script', cursive;
+            font-weight: 400;
+            font-size: 4rem;
+            color: var(--color-secondary);
+            -webkit-text-stroke-width: 1px;
+            -webkit-text-stroke-color: var(--color-secondary);
+
+            @media (--lg) {
+                font-size: 5.6rem;
+            }
         }
     }
 

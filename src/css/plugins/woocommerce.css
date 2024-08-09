@@ -35,8 +35,13 @@
         margin-left: 1rem;
     }
 
-    section.related,
+    /* section.related,
     section.products {
         display: none;
+    } */
+
+    span.onsale {
+        background-color: var(--color-primary);
+        border-radius: 0;
     }
 }

@@ -26,3 +26,18 @@
 .search-results {
     padding: 0 0 0 0.9375rem;
 }
+
+.wp-block-image {
+    overflow: hidden;
+
+    > a > img {
+        transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+        transform-origin: center;
+    }
+
+    &:hover {
+        > a > img {
+            transform: scale(1.08);
+        }
+    }
+}

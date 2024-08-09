@@ -39,9 +39,6 @@ get_header();
                 </section>
             <?php } ?>
 
-            <?php get_template_part('/template-parts/pagebuilder/pagebuilder', '');
-            ?>
-
     <?php }
     } ?>
 
