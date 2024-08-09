@@ -16,7 +16,7 @@ Download the [hederapay.zip](https://github.com/louweal/hellofuturehackathon/blo
 
 The HederaPay settings page allows you to change the site metadata that is shown in the transaction modal.
 
-![Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/assets/admin-settings.png)
+![Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/admin-settings.png)
 
 ## Shortcodes
 
