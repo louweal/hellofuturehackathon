@@ -26,6 +26,7 @@ $libs = array(
     $path . 'lib/shortcodes.php',            // Theme support configuration
     $path . 'lib/gutenberg.php',            // Custom gutenberg blocks
     $path . 'lib/acf.php',            // ACF field groups
+    $path . 'lib/footer.php' // Customize the footer
 
 
 );

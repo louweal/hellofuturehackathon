@@ -8,21 +8,34 @@
 
 function get_hbar_price($currency)
 {
-    $url = "https://api.coingecko.com/api/v3/simple/price?ids=hedera-hashgraph&vs_currencies=" . $currency;
+    static $result = [];
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    curl_close($ch);
+    if (!isset($result[$currency])) {
+        try {
+            $url = "https://api.coingecko.com/api/v3/simple/price?ids=hedera-hashgraph&vs_currencies=" . $currency;
 
-    $data = json_decode($response, true);
-    return $data['hedera-hashgraph'][$currency];
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            $data = json_decode($response, true);
+            $result[$currency] = $data['hedera-hashgraph'][$currency];
+            return $data['hedera-hashgraph'][$currency];
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+            return;
+        }
+    } else {
+        return $result[$currency];
+    }
 }
 
 function convert_currency_to_tinybar($amount, $currency)
 {
     try {
+        $amount = intval($amount);
         $hbar_price = get_hbar_price($currency);
         if ($hbar_price == 0) {
             throw new Exception("Error fetching HBAR price or HBAR price is zero");

@@ -97,14 +97,22 @@ function add_hederapay_field_groups()
                     'type' => 'text',
                     // 'instructions' => 'Enter the title here.',
                     'required' => 0,
+                    'default_value' => 'Pay', // Set default value to USD
+                ),
+                array(
+                    'key' => 'field_memo',
+                    'label' => 'Memo',
+                    'name' => 'memo',
+                    'type' => 'text',
+                    'required' => 0,
                 ),
                 array(
                     'key' => 'field_amount',
                     'label' => 'Amount',
                     'name' => 'amount',
                     'type' => 'number',
-                    'instructions' => 'The amount you wish to receive on the specified account.',
-                    'required' => 1,
+                    'instructions' => 'Leave empty to show an input field.',
+                    'required' => 0,
                     'min' => 0,
                     'wrapper' => array(
                         'width' => '50%',
@@ -116,7 +124,7 @@ function add_hederapay_field_groups()
                     'name' => 'currency',
                     'type' => 'select',
                     'instructions' => 'Select the currency the amount is in. It will be converted to HBAR using the CoinGecko API.',
-                    'required' => 1,
+                    'required' => 0,
                     'choices' => array(
                         'usd' => 'USD',
                         'eur' => 'EUR',
@@ -134,6 +142,7 @@ function add_hederapay_field_groups()
                         'mxn' => 'MXN',
                         'sgd' => 'SGD',
                     ),
+                    'default_value' => 'usd', // Set default value to USD
                     'wrapper' => array(
                         'width' => '50%',
                     ),
