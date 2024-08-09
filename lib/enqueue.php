@@ -110,7 +110,7 @@ function theme_scripts()
     wp_enqueue_script('webfontLoader', '//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js', false, false, true);
     wp_add_inline_script('webfontLoader', "WebFont.load({
 		google: {
-			families: ['League+Script:400?display=swap', 'Montserrat:300,400,500,600,700?display=swap', 'Inter:200,300,400,500,600,700?display=swap']
+			families: ['League+Script:400?display=swap', 'Montserrat:300,400,500,600,700?display=swap']
 		}
 	});");
 

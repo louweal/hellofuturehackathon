@@ -34,8 +34,7 @@ a.button.wc-forward {
         padding: 0 1.8rem;
     }
 
-    &:hover,
-    &:active {
+    &:hover {
         background-color: var(--color-secondary);
     }
 
