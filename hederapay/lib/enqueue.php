@@ -9,10 +9,8 @@ add_action('wp_enqueue_scripts', 'enqueue_hederapay_script');
 function enqueue_hederapay_script()
 {
     // Enqueue the script
-    // $path = plugin_dir_url(__FILE__); // todo move 
-    $path =  get_template_directory_uri() . '/hederapay/';
+    $path = plugin_dir_url(dirname(__FILE__, 1));
 
-    // todo: remove time()
     wp_enqueue_script('hederapay-main-script', $path .  'dist/main.bundle.js', array(), null, array(
         'strategy'  => 'defer', 'in_footer' => false
     ));
@@ -24,13 +22,13 @@ function enqueue_hederapay_script()
 add_action('wp_enqueue_scripts', 'hederapay_enqueue_styles', 20);
 function hederapay_enqueue_styles()
 {
-    $path =  get_template_directory_uri() . '/hederapay/';
+    $path = plugin_dir_url(dirname(__FILE__, 1));
 
     wp_enqueue_style(
         'hederapay-styles', // Handle
-        $path . '/src/css/hederapay.css',
+        $path . 'src/css/hederapay.css',
         array(), // Dependencies
-        time(), // Version number
+        null, // Version number
         'all' // Media type
     );
 }

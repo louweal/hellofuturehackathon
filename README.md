@@ -12,3 +12,9 @@ npm i
 
 After all the packages have been installed, type in `npm run watch` to startup the Webpack process.
 This will startup a few of the processes like Autoprefixing CSS, bundling JS and / or other tasks you might add.
+
+## Notes
+
+```
+zip -r hederapay.zip hederapay -x "hederapay/node_modules/*"
+```

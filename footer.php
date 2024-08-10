@@ -44,7 +44,7 @@
     <div class="footer__bar">
         <div class="container">
             <div class="flex justify-between">
-                <p>Realviews © <?php echo date("Y"); ?> All rights reverved</p>
+                <p>HashPress Pioneers © <?php echo date("Y"); ?> All rights reverved</p>
                 <div class="hidden lg:block"><a href="https://hellofuturehackathon.dev/">Hello Future Hackathon</a></div>
             </div>
         </div>
