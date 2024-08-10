@@ -93,7 +93,7 @@ Useful when you want to allow the user to connect their wallet without sending a
 
 ![Connect / disconnect button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/connect-button.png)
 
-### [hederapay-paired-wallet] _(optional)_
+### [hederapay_paired_account] _(optional)_
 
 Displays the Account ID of the paired wallet. It is hidden when no wallet is connected. Clicking the element opens the account in network inspector [Dragonglass](https://app.dragonglass.me/) in a new browser tab.
 
