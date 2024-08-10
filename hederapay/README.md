@@ -88,7 +88,7 @@ Useful when you want to allow the user to connect their wallet without sending a
 | connect_text    | Button text before wallet is paired             | Connect wallet    |
 | disconnect_text | Button text after connection is established     | Disconnect wallet |
 
-**Example:**
+**Example:**  
 `[hederapay-connect-button network="testnet" connect_text="Connect" disconnect_text="Disconnect"]`
 
 ![Connect / disconnect button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/connect-button.png)
