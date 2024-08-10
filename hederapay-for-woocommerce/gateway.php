@@ -50,6 +50,14 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
                 'type' => 'text',
                 'description' => 'Required when using mainnet',
             ),
+            'success_message' => array(
+                'title' => 'Successful transaction message',
+                'type' => 'text',
+            ),
+            'failed_message' => array(
+                'title' => 'Failed transaction message',
+                'type' => 'text',
+            ),
 
         );
     }
@@ -72,6 +80,8 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
         $this->testnet_account = $this->get_option('testnet_account');
         $this->previewnet_account = $this->get_option('previewnet_account');
         $this->mainnet_account = $this->get_option('mainnet_account');
+        $this->success_message = $this->get_option('success_message');
+        $this->failed_message = $this->get_option('failed_message');
 
         // Actions
         add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
@@ -112,21 +122,11 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
         // Mark as pending payment (allowing the customer to pay).
         $order->update_status('pending', __('Awaiting HBAR payment', 'woocommerce'));
 
-        // wc_reduce_stock_levels($order_id);
-
-        // Remove cart
-        // WC()->cart->empty_cart();
-
-        // Return thankyou redirect
-        // return array(
-        //     'result' => 'success',
-        //     'redirect' => $this->get_return_url($order)
-        // );
-
         // Return thank you page redirect.
         return array(
             'result'   => 'success',
             'redirect' => $order->get_checkout_payment_url(true),
+            // 'redirect' => $this->get_return_url($order),
         );
     }
 
@@ -141,7 +141,26 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
             $currency_symbol = get_woocommerce_currency_symbol();
             $account_attribute = $this->getAccountAttribute();
 
-            echo do_shortcode('[hederapay_transaction_button network="' . $this->network . '" title="Pay now - ' . $currency_symbol . $order_total . '" ' . $account_attribute . ' currency="' . $currency . '" amount="' . $order_total . '"]');
+            $status = isset($_GET['transaction']) ? $_GET['transaction'] : null;
+
+
+            if (!$status || $status != "success") {
+                echo do_shortcode('[hederapay_transaction_button network="' . $this->network . '" title="Pay now - ' . $currency_symbol . $order_total . '" ' . $account_attribute . ' currency="' . $currency . '" amount="' . $order_total . '" woocommerce="true"]');
+            } else if ($status == "success") {
+                // Mark the order as completed if payment is successful
+                $order->update_status('completed', __('Payment received, order completed.', 'woocommerce'));
+
+                // Optionally, you might want to reduce stock levels
+                wc_reduce_stock_levels($order_id);
+
+                // Empty the cart after successful payment
+                WC()->cart->empty_cart();
+
+                // Display success message
+                echo "<p>" . $this->success_message . "</p>";
+            } else {
+                echo "<p>" . $this->failed_message . "</p>";
+            }
         } else {
             var_dump("Order not found.");
         }

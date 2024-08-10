@@ -21,12 +21,10 @@ export const initConnection = () => {
 
     let connectButtons = document.querySelectorAll('.hederapay-connect-button');
     let clickedConnectButton;
-    let clickedConnectButtonText;
 
     [...connectButtons].forEach((connectButton) => {
         connectButton.addEventListener('click', async function () {
             clickedConnectButton = connectButton;
-            clickedConnectButtonText = clickedConnectButton.querySelector('.hederapay-connect-button-text');
             let network = connectButton.dataset.network;
             if (!pairingData) {
                 await init(network); //connect
@@ -74,7 +72,8 @@ export const initConnection = () => {
             let memo = transactionButton.dataset.memo;
             let network = transactionButton.dataset.network;
 
-            if (!pairingData) {
+            console.log(state);
+            if (state != HashConnectConnectionState.Connected) {
                 await init(network);
             }
 
@@ -96,6 +95,24 @@ export const initConnection = () => {
             let receipt = await response.getReceiptWithSigner(signer);
 
             console.log(receipt);
+            // Check if the transaction was successful
+            if (receipt.status.toString() === 'SUCCESS') {
+                console.log('Transaction was successful!');
+                transactionButton.setAttribute('data-success', '');
+                transactionButton.setAttribute('data-transaction-id', transactionId.toString());
+
+                console.log(transactionButton.dataset.woocommerce);
+
+                if (transactionButton.dataset.woocommerce) {
+                    const currentUrl = new URL(window.location.href);
+                    // Add the parameter to the URL
+                    currentUrl.searchParams.set('transaction', 'success');
+                    // Redirect to the new URL with the additional parameter
+                    window.location.href = currentUrl.href;
+                }
+            } else {
+                console.log(`Transaction failed with status: ${receipt.status}`);
+            }
         }); // eventlistener
     }); //foreach
 
@@ -129,20 +146,25 @@ export const initConnection = () => {
         await hashconnect.init();
 
         // Open pairing modal
-        hashconnect.openPairingModal();
+        if (!pairingData) {
+            hashconnect.openPairingModal();
+        }
     }
 
     function setUpHashConnectEvents() {
         // let connectButtons = document.querySelectorAll('.hederapay-connect-button');
         let pairedAccountDisplays = document.querySelectorAll('.hederapay-paired-account');
 
+        let selectedConnectButton = clickedConnectButton || document.querySelector('.hederapay-connect-button');
+        let selectedConnectButtonText = selectedConnectButton.querySelector('.hederapay-connect-button-text');
+
         hashconnect.pairingEvent.on((newPairing) => {
             pairingData = newPairing;
-            clickedConnectButtonText.innerText = clickedConnectButton.dataset.disconnectText;
-            clickedConnectButton.classList.add('is-connected');
+            selectedConnectButtonText.innerText = selectedConnectButton.dataset.disconnectText;
+            selectedConnectButton.classList.add('is-connected');
 
             let id = pairingData.accountIds[0];
-            let network = clickedConnectButton.dataset.network;
+            let network = selectedConnectButton.dataset.network;
 
             let url = ''; // no url for previewnet
             if (network === 'testnet') {
@@ -159,8 +181,8 @@ export const initConnection = () => {
 
         hashconnect.disconnectionEvent.on(() => {
             pairingData = null;
-            clickedConnectButtonText.innerText = clickedConnectButton.dataset.connectText;
-            clickedConnectButton.classList.remove('is-connected');
+            selectedConnectButtonText.innerText = selectedConnectButton.dataset.connectText;
+            selectedConnectButton.classList.remove('is-connected');
 
             [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
                 pairedAccountDisplay.innerHTML = '';

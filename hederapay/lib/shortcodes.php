@@ -59,7 +59,8 @@ function hederapay_transaction_button_function($atts)
             'currency' => 'hbar',
             'testnet_account' => null,
             'previewnet_account' => null,
-            'mainnet_account' => null
+            'mainnet_account' => null,
+            'woocommerce' => false, // executed from HederaPay for WooCommerce
         ),
         $atts,
         'hederapay_transaction_button'
@@ -74,11 +75,12 @@ function hederapay_transaction_button_function($atts)
     // Extract the attributes
     $title = esc_html($atts['title']);
     $memo = esc_html($atts['memo']);
-    $amount = intval(esc_html($atts['amount']));
+    $amount = floatval(esc_html($atts['amount'])); // convert string to float
     $currency = strtolower(esc_html($atts['currency']));
     $testnet_account = esc_html($atts['testnet_account']);
     $previewnet_account =  esc_html($atts['previewnet_account']);
     $mainnet_account =  esc_html($atts['testnet_account']);
+    $woocommerce =  esc_html($atts['woocommerce']);
 
     $result = getAccountAndNetwork($testnet_account, $previewnet_account, $mainnet_account);
     $network = $result["network"];
@@ -103,7 +105,7 @@ function hederapay_transaction_button_function($atts)
         $badge = '<span class="hederapay-transaction-button__badge">previewnet</span>';
     }
 
-    return '<div class="hederapay-transaction-wrapper"><div style="display: flex">' . $input_field . '<div class="btn hederapay-transaction-button" data-currency="' . $currency . '" data-network="' . $network . '" data-account="' . $account . '" data-tinybar-amount="' . $tinybar_amount . '" data-memo="' . $memo . '">' . $title . $badge . '</div></div><div class="hederapay-transaction-notices"></div></div>';
+    return '<div class="hederapay-transaction-wrapper"><div style="display: flex">' . $input_field . '<div class="btn hederapay-transaction-button" data-currency="' . $currency . '" data-network="' . $network . '" data-account="' . $account . '" data-tinybar-amount="' . $tinybar_amount . '" data-memo="' . $memo . '" data-woocommerce="' . $woocommerce . '">' . $title . $badge . '</div></div><div class="hederapay-transaction-notices"></div></div>';
 }
 
 function getAccountAndNetwork($testnet_account, $previewnet_account, $mainnet_account)
