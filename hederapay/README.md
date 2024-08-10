@@ -57,7 +57,7 @@ Always provide a `mainnet_account` **or** a `previewnet_account` **or** a `testn
 
 > Account IDs on Hedera have to start with **_0.0._**
 
-**Examples:**
+**Examples:**  
 `[hederapay_transaction_button amount="5" currency="eur" title="☕︎ Buy us a coffee" testnet_account="0.0.4505361" memo="Coffee donation"]`
 
 ![Transaction button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/transaction-button.png)
@@ -70,7 +70,6 @@ Always provide a `mainnet_account` **or** a `previewnet_account` **or** a `testn
 
 For websites with Gutenberg and [Advanced Custom Fields](https://wordpress.org/plugins/advanced-custom-fields/) or ACF Pro we also have a _HederaPay Transaction Button_-Gutenberg block. The functionality and output are the same as the shortcode.
 
-**Example:**
 ![Gutenberg block](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/gutenberg-block.png)
 
 ### [hederapay-connect-button] _(optional)_
