@@ -53,28 +53,33 @@ When no amount is provided an `<input>` field appears in which the user can ente
 
 ##### Accounts
 
-Always provide a `mainnet_account` **or** a `previewnet_account` **or** a `testnet_account`. The shortcode won't work if you provide multiple IDs. This is a safety measure to avoid mistakes. Perhaps unsurprisingly, the shortcode also won't work when you don't provide any ID at all.
+Always provide a `mainnet_account` **or** a `previewnet_account` **or** a `testnet_account`. The shortcode won't work if you provide multiple IDs. This is a safety measure to avoid mistakes. Perhaps unsurprisingly, the shortcode also won't work when you don't provide any receiver account ID at all.
 
-> Account IDs on the Hedera network have to start with **_0.0._**
+> Account IDs on Hedera have to start with **_0.0._**
 
 **Examples:**
-`[hederapay_transaction_button amount="5" currency="eur" title="☕︎ Buy us a coffee" testnet_account="0.0.4505361"]`
+`[hederapay_transaction_button amount="5" currency="eur" title="☕︎ Buy us a coffee" testnet_account="0.0.4505361" memo="Coffee donation"]`
 
-![Connect / disconnect button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/transaction-button.png)
+![Transaction button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/transaction-button.png)
+
+more images? transact modal ? dragonglass transaction?
 
 `[hederapay_transaction_button currency="usd" title="Donate" testnet_account="0.0.4505361"]`
 
-![Connect / disconnect button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/transaction-button-with-input.png)
+![Transaction button with input field](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/transaction-button-with-input.png)
 
-### [hederapay-paired-wallet] _(optional)_
+#### Gutenberg block
 
-Displays the Account ID of the paired wallet. It is hidden when no wallet is connected. Clicking the element opens the account in network inspector [Dragonglass](https://app.dragonglass.me/) in a new browser tab.
+For websites with Gutenberg and [Advanced Custom Fields](https://wordpress.org/plugins/advanced-custom-fields/) or ACF Pro we also have a _HederaPay Transaction Button_-Gutenberg block. The functionality and output are the same as the shortcode.
+
+**Example:**
+![Gutenberg block](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/gutenberg-block.png)
 
 ### [hederapay-connect-button] _(optional)_
 
 Adds a connect/disconnect button.
 
-Useful when you want to allow the user to connect their wallet without sending a transaction. After connecting the button acts as a disconnect button. The button has small badge in the top right corner when the network is set to `testnet` or `previewnet` to warn the developer that the code isn't running on the mainnet. Use custom CSS if you want to hide it.
+Useful when you want to allow the user to connect their wallet without sending a transaction. After connecting the button acts as a disconnect button. The button has small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet. Use custom CSS if you want to hide it.
 
 #### Attributes _(all attributes are optional)_
 
@@ -85,16 +90,14 @@ Useful when you want to allow the user to connect their wallet without sending a
 | disconnect_text | Button text after connection is established     | Disconnect wallet |
 
 **Example:**
-`[hederapay-connect-button network="testnet" connect_text="Connect wallet!" disconnect_text="Disconnect!"]`
+`[hederapay-connect-button network="testnet" connect_text="Connect" disconnect_text="Disconnect"]`
 
 ![Connect / disconnect button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/connect-button.png)
 
-## Gutenberg block
+### [hederapay-paired-wallet] _(optional)_
 
-If the [ACF plugin](https://wordpress.org/plugins/advanced-custom-fields/) is active on your website, HederaPay adds the _HederaPay Transaction Button_ block to your Gutenberg block overview. The functionality is the same as the `[hederapay-transaction-button]` shortcode, it is just easier to use.
+Displays the Account ID of the paired wallet. It is hidden when no wallet is connected. Clicking the element opens the account in network inspector [Dragonglass](https://app.dragonglass.me/) in a new browser tab.
 
-img-here!
+## Other Plugins by HashPress Pioneers
 
-## Questions?
-
-Contact me at **email**
+-   [HederaPay for WooCommerce](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay-for-woocommerce)
