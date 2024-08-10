@@ -35,10 +35,10 @@ function get_hbar_price($currency)
 function convert_currency_to_tinybar($amount, $currency)
 {
     try {
-        $amount = intval($amount);
+        $amount = floatval($amount);
         $hbar_price = get_hbar_price($currency);
         if ($hbar_price == 0) {
-            throw new Exception("Error fetching HBAR price or HBAR price is zero");
+            throw new Exception("Error fetching HBAR price. Please try again in a few minutes.");
         }
         $hbar_amount = $amount / $hbar_price;
         $tinybar_amount = $hbar_amount * 1e8; // 1 HBAR = 100,000,000 tinybars

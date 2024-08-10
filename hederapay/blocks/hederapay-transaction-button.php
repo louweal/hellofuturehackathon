@@ -27,7 +27,7 @@ $amount = get_field("field_amount");
 $currency = get_field("field_currency");
 $tinybar_amount = null;
 if ($amount) {
-    $tinybar_amount = $currency == 'hbar' ? $amount * 1e8 : convert_currency_to_tinybar($amount, $currency);
+    $tinybar_amount = $currency == 'hbar' ? floatval($amount) * 1e8 : convert_currency_to_tinybar($amount, $currency);
 }
 
 $badge = "";
