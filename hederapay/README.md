@@ -2,9 +2,7 @@
 
 HederaPay allows users to integrate HBAR transaction buttons into their WordPress website. This plugin is suited for all regular WordPress sites. For webshops that use WooCommerce we have another plugin: [HederaPay for WooCommerce](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay-for-woocommerce).
 
-## Pitch video
-
-Available soon
+[Video available soon]
 
 ## Installation
 
@@ -22,7 +20,9 @@ The HederaPay settings page allows you to change the site metadata that is shown
 
 ### [hederapay-transaction-button]
 
-Adds a transaction button for sending transactions on Hedera. The button has small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet. Use custom CSS if you want to hide it.
+Adds a transaction button for sending transactions on Hedera. It uses [WalletConnect](https://walletconnect.com/) to establish a a secure connection with cryptocurrency wallets.
+
+> The button has small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet.
 
 #### Attributes
 
@@ -62,8 +62,6 @@ Always provide a `mainnet_account` **or** a `previewnet_account` **or** a `testn
 
 ![Transaction button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/transaction-button.png)
 
-more images? transact modal ? dragonglass transaction?
-
 `[hederapay_transaction_button currency="usd" title="Donate" testnet_account="0.0.4505361"]`
 
 ![Transaction button with input field](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/transaction-button-with-input.png)
@@ -79,7 +77,9 @@ For websites with Gutenberg and [Advanced Custom Fields](https://wordpress.org/p
 
 Adds a connect/disconnect button.
 
-Useful when you want to allow the user to connect their wallet without sending a transaction. After connecting the button acts as a disconnect button. The button has small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet. Use custom CSS if you want to hide it.
+Useful when you want to allow the user to connect their wallet without sending a transaction. After connecting the button acts as a disconnect button. It uses [WalletConnect](https://walletconnect.com/) to establish a a secure connection with cryptocurrency wallets.
+
+> The button has small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet.
 
 #### Attributes _(all attributes are optional)_
 
