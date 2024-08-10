@@ -49,8 +49,4 @@ foreach ($classes as $class) {
 }
 
 
-
-    // require_once get_template_directory() . '/hederapay/main.php';
-
-
 // do_action('warpdrive_cache_flush'); // This will flush the entire cache
