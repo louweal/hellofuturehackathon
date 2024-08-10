@@ -27,14 +27,10 @@ get_header();
             <?php if (!empty(get_the_content())) { ?>
                 <section class="section">
                     <div class="container">
-                        <div class="lg:w-8/12 mx-auto">
-                            <div class="editor">
-                                <?php if (is_singular('post')) { ?>
-                                    <h1><?php the_title(); ?></h1>
-                                <?php } ?>
-                                <?php the_content(); ?>
-                            </div>
-                        </div>
+                        <?php if (is_singular('post')) { ?>
+                            <h1><?php the_title(); ?></h1>
+                        <?php } ?>
+                        <?php the_content(); ?>
                     </div>
                 </section>
             <?php } ?>

@@ -2,9 +2,10 @@
 .wp-block-button__link,
 .gform_button,
 .woocommerce button.button.alt,
-.wc-block-cart__submit-button,
-.wp-block-woocommerce-mini-cart-cart-button-block.wc-block-mini-cart__footer-cart.outlined,
-.wp-block-woocommerce-mini-cart-checkout-button-block.wc-block-mini-cart__footer-checkout,
+/* .wc-block-cart__submit-button, */
+/* .wp-block-woocommerce-mini-cart-cart-button-block.wc-block-mini-cart__footer-cart.outlined, */
+/* .wp-block-woocommerce-mini-cart-checkout-button-block.wc-block-mini-cart__footer-checkout, */
+.wc-block-components-button:not(.is-link),
 a.button.wc-forward {
     display: inline-flex;
     align-items: center;
@@ -19,7 +20,7 @@ a.button.wc-forward {
     background-color: var(--color-primary);
     white-space: nowrap;
     cursor: pointer;
-    height: 2.75rem;
+    height: 2.75rem !important;
     transition:
         background-color 0.3s,
         color 0.3s;

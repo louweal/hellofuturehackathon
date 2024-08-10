@@ -13,7 +13,8 @@
             <div class="col-span-7">
                 <?php if (is_active_sidebar('footer-widget-1')) { ?>
                     <div class="editor editor--footer">
-                        <?php dynamic_sidebar('footer-widget-1'); ?>
+                        <?php //dynamic_sidebar('footer-widget-1'); 
+                        ?>
                     </div>
                 <?php } ?>
 

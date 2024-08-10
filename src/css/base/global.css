@@ -19,6 +19,10 @@ body {
     padding-top: var(--header-height);
     color: var(--color-body);
     line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     @media (--1024) {
         /* padding-top: 0; */
