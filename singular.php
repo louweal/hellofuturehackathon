@@ -30,7 +30,9 @@ get_header();
                         <?php if (is_singular('post')) { ?>
                             <h1><?php the_title(); ?></h1>
                         <?php } ?>
-                        <?php the_content(); ?>
+                        <div class="editor">
+                            <?php the_content(); ?>
+                        </div>
                     </div>
                 </section>
             <?php } ?>
