@@ -15,7 +15,21 @@ module.exports = {
     mode: 'development',
     devtool: false,
     resolve: {
-        fallback: {},
+        fallback: {
+            path: false, //require.resolve('path-browserify'),
+            os: false, //require.resolve('os-browserify/browser'),
+            crypto: false, //require.resolve('crypto-browserify'),
+            stream: false, //require.resolve('stream-browserify'),
+            tls: false,
+            net: false,
+            zlib: false, //require.resolve('browserify-zlib'),
+            http: false, //require.resolve('stream-http'),
+            url: false, //require.resolve('url/'),
+            http2: false,
+            dns: false,
+            util: false, //require.resolve('util/'),
+            fs: false,
+        },
     },
     plugins: [],
     optimization: {
