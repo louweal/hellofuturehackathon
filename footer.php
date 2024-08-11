@@ -33,9 +33,9 @@
                 <h3>Socials</h3>
                 <div class="editor editor--footer">
                     <ul>
-                        <li><a href="#">Instagram</a> </li>
-                        <li><a href="#">Twitter</a> </li>
-                        <li><a href="#">Facebook</a> </li>
+                        <li><a>Instagram</a> </li>
+                        <li><a>Twitter</a> </li>
+                        <li><a>Facebook</a> </li>
                     </ul>
                 </div>
             </div>
