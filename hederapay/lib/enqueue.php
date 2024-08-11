@@ -19,7 +19,7 @@ function enqueue_hederapay_script()
     ));
 }
 
-add_action('wp_enqueue_scripts', 'hederapay_enqueue_styles', 20);
+add_action('wp_enqueue_scripts', 'hederapay_enqueue_styles', 5);
 function hederapay_enqueue_styles()
 {
     $path = plugin_dir_url(dirname(__FILE__, 1));
