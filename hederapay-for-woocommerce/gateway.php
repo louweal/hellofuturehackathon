@@ -148,7 +148,7 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
 
 
             if (!$status || $status != "success") {
-                echo do_shortcode('[hederapay_transaction_button network="' . $this->network . '" title="Pay now - ' . $currency_symbol . $order_total . '" ' . $account_attribute . ' currency="' . $currency . '" amount="' . $order_total . '" woocommerce="true"]');
+                echo do_shortcode('[hederapay_transaction_button network="' . $this->network . '" title="Pay now - ' . $currency_symbol . $order_total . '" ' . $account_attribute . ' currency="' . $currency . '" amount="' . $order_total . '" memo="Order at ' . get_bloginfo('name') . '"]');
             } else if ($status == "success") {
                 // Mark the order as completed if payment is successful
                 $order->update_status('completed', __('Payment received, order completed.', 'woocommerce'));
@@ -158,12 +158,8 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
 
                 // Empty the cart after successful payment
                 WC()->cart->empty_cart();
-
-                // Display success message
-                echo "<p>" . $this->success_message . "</p>";
-            } else {
-                echo "<p>" . $this->failed_message . "</p>";
             }
+            echo '<p class="hederapay-for-woocommerce-status" data-message-success="' . esc_html($this->success_message) . '" data-message-failed="' . esc_html($this->failed_message) . '"></p>';
         } else {
             var_dump("Order not found.");
         }

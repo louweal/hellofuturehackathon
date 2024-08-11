@@ -80,7 +80,6 @@ function hederapay_transaction_button_function($atts)
     $testnet_account = esc_html($atts['testnet_account']);
     $previewnet_account =  esc_html($atts['previewnet_account']);
     $mainnet_account =  esc_html($atts['testnet_account']);
-    $woocommerce =  esc_html($atts['woocommerce']);
 
     $result = getAccountAndNetwork($testnet_account, $previewnet_account, $mainnet_account);
     $network = $result["network"];
@@ -91,7 +90,7 @@ function hederapay_transaction_button_function($atts)
     }
 
     // convert amount to tinybar
-    $tinybar_amount = $currency == 'hbar' ? $amount * 1e8 : convert_currency_to_tinybar($amount, $currency);
+    // $tinybar_amount = $currency == 'hbar' ? $amount * 1e8 : convert_currency_to_tinybar($amount, $currency);
 
     $input_field = "";
     if ($amount == null) {
@@ -105,7 +104,7 @@ function hederapay_transaction_button_function($atts)
         $badge = '<span class="hederapay-transaction-button__badge">previewnet</span>';
     }
 
-    return '<div class="hederapay-transaction-wrapper"><div style="display: flex">' . $input_field . '<div class="btn hederapay-transaction-button" data-currency="' . $currency . '" data-network="' . $network . '" data-account="' . $account . '" data-tinybar-amount="' . $tinybar_amount . '" data-memo="' . $memo . '" data-woocommerce="' . $woocommerce . '">' . $title . $badge . '</div></div><div class="hederapay-transaction-notices"></div></div>';
+    return '<div class="hederapay-transaction-wrapper"><div style="display: flex">' . $input_field . '<div class="btn hederapay-transaction-button" data-currency="' . $currency . '" data-network="' . $network . '" data-account="' . $account . '" data-amount="' . $amount . '"  data-memo="' . $memo . '">' . $title . $badge . '</div></div><div class="hederapay-transaction-notices"></div></div>';
 }
 
 function getAccountAndNetwork($testnet_account, $previewnet_account, $mainnet_account)

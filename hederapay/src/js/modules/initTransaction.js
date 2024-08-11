@@ -43,30 +43,30 @@ export const initTransaction = () => {
         transactionNotices.innerText = ''; // reset
 
         transactionButton.addEventListener('click', async function () {
-            let tinybarAmount = transactionButton.dataset.tinybarAmount;
-            // console.log(tinybarAmount);
+            transactionNotices.innerText = ''; // reset
 
-            if (!tinybarAmount) {
+            let currency = transactionButton.dataset.currency;
+            let amount = transactionButton.dataset.amount;
+            let tinybarAmount;
+
+            if (!amount) {
                 // check for user input
                 if (transactionInput) {
                     if (transactionInput.classList.contains('hederapay-transaction-input')) {
-                        console.log('found!');
                         if (transactionInput.value != '') {
-                            let currency = transactionButton.dataset.currency;
-                            let amount = transactionInput.value;
-                            // console.log(amount);
-                            tinybarAmount = await convertCurrencyToTinybar(amount, currency);
-                            // console.log(tinybarAmount);
+                            let amountInputValue = transactionInput.value;
+                            tinybarAmount = await convertCurrencyToTinybar(amountInputValue, currency);
                         } else {
-                            console.log('empty value');
-                            transactionNotices.innerText += 'Please enter the amount you wish to donate.';
+                            transactionNotices.innerText += 'Please enter the amount you wish to donate. ';
                             return; // do nothing; amount missing
                         }
                     } else {
-                        console.log('amount missing and input field missing');
+                        console.log('Amount missing and input field missing');
                         return; // do nothing; amount missing and input field missing
                     }
                 }
+            } else {
+                tinybarAmount = await convertCurrencyToTinybar(amount, currency);
             }
 
             let memo = transactionButton.dataset.memo;
@@ -87,31 +87,41 @@ export const initTransaction = () => {
                 .setTransactionMemo(memo)
                 .freezeWithSigner(signer);
 
-            let response = await transaction.executeWithSigner(signer);
-            console.log(response);
+            try {
+                let response = await transaction.executeWithSigner(signer);
+                console.log(response);
 
-            const transactionId = response.transactionId;
-            console.log('Transaction ID:', transactionId.toString());
-            let receipt = await response.getReceiptWithSigner(signer);
+                const transactionId = response.transactionId;
+                console.log('Transaction ID:', transactionId.toString());
+                let receipt = await response.getReceiptWithSigner(signer);
 
-            console.log(receipt);
-            // Check if the transaction was successful
-            if (receipt.status.toString() === 'SUCCESS') {
-                console.log('Transaction was successful!');
-                transactionButton.setAttribute('data-success', '');
-                transactionButton.setAttribute('data-transaction-id', transactionId.toString());
+                console.log(receipt);
 
-                console.log(transactionButton.dataset.woocommerce);
+                let woocommerceStatusDisplay = document.querySelector('.hederapay-for-woocommerce-status'); // only for woocommerce order page
 
-                if (transactionButton.dataset.woocommerce) {
-                    const currentUrl = new URL(window.location.href);
-                    // Add the parameter to the URL
-                    currentUrl.searchParams.set('transaction', 'success');
-                    // Redirect to the new URL with the additional parameter
-                    window.location.href = currentUrl.href;
+                // Check if the transaction was successful
+                if (receipt.status.toString() === 'SUCCESS') {
+                    console.log('Transaction was successful!');
+
+                    if (woocommerceStatusDisplay) {
+                        woocommerceStatusDisplay.innerText = woocommerceStatusDisplay.dataset.messageSuccess;
+                    } else {
+                        transactionNotices.innerText += 'Payment received. Thank you! ';
+                    }
+                    return;
                 }
-            } else {
+
                 console.log(`Transaction failed with status: ${receipt.status}`);
+            } catch (e) {
+                if (e.code === 9000) {
+                    transactionNotices.innerText += 'Transaction rejected by user. ';
+                } else {
+                    if (woocommerceStatusDisplay) {
+                        woocommerceStatusDisplay.innerText = woocommerceStatusDisplay.dataset.messageFailed;
+                    } else {
+                        transactionNotices.innerText += 'Transaction failed. Please try again. ';
+                    }
+                }
             }
         }); // eventlistener
     }); //foreach

@@ -25,10 +25,6 @@ $title = get_field("field_title");
 $memo = get_field("field_memo");
 $amount = get_field("field_amount");
 $currency = get_field("field_currency");
-$tinybar_amount = null;
-if ($amount) {
-    $tinybar_amount = $currency == 'hbar' ? floatval($amount) * 1e8 : convert_currency_to_tinybar($amount, $currency);
-}
 
 $badge = "";
 if ($network == "testnet") {
@@ -46,7 +42,7 @@ if ($network == "testnet") {
         <?php }; //if 
         ?>
 
-        <div class="btn hederapay-transaction-button" data-currency="<?php echo $currency; ?>" data-memo="<?php echo $memo; ?>" data-network="<?php echo $network; ?>" data-account="<?php echo $account; ?>" data-tinybar-amount="<?php echo $tinybar_amount; ?>">
+        <div class="btn hederapay-transaction-button" data-currency="<?php echo $currency; ?>" data-memo="<?php echo $memo; ?>" data-network="<?php echo $network; ?>" data-account="<?php echo $account; ?>" data-amount="<?php echo $amount; ?>">
             <?php echo $title; ?><?php echo $badge; ?>
         </div>
     </div>
