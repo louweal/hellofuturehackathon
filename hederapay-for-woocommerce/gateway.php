@@ -53,10 +53,13 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
             'success_message' => array(
                 'title' => 'Successful transaction message',
                 'type' => 'text',
+                'default' => 'Payment received.<br><br>Thank you for your order!',
+
             ),
             'failed_message' => array(
                 'title' => 'Failed transaction message',
                 'type' => 'text',
+                'default' => 'Transaction failed. Please try again.',
             ),
 
         );
