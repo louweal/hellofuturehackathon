@@ -1,11 +1,11 @@
 // Import modules.
 
-import { initConnection } from './modules/initConnection';
+import { initTransaction } from './modules/initTransaction';
 
 // Main thread
 (function () {
     'use strict';
 
     // Use modules
-    initConnection();
+    initTransaction();
 })();

@@ -2,7 +2,7 @@ import { HashConnect, HashConnectConnectionState } from 'hashconnect';
 import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
 import { LedgerId } from '@hashgraph/sdk';
 
-export const initConnection = () => {
+export const initTransaction = () => {
     let metadata = document.querySelector('#hederapay-app-metadata');
 
     let appMetadata = {};
@@ -73,9 +73,9 @@ export const initConnection = () => {
             let network = transactionButton.dataset.network;
 
             console.log(state);
-            if (state != HashConnectConnectionState.Connected) {
-                await init(network);
-            }
+            // if (state != HashConnectConnectionState.Connected) { //pairingData?
+            await init(network);
+            // }
 
             let fromAccount = AccountId.fromString(pairingData.accountIds[0]); // assumes paired and takes first paired account id
             const toAccount = AccountId.fromString(transactionButton.dataset.account);
