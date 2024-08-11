@@ -71,7 +71,7 @@ function add_hederapay_field_groups()
                 ),
                 array(
                     'key' => 'testnet_account',
-                    'label' => 'Testnet Account ID',
+                    'label' => 'Account ID',
                     'name' => 'testnet_account',
                     'type' => 'text',
                     // 'instructions' => 'Enter the Account Id here.',
@@ -88,10 +88,11 @@ function add_hederapay_field_groups()
                             ),
                         ),
                     ),
+                    'placeholder' => 'Testnet', // Set default value to USD
                 ),
                 array(
                     'key' => 'previewnet_account',
-                    'label' => 'Previewnet Account ID',
+                    'label' => 'Account ID',
                     'name' => 'previewnet_account',
                     'type' => 'text',
                     'required' => 0,
@@ -107,10 +108,11 @@ function add_hederapay_field_groups()
                             ),
                         ),
                     ),
+                    'placeholder' => 'Previewnet', // Set default value to USD
                 ),
                 array(
                     'key' => 'mainnet_account',
-                    'label' => 'Mainnet Account ID',
+                    'label' => 'Account ID',
                     'name' => 'mainnet_account',
                     'type' => 'text',
                     'required' => 0,
@@ -126,6 +128,7 @@ function add_hederapay_field_groups()
                             ),
                         ),
                     ),
+                    'placeholder' => 'Mainnet', // Set default value to USD
                 ),
                 array(
                     'key' => 'field_title',
