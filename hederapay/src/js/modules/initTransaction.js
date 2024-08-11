@@ -73,9 +73,9 @@ export const initTransaction = () => {
             let network = transactionButton.dataset.network;
 
             console.log(state);
-            // if (state != HashConnectConnectionState.Connected) { //pairingData?
-            await init(network);
-            // }
+            if (state != HashConnectConnectionState.Connected) {
+                await init(network);
+            }
 
             let fromAccount = AccountId.fromString(pairingData.accountIds[0]); // assumes paired and takes first paired account id
             const toAccount = AccountId.fromString(transactionButton.dataset.account);
