@@ -38,8 +38,7 @@ if (function_exists('opcache_reset')) {
 
                 </div>
                 <a href="/shop">Shop</a>
-                <a href="/cart">Cart</a>
-
+                <a href="/webinar">Webinar</a>
             </div>
 
             <?php if (is_active_sidebar('header-widget')) { ?>

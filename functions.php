@@ -24,7 +24,7 @@ $templates = array(
     'lib/head.php',                // wp_head functions
     'lib/body.php',                // wp_body_open functions
     'lib/widgets.php',            // Widget registration
-    'lib/plugins.php',            // Plugins
+    // 'lib/plugins.php',            // Plugins
 );
 
 /**

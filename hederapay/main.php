@@ -37,7 +37,7 @@ function hederapay_block_init()
             'render_template'   => dirname(plugin_dir_path(__FILE__)) . '/hederapay/blocks/hederapay-transaction-button.php',
             'mode'              => 'edit',
             'category'          => 'common',
-            'icon'              => 'admin-comments',
+            'icon'              => 'dashicons-money-alt',
             'keywords'          => array('hederapay', 'hedera', 'transaction', 'button'),
         ));
     }
