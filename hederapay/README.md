@@ -6,7 +6,7 @@ HederaPay allows users to integrate HBAR transaction buttons into their WordPres
 
 ## Installation
 
-Download the [hederapay.zip](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay.zip) file in the root of this repository. Go to your WordPress dashboard > Plugins. Click 'Add New Plugin'. Click 'Upload Plugin' and upload the zipfile. This will upload and install the plugin, next click 'Activate' to activate the plugin.
+Download the [hederapay.zip](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay.zip) file in the root of this repository. Go to the `WP dashboard` **>** `Plugins`. Click `Add New Plugin` **>** `Upload Plugin` and upload the downloaded zipfile. This will upload and install the plugin, next click `Activate` to activate the plugin.
 
 > We are currently in the process of getting the plugin listed in the build-in WordPress Plugin Store.
 
@@ -18,7 +18,7 @@ The HederaPay settings page allows you to change the site metadata that is shown
 
 ## Shortcodes
 
-### [hederapay-transaction-button]
+### [hederapay_transaction_button]
 
 Adds a transaction button for sending transactions on Hedera. It uses [WalletConnect](https://walletconnect.com/) to establish a a secure connection with cryptocurrency wallets.
 
@@ -72,7 +72,7 @@ For websites with Gutenberg and [Advanced Custom Fields](https://wordpress.org/p
 
 ![Gutenberg block](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/gutenberg-block.png)
 
-### [hederapay-connect-button] _(optional)_
+### [hederapay_connect_button] _(optional)_
 
 Adds a connect/disconnect button.
 
