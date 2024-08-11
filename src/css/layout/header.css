@@ -22,7 +22,7 @@
     }
 
     &__logo {
-        width: 80px;
+        width: 44px;
 
         &:hover {
             animation: growShrink 0.45s cubic-bezier(0.19, 0, 0.22, 1) forwards;
