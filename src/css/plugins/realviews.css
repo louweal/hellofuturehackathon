@@ -1,0 +1,11 @@
+.realviews-review__icon {
+    background-color: var(--color-primary);
+}
+
+.realviews-write-review {
+    background-color: var(--color-secondary);
+
+    &:hover {
+        background-color: var(--color-primary);
+    }
+}

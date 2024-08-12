@@ -5,7 +5,7 @@
  * Description:    		Add CSS and Javascript to the page
  */
 
-add_action('wp_enqueue_scripts', 'enqueue_realviews_script');
+add_action('wp_enqueue_scripts', 'enqueue_realviews_script', 13);
 function enqueue_realviews_script()
 {
     // Enqueue the script
@@ -19,7 +19,7 @@ function enqueue_realviews_script()
     ));
 }
 
-add_action('wp_enqueue_scripts', 'enqueue_realviews_styles', 20);
+add_action('wp_enqueue_scripts', 'enqueue_realviews_styles', 5);
 function enqueue_realviews_styles()
 {
     $path = plugin_dir_url(dirname(__FILE__, 1));
