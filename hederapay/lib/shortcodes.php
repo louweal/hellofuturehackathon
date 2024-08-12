@@ -103,7 +103,7 @@ function hederapay_transaction_button_function($atts)
         $badge = '<span class="hederapay-transaction-button__badge">previewnet</span>';
     }
 
-    return '<div class="' . $class_name . '"><div style="display: flex">' . $input_field . '<div class="btn hederapay-transaction-button" data-currency="' . $currency . '" data-network="' . $network . '" data-account="' . $account . '" data-amount="' . $amount . '"  data-memo="' . $memo . '" data-woocommerce="' . $woocommerce . '">' . $title . $badge . '</div></div><div class="hederapay-transaction-notices"></div></div>';
+    return '<div class="hederapay-transaction-wrapper"><div style="display: flex">' . $input_field . '<div class="btn hederapay-transaction-button" data-currency="' . $currency . '" data-network="' . $network . '" data-account="' . $account . '" data-amount="' . $amount . '"  data-memo="' . $memo . '" data-woocommerce="' . $woocommerce . '">' . $title . $badge . '</div></div><div class="hederapay-transaction-notices"></div></div>';
 }
 
 function getAccountAndNetwork($testnet_account, $previewnet_account, $mainnet_account)

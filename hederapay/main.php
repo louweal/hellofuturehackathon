@@ -199,6 +199,26 @@ function add_hederapay_field_groups()
     }
 }
 
+add_action('plugins_loaded', 'init_hederapay_for_woocommerce_gateway');
+function init_hederapay_for_woocommerce_gateway()
+{
+    // Check if WooCommerce is active
+    if (!class_exists('WC_Payment_Gateway')) return;
+
+    // Include our Gateway Class
+    include_once 'gateway.php';
+
+    // Add the Gateway to WooCommerce
+    add_filter('woocommerce_payment_gateways', 'add_hederapay_payment_gateway');
+}
+
+
+function add_hederapay_payment_gateway($gateways)
+{
+    $gateways[] = 'WC_Gateway_Hederapay';
+    return $gateways;
+}
+
 
 add_action('plugins_loaded', function () {
     error_log('HederaPay has been loaded.');

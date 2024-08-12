@@ -41,7 +41,6 @@ import { LedgerId } from '@hashgraph/sdk';
 
     let transactionWrappers = document.querySelectorAll('.hederapay-transaction-wrapper');
 
-    // async function () {
     [...transactionWrappers].forEach((transactionWrapper) => {
         let transactionButton = transactionWrapper.querySelector('.hederapay-transaction-button');
         transactionButton.addEventListener('click', async function () {

@@ -5,7 +5,7 @@
  * Description:    		Add CSS and Javascript to the page
  */
 
-add_action('wp_enqueue_scripts', 'enqueue_hederapay_script');
+add_action('wp_enqueue_scripts', 'enqueue_hederapay_script', 11);
 function enqueue_hederapay_script()
 {
     // Enqueue the script

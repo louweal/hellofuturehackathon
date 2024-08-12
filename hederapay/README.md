@@ -18,6 +18,12 @@ The HederaPay settings page allows you to change the site metadata that is shown
 
 ![Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/admin-settings.png)
 
+### Configuration for WooCommerce shops
+
+On the HederaPay for WooCommerce admin page (`WP Dashboard` **>** `WooCommerce` **>** `Settings` **>** `Payments` **>** `HederaPay for WooCommerce`) you can select the network and the Account ID of the receiver on that network. Optionally, you can also change success and failure messages that will be displayed to the user after the transaction.
+
+![WooCommerce Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay-for-woocommerce/assets/woocommerce-admin.png)
+
 ## Shortcodes
 
 ### [hederapay-transaction-button]
