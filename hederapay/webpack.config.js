@@ -1,5 +1,4 @@
 const path = require('path');
-// const webpack = require('webpack');
 
 module.exports = {
     entry: './src/js/main.js',
@@ -13,7 +12,7 @@ module.exports = {
             directory: path.join(__dirname, '/'),
         },
     },
-    mode: 'production',
+    mode: 'development',
     devtool: false,
     resolve: {
         fallback: {},

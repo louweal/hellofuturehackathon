@@ -28,9 +28,6 @@ if (function_exists('opcache_reset')) {
                 <div class="header__logo">
                     <a href="<?php echo home_url(); ?>" title="<?php bloginfo('name'); ?>" rel="home">
                         <picture>
-                            <?php if (get_the_retina_logo()) { ?>
-                                <source srcset="<?php the_logo(); ?> 1x, <?php the_retina_logo(); ?> 2x">
-                            <?php } ?>
                             <img alt="<?php bloginfo('name'); ?>" src="<?php the_logo(); ?>">
                         </picture>
                     </a>
