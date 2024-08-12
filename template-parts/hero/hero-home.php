@@ -6,7 +6,14 @@
  */
 $title = get_field('hero_title');
 $link = get_field('hero_link');
-$visuals = get_field('hero_visuals');
+$image_1 = get_field('hero_image_1');
+$image_2 = get_field('hero_image_2');
+$image_3 = get_field('hero_image_3');
+$image_4 = get_field('hero_image_4');
+$image_5 = get_field('hero_image_5');
+$image_6 = get_field('hero_image_6');
+$images = [$image_1, $image_2, $image_3, $image_4, $image_5, $image_6];
+
 ?>
 
 <header class="hero-home">
@@ -29,7 +36,7 @@ $visuals = get_field('hero_visuals');
     <div class="hero-home__slider order-1 sm:order-2">
         <div class="slider slider--home swiper js-slider" data-slider="home">
             <div class="slider__wrapper swiper-wrapper">
-                <?php foreach ($visuals as $image) { ?>
+                <?php foreach ($images as $image) { ?>
                     <div class="slider__slide swiper-slide">
                         <picture>
                             <img src="<?php echo $image['sizes']['medium_large']; ?>" alt="<?php echo $image['alt']; ?>">
