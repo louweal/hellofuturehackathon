@@ -261,9 +261,4 @@ import { LedgerId } from '@hashgraph/sdk';
             throw error;
         }
     }
-
-    async function test() {
-        console.log('hello');
-    }
-    window.test = test;
 })();

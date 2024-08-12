@@ -1,19 +1,8 @@
-// Import modules.
-
-import { greet, initConsensus } from './modules/initConsensus';
-
 // Main thread
 (function () {
     'use strict';
 
-    // Use modules
-
     let body = document.querySelector('body');
-
-    initConsensus();
-    greet();
-
-    window.greet = greet; // Ensure greet is attached to the window object
 
     let showModalButtons = document.querySelectorAll('.show-realviews-modal');
 
