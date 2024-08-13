@@ -9,10 +9,10 @@
     padding: 0 1.4rem;
 }
 
-.realviews-transaction-button__badge,
-.realviews-transaction-button__cashback {
+.realviews-transaction-button__badge {
     position: absolute;
     top: -4px;
+    right: -4px;
     background-color: #000;
     color: #fff;
     padding: 0px 6px;
@@ -23,17 +23,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.realviews-transaction-button__badge {
-    right: -4px;
-}
-
-.realviews-transaction-button__cashback {
-    left: -4px;
-    background-color: #fff;
-    border: 1px solid #000;
-    color: #000;
 }
 
 body.realviews-modal-open {
