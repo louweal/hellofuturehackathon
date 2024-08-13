@@ -18,6 +18,17 @@ add_action('widgets_init', 'theme_sidebars');
 function theme_sidebars()
 {
     $args = array(
+        'id'            => 'header-menu',
+        'class'         => 'header-menu',
+        'name'          => __('Header menu', 'hfh'),
+        'description'   => __('Menu area in the header', 'hfh'),
+        'before_title'  => '',
+        'after_title'   => '',
+        'before_widget' => '',
+        'after_widget'  => '',
+    );
+    register_sidebar($args);
+    $args = array(
         'id'            => 'header-widget',
         'class'         => 'header',
         'name'          => __('Header widget', 'hfh'),

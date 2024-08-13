@@ -33,7 +33,6 @@ if ($network == "testnet") {
     $badge = '<span class="hederapay-transaction-button__badge">previewnet</span>';
 }
 
-// debug($amount);
 ?>
 <div class="hederapay-transaction-wrapper">
     <div style="display: flex">

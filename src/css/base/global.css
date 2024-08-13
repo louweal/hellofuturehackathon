@@ -32,7 +32,3 @@ body {
 body.is-menu-open {
     overflow: hidden;
 }
-
-[data-aos='fade-up-10'] {
-    transform: translate3d(0, 10px, 0);
-}

@@ -34,8 +34,13 @@ if (function_exists('opcache_reset')) {
 
 
                 </div>
-                <a href="/shop">Shop</a>
-                <a href="/webinar">Webinar</a>
+                <!-- <a href="/shop">Shop</a> -->
+                <!-- <a href="/webinar">Webinar</a> -->
+                <?php if (is_active_sidebar('header-menu')) { ?>
+                    <div class="header__menu">
+                        <?php dynamic_sidebar('header-menu'); ?>
+                    </div>
+                <?php } ?>
             </div>
 
             <?php if (is_active_sidebar('header-widget')) { ?>

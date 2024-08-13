@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Realviews
-Description: Integrate Hedera Consensus Service into your WordPress website for trustworthy reviews. 
+Description: Integrate Hedera Smart Contracts into your WordPress website for trustworthy reviews. 
 Version: 0.1
 Author: HashPress Pioneers
 */

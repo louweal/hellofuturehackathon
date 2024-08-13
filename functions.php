@@ -28,14 +28,6 @@ $templates = array(
 );
 
 /**
- * All the classes to include
- * 
- */
-$classes = array(
-    // 'classes/nav-walker.php',                    // Custom Navigation Walker
-);
-
-/**
  * Loop over all the paths and locate the
  * templates. This will include all files into
  * this functions.php file.
@@ -44,9 +36,6 @@ foreach ($templates as $template) {
     locate_template($template, true, true);
 }
 
-foreach ($classes as $class) {
-    locate_template($class, true, true);
-}
 
 
 // do_action('warpdrive_cache_flush'); // This will flush the entire cache

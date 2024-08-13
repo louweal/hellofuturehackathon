@@ -29,9 +29,11 @@
         }
     }
 
-    &__toggle {
-        @media (--lg) {
-            display: none;
+    &__menu {
+        ul {
+            list-style-type: none;
+            display: flex;
+            gap: 1rem;
         }
     }
 }
