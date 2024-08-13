@@ -1,6 +1,6 @@
 # HederaPay
 
-HederaPay allows users to integrate HBAR transaction buttons into their WordPress websites and WooCommerce shops.
+HederaPay allows users to integrate Hedera transactions into their WordPress websites and WooCommerce shops.
 
 ## Dependencies (OPTIONAL)
 
