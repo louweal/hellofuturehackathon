@@ -100,8 +100,6 @@ function hederapay_transaction_button_function($atts)
         return "A Hedera Account ID should look like this: 0.0.xxxxxxx";
     }
 
-    $button_state = $amount == null ? "disabled" : "";
-
     $badge = "";
     if ($network == "testnet") {
         $badge = '<span class="hederapay-transaction-button__badge">testnet</span>';
@@ -129,7 +127,7 @@ function hederapay_transaction_button_function($atts)
             <?php }; //if 
             ?>
 
-            <button type="button" class="btn hederapay-transaction-button" data-woocommerce="<?php echo $woocommerce; ?>" data-attributes="<?php echo $encodedData; ?>" <?php echo $button_state; ?>>
+            <button type="button" class="btn hederapay-transaction-button" data-woocommerce="<?php echo $woocommerce; ?>" data-attributes="<?php echo $encodedData; ?>">
                 <?php echo $title; ?><?php echo $badge; ?>
             </button>
         </div>

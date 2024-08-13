@@ -48,21 +48,13 @@ import { LedgerId } from '@hashgraph/sdk';
     let transactionWrappers = document.querySelectorAll('.hederapay-transaction-wrapper');
 
     [...transactionWrappers].forEach((transactionWrapper) => {
-        let transactionInput = transactionWrapper.querySelector('.hederapay-transaction-input');
-        if (transactionInput) {
-            transactionInput.addEventListener('change', function (event) {
-                if (transactionInput.value != '') {
-                    transactionButton.removeAttribute('disabled');
-                } else {
-                    transactionButton.setAttribute('disabled', ''); // enable button
-                }
-            });
-        }
-
         let transactionButton = transactionWrapper.querySelector('.hederapay-transaction-button');
         transactionButton.addEventListener('click', async function () {
             let transactionData = decodeData(transactionButton.dataset.attributes);
             let network = transactionData.network;
+
+            let tinybarAmount = await getTinybarAmount(transactionWrapper, transactionData);
+            if (!tinybarAmount) return;
 
             if (!pairingData) {
                 await init(network);

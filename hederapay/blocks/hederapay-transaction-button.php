@@ -21,6 +21,11 @@ switch ($network) {
         $account = get_field("testnet_account");
 }
 
+if (!$account) {
+    echo "<p>Receiver Account ID missing.</p>";
+    return;
+}
+
 $title = get_field("field_title");
 $memo = get_field("field_memo");
 $amount = get_field("field_amount");
@@ -32,8 +37,6 @@ if ($network == "testnet") {
 } else if ($network == 'previewnet') {
     $badge = '<span class="hederapay-transaction-button__badge">previewnet</span>';
 }
-
-$button_state = $amount == null ? "disabled" : "";
 
 $data = array(
     "currency" => $currency,
@@ -54,7 +57,7 @@ $encodedData = base64_encode($jsonData);     // Encode the JSON string using Bas
         <?php }; //if 
         ?>
 
-        <button type="button" class="btn hederapay-transaction-button" data-attributes="<?php echo $encodedData; ?>" <?php echo $button_state; ?>>
+        <button type="button" class="btn hederapay-transaction-button" data-attributes="<?php echo $encodedData; ?>">
             <?php echo $title; ?><?php echo $badge; ?>
         </button>
     </div>
