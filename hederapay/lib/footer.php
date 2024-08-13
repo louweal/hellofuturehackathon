@@ -9,9 +9,17 @@ function add_hederapay_settings_to_footer()
     $icon = isset($settings['icon']) ? esc_html($settings['icon']) : get_site_icon_url();
     $url = isset($settings['url']) ? esc_html($settings['url']) : home_url();
 
-?>
-    <div id="hederapay-app-metadata" style="display: none;" data-name="<?php echo $name; ?>" data-description="<?php echo $description; ?>" data-icon="<?php echo $icon; ?>" data-url="<?php echo $url; ?>"></div>
+    $data = array(
+        "name" => $name,
+        "description" => $description,
+        "icon" => $icon,
+        "url" => $url
+    );
 
+    $jsonData = json_encode($data);     // Encode to JSON
+    $encodedData = base64_encode($jsonData);     // Encode the JSON string using Base64
+?>
+    <div id="hederapay-app-metadata" style="display: none;" data-attributes="<?php echo $encodedData; ?>"></div>
 <?php
 }
 add_action('wp_footer', 'add_hederapay_settings_to_footer');
