@@ -5,8 +5,9 @@ HederaPay allows users to integrate HBAR transaction buttons into their WordPres
 ## Dependencies (OPTIONAL)
 
 -   (OPTIONAL) [Advanced Custom Fields](https://wordpress.org/plugins/advanced-custom-fields/) or ACF Pro
+    -   If ACF is installed Gutenberg blocks are added, these blocks have the same functionality as the shortcodes.
 -   (OPTIONAL) [WooCommerce](https://woocommerce.com/)
-    -   When WooCommerce is installed the HederaPay option is added to the Payment options in the WooCommerce check-out.
+    -   If WooCommerce is installed the HederaPay option is added to the Payment options in the WooCommerce check-out.
 
 ## Installation
 
