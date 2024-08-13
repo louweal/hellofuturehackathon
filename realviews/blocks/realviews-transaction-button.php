@@ -36,10 +36,6 @@ if ($network == "testnet") {
 
 $cashback = get_field("field_cashback");
 
-$cashback_badge = "";
-if ($cashback) {
-    $cashback_badge = '<span class="realviews-transaction-button__cashback">–' . $cashback . '</span>';
-}
 
 ?>
 

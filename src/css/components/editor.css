@@ -9,6 +9,10 @@
         }
     }
 
+    > p > a[data-type='link'] {
+        border-bottom: 1px solid var(--color-primary);
+    }
+
     > :--headings {
         margin: 0 0 1rem 0;
 

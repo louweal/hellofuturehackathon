@@ -53,7 +53,7 @@ get_header();
         </section>
 
     <?php } else { ?>
-        <section class="section section--woocommerce woocommerce" data-aos="fade-up-10">
+        <section class="section section--woocommerce woocommerce">
             <div class="container">
                 <div class="woocommerce__content">
                     <?php woocommerce_content(); ?>

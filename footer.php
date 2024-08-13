@@ -20,24 +20,20 @@
 
             </div>
             <div class="lg:col-span-2">
-                <h3>Shop</h3>
-                <div class="editor editor--footer">
-                    <ul>
-                        <li><a href="/product/polo">Polo</a> </li>
-                        <li><a href="/product/hoodie">Hoodie</a> </li>
-                        <li><a href="/product/beanie">Beanie</a> </li>
-                    </ul>
-                </div>
+                <?php if (is_active_sidebar('footer-widget-2')) { ?>
+                    <div class="editor editor--footer">
+                        <?php dynamic_sidebar('footer-widget-2');
+                        ?>
+                    </div>
+                <?php } ?>
             </div>
             <div class="lg:col-span-3">
-                <h3>Socials</h3>
-                <div class="editor editor--footer">
-                    <ul>
-                        <li><a>Instagram</a> </li>
-                        <li><a>Twitter</a> </li>
-                        <li><a>Facebook</a> </li>
-                    </ul>
-                </div>
+                <?php if (is_active_sidebar('footer-widget-3')) { ?>
+                    <div class="editor editor--footer">
+                        <?php dynamic_sidebar('footer-widget-3');
+                        ?>
+                    </div>
+                <?php } ?>
             </div>
 
         </div>
