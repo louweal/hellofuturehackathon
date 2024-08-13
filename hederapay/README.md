@@ -4,8 +4,8 @@ HederaPay allows users to integrate Hedera transactions into their WordPress web
 
 ## Dependencies (OPTIONAL)
 
--   (OPTIONAL) [Advanced Custom Fields](https://wordpress.org/plugins/advanced-custom-fields/) or ACF Pro
-    -   If ACF is installed Gutenberg blocks are added, these blocks have the same functionality as the shortcodes.
+-   (OPTIONAL) [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
+    -   If ACF PRO is installed, the plugin adds easy to use Gutenberg blocks (these blocks have the same functionality as the shortcodes).
 -   (OPTIONAL) [WooCommerce](https://woocommerce.com/)
     -   If WooCommerce is installed the HederaPay option is added to the Payment options in the WooCommerce check-out.
 
@@ -29,7 +29,7 @@ On the HederaPay for WooCommerce admin page (`WP Dashboard` **>** `WooCommerce` 
 
 ## Shortcodes
 
-### [hederapay-transaction-button]
+### `[hederapay_transaction_button]`
 
 Adds a transaction button for sending transactions on Hedera. It uses [WalletConnect](https://walletconnect.com/) to establish a a secure connection with cryptocurrency wallets.
 
@@ -79,7 +79,7 @@ Always provide a `mainnet_account` **or** a `previewnet_account` **or** a `testn
 
 #### Gutenberg block
 
-For websites with Gutenberg and [Advanced Custom Fields](https://wordpress.org/plugins/advanced-custom-fields/) or ACF Pro we also have a _HederaPay Transaction Button_-Gutenberg block. The functionality and output are the same as the shortcode.
+On websites with Gutenberg and [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) you can also the _HederaPay Transaction Button_-Gutenberg block instead of the `[hederapay_transaction_button]`. The functionality and output are the same as the shortcode.
 
 ![Gutenberg block](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/gutenberg-block.png)
 
@@ -110,4 +110,4 @@ Displays the Account ID of the paired wallet. It is hidden when no wallet is con
 
 ## Other Plugins by HashPress Pioneers
 
--   [HederaPay for WooCommerce](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay-for-woocommerce)
+-   [Realviews](https://github.com/louweal/hellofuturehackathon/tree/master/realviews)
