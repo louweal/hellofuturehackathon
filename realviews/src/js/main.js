@@ -38,4 +38,23 @@
             body.classList.remove('realviews-modal-open');
         });
     });
+
+    let writeReviewWrappers = document.querySelectorAll('.realviews-write-review-wrapper');
+    [...writeReviewWrappers].forEach((writeReviewWrapper) => {
+        let accountId = decodeData(writeReviewWrapper.dataset.encoded);
+        console.log(accountId);
+
+        let localAccountId = localStorage.getItem('accountId');
+        console.log(localAccountId);
+
+        if (localAccountId) {
+            if (accountId === localAccountId) {
+                writeReviewWrapper.classList.add('is-active');
+            } else {
+                console.log('Different account');
+            }
+        } else {
+            console.log('not paired');
+        }
+    });
 })();

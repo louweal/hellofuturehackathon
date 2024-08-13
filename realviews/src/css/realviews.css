@@ -230,3 +230,13 @@ body.realviews-modal-open {
 
 .realviews-stars__star + .realviews-stars__star {
 }
+
+.realviews-write-review-wrapper {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.realviews-write-review-wrapper.is-active {
+    opacity: 1;
+    visibility: visible;
+}

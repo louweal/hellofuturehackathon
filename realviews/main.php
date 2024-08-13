@@ -19,6 +19,7 @@ function init_realviews_function()
     require_once plugin_dir_path(__FILE__) . 'lib/enqueue.php';
     require_once plugin_dir_path(__FILE__) . 'lib/helpers.php';
     require_once plugin_dir_path(__FILE__) . 'lib/shortcodes.php';
+    require_once plugin_dir_path(__FILE__) . 'lib/product.php';
 }
 
 // must be hooked from main ?!

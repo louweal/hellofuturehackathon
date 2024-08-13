@@ -17,6 +17,7 @@ function init_hederapay_function()
 {
     require_once plugin_dir_path(__FILE__) . 'lib/admin.php';
     require_once plugin_dir_path(__FILE__) . 'lib/enqueue.php';
+    require_once plugin_dir_path(__FILE__) . 'lib/helpers.php';
     require_once plugin_dir_path(__FILE__) . 'lib/shortcodes.php';
     require_once plugin_dir_path(__FILE__) . 'lib/footer.php';
 }

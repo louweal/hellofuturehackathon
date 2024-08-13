@@ -139,41 +139,22 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
 
         if ($order) {
             $order_total = $order->get_total();
-            $first_name = $order->get_billing_first_name(); // Get the customer's first name
-            $last_name = $order->get_billing_last_name();   // Get the customer's last name
-            $full_name = $first_name . ' ' . $last_name;
+            // $first_name = $order->get_billing_first_name(); // Get the customer's first name
+            // $last_name = $order->get_billing_last_name();   // Get the customer's last name
+            // $full_name = $first_name . ' ' . $last_name;
+            // echo $full_name;
 
             $currency = get_woocommerce_currency();
             $currency_symbol = get_woocommerce_currency_symbol();
             $account_attribute = $this->getAccountAttribute();
 
-
             $status = isset($_GET['transaction']) ? $_GET['transaction'] : null;
+            $transaction_id = isset($_GET['transaction_id']) ? $_GET['transaction_id'] : null;
 
-            echo $full_name;
 
-            echo '<ul>';
-
-            foreach ($order->get_items() as $item_id => $item) {
-                // Get the product ID
-                $product_id = $item->get_product_id();
-                // Get the product object
-                $product = wc_get_product($product_id);
-                // Get the product name
-                $product_name = $product ? $product->get_name() : 'Unknown Product';
-
-                // Output product details
-                echo '<li>';
-                echo 'Product ID: ' . esc_html($product_id) . ' - ';
-                echo 'Product Name: ' . esc_html($product_name);
-                echo '</li>';
-            }
-
-            echo '</ul>';
-
-            if (!$status || $status != "success") {
+            if (!$transaction_id) {
                 echo do_shortcode('[hederapay_transaction_button network="' . $this->network . '" title="Pay now - ' . $currency_symbol . $order_total . '" ' . $account_attribute . ' currency="' . $currency . '" amount="' . $order_total . '" woocommerce="true" memo="Order at ' . get_bloginfo('name') . '"]');
-            } else if ($status == "success") {
+            } else { //if ($status == "success") {
                 // Mark the order as completed if payment is successful
                 $order->update_status('completed', __('Payment received, order completed.', 'woocommerce'));
 
@@ -185,9 +166,16 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
 
                 // Display success message
                 echo "<p>" . $this->success_message . "</p>";
-            } else {
-                echo "<p>" . $this->failed_message . "</p>";
+
+                // add meta info to products
+                foreach ($order->get_items() as $item_id => $item) {
+                    $product_id = $item->get_product_id();
+                    add_transaction_id_to_post($product_id, $transaction_id);
+                }
             }
+            // else {
+            //echo "<p>" . $this->failed_message . "</p>";
+            //}
         } else {
             var_dump("Order not found.");
         }

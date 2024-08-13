@@ -23,10 +23,14 @@ import { LedgerId } from '@hashgraph/sdk';
     let hashconnect;
     let state = HashConnectConnectionState.Disconnected;
     let pairingData;
-
-    let connectButtons = document.querySelectorAll('.hederapay-connect-button');
     let clickedConnectButton;
 
+    let localAccountId = localStorage.getItem('accountId');
+    console.log(localAccountId);
+
+    setVisibleAccountId(localAccountId);
+
+    let connectButtons = document.querySelectorAll('.hederapay-connect-button');
     [...connectButtons].forEach((connectButton) => {
         connectButton.addEventListener('click', async function () {
             clickedConnectButton = connectButton;
@@ -90,8 +94,8 @@ import { LedgerId } from '@hashgraph/sdk';
             let response = await transaction.executeWithSigner(signer);
             console.log(response);
 
-            const transactionId = response.transactionId;
-            console.log('Transaction ID:', transactionId.toString());
+            const transactionId = response.transactionId.toString();
+            console.log('Transaction ID:', transactionId);
             let receipt = await response.getReceiptWithSigner(signer);
 
             console.log(receipt);
@@ -103,6 +107,9 @@ import { LedgerId } from '@hashgraph/sdk';
                     const currentUrl = new URL(window.location.href);
                     // Add the parameter to the URL
                     currentUrl.searchParams.set('transaction', 'success');
+                    let urlTransactionId = transactionId.replace('@', '-');
+                    currentUrl.searchParams.set('transaction_id', urlTransactionId);
+
                     // Redirect to the new URL with the additional parameter
                     window.location.href = currentUrl.href;
                 } else {
@@ -170,7 +177,6 @@ import { LedgerId } from '@hashgraph/sdk';
 
     function setUpHashConnectEvents() {
         // let connectButtons = document.querySelectorAll('.hederapay-connect-button');
-        let pairedAccountDisplays = document.querySelectorAll('.hederapay-paired-account');
 
         let selectedConnectButton = clickedConnectButton || document.querySelector('.hederapay-connect-button');
         let selectedConnectButtonText = selectedConnectButton.querySelector('.hederapay-connect-button-text');
@@ -180,32 +186,31 @@ import { LedgerId } from '@hashgraph/sdk';
             pairingData = newPairing;
             selectedConnectButtonText.innerText = selectedConnectButtonData.disconnect_text;
             selectedConnectButton.classList.add('is-connected');
+            localStorage.setItem('accountId', pairingData.accountIds[0]);
 
-            let id = pairingData.accountIds[0];
-            let network = selectedConnectButtonData.network;
+            // let id = pairingData.accountIds[0];
+            setVisibleAccountId(pairingData.accountIds[0]);
+            // let network = selectedConnectButtonData.network;
 
-            let url = ''; // no url for previewnet
-            if (network === 'testnet') {
-                url = 'https://testnet.dragonglass.me/accounts/' + id;
-            } else {
-                url = 'https://app.dragonglass.me/accounts/' + id;
-            }
+            // let url = ''; // no url for previewnet
+            // if (network === 'testnet') {
+            //     url = 'https://testnet.dragonglass.me/accounts/' + id;
+            // } else {
+            //     url = 'https://app.dragonglass.me/accounts/' + id;
+            // }
 
-            [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
-                pairedAccountDisplay.innerHTML = `<a target="_blank" href="${url}">${id}</a>`;
-                pairedAccountDisplay.style.display = 'inline';
-            });
+            // [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
+            //     pairedAccountDisplay.innerHTML = `<a target="_blank" href="${url}">${id}</a>`;
+            //     pairedAccountDisplay.style.display = 'inline';
+            // });
         });
 
         hashconnect.disconnectionEvent.on(() => {
             pairingData = null;
             selectedConnectButtonText.innerText = selectedConnectButtonData.connect_text;
             selectedConnectButton.classList.remove('is-connected');
-
-            [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
-                pairedAccountDisplay.innerHTML = '';
-                pairedAccountDisplay.style.display = 'none';
-            });
+            localStorage.removeItem('accountId');
+            setVisibleAccountId(undefined);
         });
 
         hashconnect.connectionStatusChangeEvent.on((connectionStatus) => {
@@ -214,6 +219,20 @@ import { LedgerId } from '@hashgraph/sdk';
     }
 
     //helper functions
+
+    function setVisibleAccountId(pairedAccount) {
+        let pairedAccountDisplays = document.querySelectorAll('.hederapay-paired-account');
+
+        [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
+            if (pairedAccount) {
+                pairedAccountDisplay.innerHTML = pairedAccount;
+                pairedAccountDisplay.style.display = 'inline';
+            } else {
+                pairedAccountDisplay.innerHTML = '';
+                pairedAccountDisplay.style.display = 'none';
+            }
+        });
+    }
 
     async function getHbarPrice(currency) {
         const url = 'https://api.coingecko.com/api/v3/simple/price?ids=hedera-hashgraph&vs_currencies=' + currency;
