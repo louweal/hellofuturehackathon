@@ -33,6 +33,19 @@ if ($network == "testnet") {
     $badge = '<span class="hederapay-transaction-button__badge">previewnet</span>';
 }
 
+$button_state = $amount == null ? "disabled" : "";
+
+$data = array(
+    "currency" => $currency,
+    "memo" => $memo,
+    "network" => $network,
+    "account" => $account,
+    "amount" => $amount,
+);
+
+$jsonData = json_encode($data);     // Encode to JSON
+$encodedData = base64_encode($jsonData);     // Encode the JSON string using Base64
+
 ?>
 <div class="hederapay-transaction-wrapper">
     <div style="display: flex">
@@ -41,9 +54,9 @@ if ($network == "testnet") {
         <?php }; //if 
         ?>
 
-        <div class="btn hederapay-transaction-button" data-currency="<?php echo $currency; ?>" data-memo="<?php echo $memo; ?>" data-network="<?php echo $network; ?>" data-account="<?php echo $account; ?>" data-amount="<?php echo $amount; ?>">
+        <button type="button" class="btn hederapay-transaction-button" data-attributes="<?php echo $encodedData; ?>" <?php echo $button_state; ?>>
             <?php echo $title; ?><?php echo $badge; ?>
-        </div>
+        </button>
     </div>
 
     <div class="hederapay-transaction-notices"></div>
