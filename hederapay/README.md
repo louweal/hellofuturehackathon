@@ -2,9 +2,11 @@
 
 HederaPay allows users to integrate HBAR transaction buttons into their WordPress website. This plugin is suited for all regular WordPress sites. For webshops that use WooCommerce we have another plugin: [HederaPay for WooCommerce](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay-for-woocommerce).
 
-## Dependencies / Required plugins
+## Dependencies (OPTIONAL)
 
-No required plugins, although Advanced Custom Fields (free) or Advanced Custom Fields Pro might be [handy](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay#gutenberg-block).
+-   (OPTIONAL) [Advanced Custom Fields](https://wordpress.org/plugins/advanced-custom-fields/) or ACF Pro
+-   (OPTIONAL) [WooCommerce](https://woocommerce.com/)
+    -   When WooCommerce is installed the HederaPay option is added to the Payment options in the WooCommerce check-out.
 
 ## Installation
 
@@ -18,11 +20,11 @@ The HederaPay settings page allows you to change the site metadata that is shown
 
 ![Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/admin-settings.png)
 
-### Configuration for WooCommerce shops
+## Configuration for WooCommerce shops
 
 On the HederaPay for WooCommerce admin page (`WP Dashboard` **>** `WooCommerce` **>** `Settings` **>** `Payments` **>** `HederaPay for WooCommerce`) you can select the network and the Account ID of the receiver on that network. Optionally, you can also change success and failure messages that will be displayed to the user after the transaction.
 
-![WooCommerce Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay-for-woocommerce/assets/woocommerce-admin.png)
+![WooCommerce Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/woocommerce-admin.png)
 
 ## Shortcodes
 
