@@ -6,14 +6,6 @@
  */
 
 
-// for development /testing only
-// add_shortcode('realviews_create_topic', 'realviews_create_topic_function');
-// function realviews_create_topic_function()
-// {
-//     return '<div class="btn realviews-create-topic-button" data-network="testnet">Create topic</div>';
-// }
-
-
 add_shortcode('realviews_latest_reviews', 'realviews_latest_reviews_function', 5);
 function realviews_latest_reviews_function($atts)
 {
@@ -257,20 +249,22 @@ function realviews_latest_reviews_function($atts)
                         </div>
 
                         <div class="realviews-modal__body">
-                            <div class="realviews-modal__form">
-                                <div class="realviews-rating">
+                            <form id="write-review" class="realviews-modal__form">
+
+                                <div class="realviews-rating" id="rating-wrapper">
                                     <span>Rating:</span>
                                     <div class="realviews-stars">
                                         <?php for ($i = 5; $i >= 1; $i--) { ?>
-                                            <div class="realviews-stars__star" data-star-id="<?php echo $i; ?>"></div>
+                                            <div class="realviews-stars__star" id="<?php echo $i; ?>"></div>
                                         <?php } ?>
                                     </div>
+                                    <span class="realviews-rating__display"><span class="selected-rating">0</span>/5</span>
                                 </div>
 
                                 <input type="text" id="name" name="name" placeholder="Name">
                                 <textarea name="message" id="message" placeholder="Message"></textarea>
-                                <div class="btn realviews-submit-review">Submit</div>
-                            </div>
+                                <button type="submit" class="btn realviews-submit-review">Submit</button>
+                            </form>
                         </div>
                     </div>
                 </div><!-- modal -->
