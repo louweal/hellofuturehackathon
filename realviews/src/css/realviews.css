@@ -35,6 +35,7 @@ body.realviews-modal-open {
     --gap: 1.25rem;
     gap: var(--gap);
     margin-bottom: 2rem;
+    margin-top: 2rem;
 }
 
 .realviews-review {
