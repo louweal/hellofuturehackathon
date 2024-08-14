@@ -22,6 +22,16 @@ function init_realviews_function()
     require_once plugin_dir_path(__FILE__) . 'lib/product.php';
 }
 
+function enable_hederapay()
+{
+    $plugin = 'hederapay/main.php';
+
+    if (!is_plugin_active($plugin)) {
+        activate_plugin($plugin);
+    }
+}
+add_action('init', 'enable_hederapay');
+
 // must be hooked from main ?!
 add_action('acf/init', 'realviews_block_init', 10);
 function realviews_block_init()
