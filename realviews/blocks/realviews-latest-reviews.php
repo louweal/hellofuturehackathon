@@ -212,22 +212,24 @@ function getTitle()
                         </svg>
                     </button>
 
-                    <h2>Write review for <?php echo $title; ?></h2>
+                    <h2>Write a review for <?php echo $title; ?></h2>
                 </div>
 
                 <div class="realviews-modal__body">
-
-                    <div class="realviews-rating">
-                        <span>Rating:</span>
-                        <div class="realviews-stars">
-                            <?php for ($i = 5; $i >= 1; $i--) { ?>
-                                <div class="realviews-stars__star" data-star-id="<?php echo $i; ?>"></div>
-                            <?php } ?>
+                    <div class="realviews-modal__form">
+                        <div class="realviews-rating">
+                            <span>Rating:</span>
+                            <div class="realviews-stars">
+                                <?php for ($i = 5; $i >= 1; $i--) { ?>
+                                    <div class="realviews-stars__star" data-star-id="<?php echo $i; ?>"></div>
+                                <?php } ?>
+                            </div>
                         </div>
-                    </div>
 
-                    <textarea name="message" id="message" placeholder="Message"></textarea>
-                    <div class="btn realviews-submit-review">Submit</div>
+                        <input type="text" id="name" name="name" placeholder="Name">
+                        <textarea name="message" id="message" placeholder="Message"></textarea>
+                        <div class="btn realviews-submit-review">Submit</div>
+                    </div>
                 </div>
             </div>
         </div>

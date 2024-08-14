@@ -176,9 +176,23 @@ body.realviews-modal-open {
     justify-content: center;
 }
 
+.realviews-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    /* justify-content: flex-start; */
+    align-items: flex-start;
+}
+
+.realviews-modal input[type='text'] {
+    width: 100%;
+    outline: none;
+}
+
 .realviews-modal textarea {
     width: 100%;
     min-height: 12.5rem;
+    outline: none;
 }
 
 .realviews-actions {
@@ -194,7 +208,6 @@ body.realviews-modal-open {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    margin-bottom: 1rem;
 }
 
 .realviews-stars {
