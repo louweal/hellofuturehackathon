@@ -23,7 +23,6 @@ import { LedgerId } from '@hashgraph/sdk';
     let hashconnect;
     let state = HashConnectConnectionState.Disconnected;
     let pairingData;
-    let clickedConnectButton;
 
     let localAccountId = localStorage.getItem('accountId');
 
@@ -33,7 +32,6 @@ import { LedgerId } from '@hashgraph/sdk';
     let connectButtons = document.querySelectorAll('.hederapay-connect-button');
     [...connectButtons].forEach((connectButton) => {
         connectButton.addEventListener('click', async function () {
-            clickedConnectButton = connectButton;
             let buttonData = decodeData(connectButton.dataset.attributes);
 
             if (!pairingData) {
@@ -63,7 +61,6 @@ import { LedgerId } from '@hashgraph/sdk';
     }); //foreach
 
     async function handleTransaction(transactionWrapper, transactionData) {
-        let transactionButton = transactionWrapper.querySelector('.hederapay-transaction-button');
         let transactionNotices = transactionWrapper.querySelector('.hederapay-transaction-notices');
         transactionNotices.innerText = ''; // reset
 
@@ -96,7 +93,6 @@ import { LedgerId } from '@hashgraph/sdk';
                 if (transactionData.store === true) {
                     const currentUrl = new URL(window.location.href);
                     // Add the parameter to the URL
-                    // currentUrl.searchParams.set('transaction', 'success');
                     let urlTransactionId = transactionId.replace('@', '-');
                     currentUrl.searchParams.set('transaction_id', urlTransactionId);
 
@@ -117,11 +113,9 @@ import { LedgerId } from '@hashgraph/sdk';
         }
         return;
     }
-    window.handleTransaction = handleTransaction;
 
     async function getTinybarAmount(transactionWrapper, transactionData) {
         let transactionInput = transactionWrapper.querySelector('.hederapay-transaction-input');
-        let transactionButton = transactionWrapper.querySelector('.hederapay-transaction-button');
         let transactionNotices = transactionWrapper.querySelector('.hederapay-transaction-notices');
         transactionNotices.innerText = ''; // reset
 
@@ -193,7 +187,6 @@ import { LedgerId } from '@hashgraph/sdk';
 
     function setVisibleAccountId(pairedAccount) {
         let pairedAccountDisplays = document.querySelectorAll('.hederapay-paired-account');
-
         [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
             if (pairedAccount) {
                 pairedAccountDisplay.innerHTML = pairedAccount;
