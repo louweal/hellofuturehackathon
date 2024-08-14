@@ -40,9 +40,9 @@
     </div>
     <div class="footer__bar">
         <div class="container">
-            <div class="flex justify-between">
+            <div class="flex flex-col sm:flex-row gap-2 justify-between">
                 <p>HashPress Pioneers © <?php echo date("Y"); ?> All rights reverved</p>
-                <div class="hidden lg:block"><a href="https://hellofuturehackathon.dev/">Hello Future Hackathon</a></div>
+                <a href="https://hellofuturehackathon.dev/">Hello Future Hackathon</a>
             </div>
         </div>
     </div>
