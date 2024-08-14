@@ -1,4 +1,4 @@
-import { HashConnect } from 'hashconnect';
+import { HashConnect, HashConnectConnectionState } from 'hashconnect';
 import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
 import { LedgerId } from '@hashgraph/sdk';
 
@@ -21,8 +21,12 @@ import { LedgerId } from '@hashgraph/sdk';
     }
 
     let hashconnect;
-    // let state = HashConnectConnectionState.Disconnected;
+    let state = HashConnectConnectionState.Disconnected;
     let pairingData;
+
+    if (!hashconnect) {
+        localStorage.removeItem('accountId');
+    }
 
     let localAccountId = localStorage.getItem('accountId');
 
