@@ -30,6 +30,8 @@ $title = get_field("field_title");
 $memo = get_field("field_memo");
 $amount = get_field("field_amount");
 $currency = get_field("field_currency");
+$store = get_field("field_store");
+
 
 $badge = "";
 if ($network == "testnet") {
@@ -44,6 +46,7 @@ $data = array(
     "network" => $network,
     "account" => $account,
     "amount" => $amount,
+    "store" => $store
 );
 
 $jsonData = json_encode($data);     // Encode to JSON
@@ -63,4 +66,15 @@ $encodedData = base64_encode($jsonData);     // Encode the JSON string using Bas
     </div>
 
     <div class="hederapay-transaction-notices"></div>
+
+    <?php
+    $transaction_id = isset($_GET['transaction_id']) ? $_GET['transaction_id'] : null;
+
+    if ($transaction_id) { ?>
+        <div class="hederapay-transaction-success">
+            <p>Payment received. Thank you!</p>
+        </div>
+    <?php
+    }
+    ?>
 </div>

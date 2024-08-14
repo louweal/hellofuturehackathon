@@ -70,7 +70,7 @@ function hederapay_transaction_button_function($atts)
             'testnet_account' => null,
             'previewnet_account' => null,
             'mainnet_account' => null,
-            'woocommerce' => false, // executed from WooCommerce
+            'store' => false, // executed from WooCommerce
         ),
         $atts,
         'hederapay_transaction_button'
@@ -90,7 +90,8 @@ function hederapay_transaction_button_function($atts)
     $testnet_account = esc_html($atts['testnet_account']);
     $previewnet_account =  esc_html($atts['previewnet_account']);
     $mainnet_account =  esc_html($atts['testnet_account']);
-    $woocommerce =  esc_html($atts['woocommerce']);
+    $store =  esc_html($atts['store']);
+    echo $store;
 
     $result = getAccountAndNetwork($testnet_account, $previewnet_account, $mainnet_account);
     $network = $result["network"];
@@ -113,6 +114,7 @@ function hederapay_transaction_button_function($atts)
         "network" => $network,
         "account" => $account,
         "amount" => $amount,
+        "store" => $store
     );
 
     $jsonData = json_encode($data);     // Encode to JSON
@@ -127,7 +129,7 @@ function hederapay_transaction_button_function($atts)
             <?php }; //if 
             ?>
 
-            <button type="button" class="btn hederapay-transaction-button" data-woocommerce="<?php echo $woocommerce; ?>" data-attributes="<?php echo $encodedData; ?>">
+            <button type="button" class="btn hederapay-transaction-button" data-attributes="<?php echo $encodedData; ?>">
                 <?php echo $title; ?><?php echo $badge; ?>
             </button>
         </div>

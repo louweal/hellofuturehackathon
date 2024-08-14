@@ -89,7 +89,7 @@ function add_hederapay_field_groups()
                                 ),
                             ),
                         ),
-                        'placeholder' => 'Testnet', // Set default value to USD
+                        'placeholder' => 'Testnet',
                     ),
                     array(
                         'key' => 'previewnet_account',
@@ -109,7 +109,7 @@ function add_hederapay_field_groups()
                                 ),
                             ),
                         ),
-                        'placeholder' => 'Previewnet', // Set default value to USD
+                        'placeholder' => 'Previewnet',
                     ),
                     array(
                         'key' => 'mainnet_account',
@@ -129,7 +129,7 @@ function add_hederapay_field_groups()
                                 ),
                             ),
                         ),
-                        'placeholder' => 'Mainnet', // Set default value to USD
+                        'placeholder' => 'Mainnet',
                     ),
                     array(
                         'key' => 'field_title',
@@ -137,7 +137,7 @@ function add_hederapay_field_groups()
                         'name' => 'title',
                         'type' => 'text',
                         'required' => 0,
-                        'default_value' => 'Pay', // Set default value to USD
+                        'default_value' => 'Pay',
                     ),
                     array(
                         'key' => 'field_memo',
@@ -182,10 +182,20 @@ function add_hederapay_field_groups()
                             'mxn' => 'MXN',
                             'sgd' => 'SGD',
                         ),
-                        'default_value' => 'usd', // Set default value to USD
+                        'default_value' => 'usd',
                         'wrapper' => array(
                             'width' => '50%',
                         ),
+                    ),
+                    array(
+                        'key' => 'field_store',
+                        'label' => 'Store transaction',
+                        'name' => 'field_store',
+                        'type' => 'true_false',
+                        'instructions' => 'Store transaction in page data.',
+                        'ui' => 1,
+                        'required' => 0,
+                        'default_value' => 0,
                     ),
                 ),
                 'location' => array(

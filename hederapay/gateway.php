@@ -56,12 +56,6 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
                 'default' => 'Payment received.<br><br>Thank you for your order!',
 
             ),
-            'failed_message' => array(
-                'title' => 'Failed transaction message',
-                'type' => 'text',
-                'default' => 'Transaction failed. Please try again.',
-            ),
-
         );
     }
 
@@ -84,7 +78,6 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
         $this->previewnet_account = $this->get_option('previewnet_account');
         $this->mainnet_account = $this->get_option('mainnet_account');
         $this->success_message = $this->get_option('success_message');
-        $this->failed_message = $this->get_option('failed_message');
 
         // Actions
         add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
@@ -148,13 +141,11 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
             $currency_symbol = get_woocommerce_currency_symbol();
             $account_attribute = $this->getAccountAttribute();
 
-            $status = isset($_GET['transaction']) ? $_GET['transaction'] : null;
             $transaction_id = isset($_GET['transaction_id']) ? $_GET['transaction_id'] : null;
 
-
             if (!$transaction_id) {
-                echo do_shortcode('[hederapay_transaction_button network="' . $this->network . '" title="Pay now - ' . $currency_symbol . $order_total . '" ' . $account_attribute . ' currency="' . $currency . '" amount="' . $order_total . '" woocommerce="true" memo="Order at ' . get_bloginfo('name') . '"]');
-            } else { //if ($status == "success") {
+                echo do_shortcode('[hederapay_transaction_button network="' . $this->network . '" title="Pay now - ' . $currency_symbol . $order_total . '" ' . $account_attribute . ' currency="' . $currency . '" amount="' . $order_total . '" store="true" memo="Order at ' . get_bloginfo('name') . '"]');
+            } else {
                 // Mark the order as completed if payment is successful
                 $order->update_status('completed', __('Payment received, order completed.', 'woocommerce'));
 
@@ -173,9 +164,6 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
                     add_transaction_id_to_post($product_id, $transaction_id);
                 }
             }
-            // else {
-            //echo "<p>" . $this->failed_message . "</p>";
-            //}
         } else {
             var_dump("Order not found.");
         }
