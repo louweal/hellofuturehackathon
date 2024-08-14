@@ -206,13 +206,6 @@ function add_hederapay_field_groups()
                             'value' => 'acf/hederapay-transaction-button',
                         ),
                     ),
-                    array(
-                        array(
-                            'param' => 'block',
-                            'operator' => '==',
-                            'value' => 'acf/realviews-transaction-button',
-                        ),
-                    ),
                 ),
             ));
         }
