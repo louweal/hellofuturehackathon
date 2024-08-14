@@ -155,6 +155,38 @@ import { LedgerId } from '@hashgraph/sdk';
         });
     });
 
+    let reviewForm = document.querySelector('#write-review');
+    const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
+    const rating = ratingWrapper.querySelector('.selected-rating');
+    let ratingValue;
+
+    const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
+    [...stars].forEach((star) => {
+        star.addEventListener('click', function () {
+            // reset active states
+            [...stars].forEach((star) => {
+                star.classList.remove('is-active');
+            });
+
+            ratingValue = star.id;
+            rating.innerText = ratingValue;
+            star.classList.add('is-active');
+        });
+    });
+
+    reviewForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const name = reviewForm.querySelector('#name').value;
+        const message = reviewForm.querySelector('#message').value;
+
+        console.log(ratingValue);
+        console.log(name);
+        console.log(message);
+
+        // todo: create contract
+    });
+
     displayWriteReviewButtons();
 
     function displayWriteReviewButtons() {
