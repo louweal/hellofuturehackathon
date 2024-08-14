@@ -87,15 +87,13 @@ function hederapay_transaction_button_function($atts)
     $memo = esc_html($atts['memo']);
     $amount = floatval(esc_html($atts['amount'])); // convert string to float
     $currency = strtolower(esc_html($atts['currency']));
-    $testnet_account = esc_html($atts['testnet_account']);
-    $previewnet_account =  esc_html($atts['previewnet_account']);
-    $mainnet_account =  esc_html($atts['testnet_account']);
     $store =  esc_html($atts['store']);
-    echo $store;
 
-    $result = getAccountAndNetwork($testnet_account, $previewnet_account, $mainnet_account);
+
+    $result = getAccountAndNetwork($atts['testnet_account'], $atts['previewnet_account'], $atts['mainnet_account']);
     $network = $result["network"];
     $account = $result["account"];
+
 
     if (!str_starts_with($account, '0.0.')) {
         return "A Hedera Account ID should look like this: 0.0.xxxxxxx";
@@ -116,6 +114,7 @@ function hederapay_transaction_button_function($atts)
         "amount" => $amount,
         "store" => $store
     );
+
 
     $jsonData = json_encode($data);     // Encode to JSON
     $encodedData = base64_encode($jsonData);     // Encode the JSON string using Base64

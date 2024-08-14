@@ -1,4 +1,4 @@
-import { HashConnect, HashConnectConnectionState } from 'hashconnect';
+import { HashConnect } from 'hashconnect';
 import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
 import { LedgerId } from '@hashgraph/sdk';
 
@@ -21,7 +21,7 @@ import { LedgerId } from '@hashgraph/sdk';
     }
 
     let hashconnect;
-    let state = HashConnectConnectionState.Disconnected;
+    // let state = HashConnectConnectionState.Disconnected;
     let pairingData;
 
     let localAccountId = localStorage.getItem('accountId');
@@ -90,7 +90,7 @@ import { LedgerId } from '@hashgraph/sdk';
             // Check if the transaction was successful
             if (receipt.status.toString() === 'SUCCESS') {
                 // executed from woocommerce gateway
-                if (transactionData.store === true) {
+                if (transactionData.store === true || transactionData.store === 'true') {
                     const currentUrl = new URL(window.location.href);
                     // Add the parameter to the URL
                     let urlTransactionId = transactionId.replace('@', '-');
@@ -100,6 +100,7 @@ import { LedgerId } from '@hashgraph/sdk';
                     window.location.href = currentUrl.href;
                 } else {
                     transactionNotices.innerText += 'Payment received. Thank you! ';
+                    console.log(transactionData.store);
                 }
                 return;
             }
