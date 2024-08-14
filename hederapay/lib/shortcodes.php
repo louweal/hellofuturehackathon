@@ -56,9 +56,7 @@ function hederapay_connect_button_function($atts)
 add_shortcode('hederapay_transaction_button', 'hederapay_transaction_button_function');
 function hederapay_transaction_button_function($atts)
 {
-    if (!isset($atts['amount'])) {
-        return "Please specify the amount you wish to receive.";
-    }
+
 
     // Define the default attributes
     $atts = shortcode_atts(
