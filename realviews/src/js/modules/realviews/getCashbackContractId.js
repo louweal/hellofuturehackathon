@@ -19,7 +19,7 @@ export const getCashbackContractId = async function getCashbackContractId(transa
         if (data.transactions) {
             if (data.transactions.length > 0) {
                 let transactions = data.transaction;
-                for (const transaction in transactions) {
+                for (const transaction of transactions) {
                     if (transaction.name === 'CONTRACTCREATEINSTANCE') {
                         console.log('New contract: ' + transaction.entity_id);
                         break;

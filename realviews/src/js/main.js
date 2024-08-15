@@ -1,9 +1,6 @@
 import { HashConnect, HashConnectConnectionState } from 'hashconnect';
 import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
-import { ContractId, ContractExecuteTransaction, ContractFunctionParameters } from '@hashgraph/sdk';
-
-import { displayWriteReviewButtons } from './modules/displayWriteReviewButtons';
-import { getCashbackContractId } from './modules/getCashbackContractId';
+import { setAppMetadata } from './modules/setAppMetadata';
 import { setQueryParamAndRedirect } from './modules/setQueryParamsAndRedirect';
 import { decodeData } from './modules/decodeData';
 import { getTinybarAmount } from './modules/getTinybarAmount';
@@ -11,100 +8,29 @@ import { getNetworkId } from './modules/getNetworkId';
 import { setConnectButtonsText } from './modules/setConnectButtonsText';
 import { setVisibleAccountId } from './modules/setVisibleAccountId';
 
+// Realviews
+import { handleAllReviewsToggle } from './modules/realviews/handleAllReviewsToggle';
+import { handleContractCreateTest } from './modules/realviews/handleContractCreateTest';
+import { handleWriteReviewToggle } from './modules/realviews/handleWriteReviewToggle';
+import { handleModalsHide } from './modules/realviews/handleModalsHide';
+import { handleReviewSubmit } from './modules/realviews/handleReviewSubmit';
+import { displayWriteReviewButtons } from './modules/realviews/displayWriteReviewButtons';
+import { fetchMirrornodeTransaction } from './modules/realviews/fetchMirrornodeTransaction';
+import { getCashbackContractId } from './modules/realviews/getCashbackContractId';
 // Main thread
 (function () {
     'use strict';
 
-    // testFun();
-
-    // async function testFun() {
-    //     let testUrl = 'https://testnet.mirrornode.hedera.com/api/v1/transactions/0.0.4505361-1723726703-552864158';
-    //     const restResponse = await fetch(testUrl, {
-    //         method: 'GET',
-    //         headers: {},
-    //     });
-    //     const text = await restResponse.json();
-    //     console.log(text);
-    // }
-
-    let createContractButton = document.querySelector('.create-contract-button');
-    if (createContractButton) {
-        createContractButton.addEventListener('click', async function () {
-            if (!pairingData) {
-                await init('testnet');
-            }
-
-            const factoryContractId = ContractId.fromString('0.0.4685895');
-            console.log(factoryContractId.toString());
-            let bSeconds = 1723574410;
-            let bNanoseconds = 0;
-            let amount = 1000; // tinybar, integer!
-            let cashback = 1; // tinybar
-            let shopOwner = AccountId.fromString('0.0.4507369');
-            let iSeconds = 4;
-
-            let fromAccount = AccountId.fromString(pairingData.accountIds[0]);
-
-            let signer = hashconnect.getSigner(fromAccount);
-
-            //Create the transaction to deploy a new CashbackReview contract
-            let transaction = await new ContractExecuteTransaction()
-                //Set the ID of the contract
-                .setContractId(factoryContractId)
-                //Set the gas for the call
-                .setGas(2000000)
-                //Set the function of the contract to call
-                .setFunction(
-                    'deployCashbackReview',
-                    new ContractFunctionParameters()
-                        .addUint32(bSeconds)
-                        .addUint32(bNanoseconds)
-                        .addUint64(cashback)
-                        .addAddress(shopOwner)
-                        .addUint32(iSeconds),
-                )
-                .setPayableAmount(Hbar.fromTinybars(amount))
-                .freezeWithSigner(signer);
-
-            let response = await transaction.executeWithSigner(signer);
-            // console.log(response);
-
-            //Confirm the transaction was executed successfully
-            const transactionId = response.transactionId.toString();
-            // console.log('Transaction ID:', transactionId);
-            let receipt = await response.getReceiptWithSigner(signer);
-            // console.log(receipt);
-            console.log('The transaction status is ' + receipt.status.toString());
-            if (receipt.status._code === 22) {
-                // add transactionId to url and redirect
-                setQueryParamAndRedirect(transactionId);
-            } else {
-                console.log('Oops');
-            }
-        });
-    }
-
-    let metadata = document.querySelector('#hederapay-app-metadata');
-
-    let appMetadata = {};
-    if (metadata) {
-        let metadataData = decodeData(metadata.dataset.attributes);
-
-        appMetadata = {
-            name: metadataData.name,
-            description: metadataData.description,
-            icons: [metadataData.icon],
-            url: metadataData.url,
-        };
-    }
-
     let hashconnect;
     let state = `HashConnectConnectionState`.Disconnected;
     let pairingData;
+    let appMetadata = setAppMetadata();
 
     if (!hashconnect) {
         localStorage.removeItem('accountId');
     }
+
+    handleContractCreateTest(pairingData);
 
     let localAccountId = localStorage.getItem('accountId');
 
@@ -116,7 +42,7 @@ import { setVisibleAccountId } from './modules/setVisibleAccountId';
         connectButton.addEventListener('click', async function () {
             let buttonData = decodeData(connectButton.dataset.attributes);
 
-            if (!pairingData && !localAccountId) {
+            if (!pairingData) {
                 await init(buttonData.network); //connect
             } else {
                 hashconnect.disconnect(); // disconnect wallet
@@ -191,79 +117,6 @@ import { setVisibleAccountId } from './modules/setVisibleAccountId';
         return;
     }
 
-    let body = document.querySelector('body');
-
-    let showModalButtons = document.querySelectorAll('.show-realviews-modal');
-
-    [...showModalButtons].forEach((showModalButton) => {
-        showModalButton.addEventListener('click', function () {
-            let modal = showModalButton.nextElementSibling;
-            modal.classList.add('is-active');
-            body.classList.add('realviews-modal-open');
-        });
-    });
-
-    let showWriteModalButtons = document.querySelectorAll('.realviews-write-review');
-    [...showWriteModalButtons].forEach((showWriteModalButton) => {
-        showWriteModalButton.addEventListener('click', function () {
-            let writeModal = showWriteModalButton.nextElementSibling;
-            writeModal.classList.add('is-active');
-            body.classList.add('realviews-modal-open');
-        });
-    });
-
-    let modals = document.querySelectorAll('.realviews-modal');
-    [...modals].forEach((modal) => {
-        let modalBg = modal.querySelector('.realviews-modal__bg');
-        let closeModalButton = modal.querySelector('.realviews-modal__close');
-
-        modalBg.addEventListener('click', function () {
-            modal.classList.remove('is-active');
-            body.classList.remove('realviews-modal-open');
-        });
-
-        closeModalButton.addEventListener('click', function () {
-            modal.classList.remove('is-active');
-            body.classList.remove('realviews-modal-open');
-        });
-    });
-
-    let reviewForm = document.querySelector('#write-review');
-    if (reviewForm) {
-        const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
-        const rating = ratingWrapper.querySelector('.selected-rating');
-        let ratingValue;
-
-        const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
-        [...stars].forEach((star) => {
-            star.addEventListener('click', function () {
-                // reset active states
-                [...stars].forEach((star) => {
-                    star.classList.remove('is-active');
-                });
-
-                ratingValue = star.id;
-                rating.innerText = ratingValue;
-                star.classList.add('is-active');
-            });
-        });
-
-        reviewForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            const name = reviewForm.querySelector('#name').value;
-            const message = reviewForm.querySelector('#message').value;
-
-            console.log(ratingValue);
-            console.log(name);
-            console.log(message);
-
-            // todo: create contract
-        });
-    }
-
-    displayWriteReviewButtons();
-
     async function init(network) {
         // Create the hashconnect instance
         hashconnect = new HashConnect(getNetworkId(network), '606201a2da45f68c8084e2eea1f14ad7', appMetadata, true);
@@ -302,4 +155,11 @@ import { setVisibleAccountId } from './modules/setVisibleAccountId';
             state = connectionStatus;
         });
     }
+
+    // Realviews
+    handleAllReviewsToggle(); // show all reviews on click
+    handleWriteReviewToggle(); // show write a review modal on click
+    handleModalsHide(); // hide all active modals on click
+    handleReviewSubmit(); // handle submission of the write review form
+    displayWriteReviewButtons(); // handle visibility of the 'write review' button (active account must have a transaction record)
 })();

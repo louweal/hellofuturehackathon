@@ -2,6 +2,8 @@ import { HashConnect, HashConnectConnectionState } from 'hashconnect';
 import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
 import { LedgerId } from '@hashgraph/sdk';
 
+/* IMPORTANT: THIS SCRIPT IS NOT ENQUEUED WHEN REALVIEWS IS ACTIVE */
+
 // Main thread
 (function () {
     'use strict';
