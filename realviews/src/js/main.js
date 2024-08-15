@@ -1,10 +1,88 @@
 import { HashConnect, HashConnectConnectionState } from 'hashconnect';
 import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
-import { LedgerId } from '@hashgraph/sdk';
+import { ContractId, ContractExecuteTransaction, ContractFunctionParameters } from '@hashgraph/sdk';
+
+import { displayWriteReviewButtons } from './modules/displayWriteReviewButtons';
+import { getCashbackContractId } from './modules/getCashbackContractId';
+import { setQueryParamAndRedirect } from './modules/setQueryParamsAndRedirect';
+import { decodeData } from './modules/decodeData';
+import { getTinybarAmount } from './modules/getTinybarAmount';
+import { getNetworkId } from './modules/getNetworkId';
+import { setConnectButtonsText } from './modules/setConnectButtonsText';
+import { setVisibleAccountId } from './modules/setVisibleAccountId';
 
 // Main thread
 (function () {
     'use strict';
+
+    // testFun();
+
+    // async function testFun() {
+    //     let testUrl = 'https://testnet.mirrornode.hedera.com/api/v1/transactions/0.0.4505361-1723726703-552864158';
+    //     const restResponse = await fetch(testUrl, {
+    //         method: 'GET',
+    //         headers: {},
+    //     });
+    //     const text = await restResponse.json();
+    //     console.log(text);
+    // }
+
+    let createContractButton = document.querySelector('.create-contract-button');
+    if (createContractButton) {
+        createContractButton.addEventListener('click', async function () {
+            if (!pairingData) {
+                await init('testnet');
+            }
+
+            const factoryContractId = ContractId.fromString('0.0.4685895');
+            console.log(factoryContractId.toString());
+            let bSeconds = 1723574410;
+            let bNanoseconds = 0;
+            let amount = 1000; // tinybar, integer!
+            let cashback = 1; // tinybar
+            let shopOwner = AccountId.fromString('0.0.4507369');
+            let iSeconds = 4;
+
+            let fromAccount = AccountId.fromString(pairingData.accountIds[0]);
+
+            let signer = hashconnect.getSigner(fromAccount);
+
+            //Create the transaction to deploy a new CashbackReview contract
+            let transaction = await new ContractExecuteTransaction()
+                //Set the ID of the contract
+                .setContractId(factoryContractId)
+                //Set the gas for the call
+                .setGas(2000000)
+                //Set the function of the contract to call
+                .setFunction(
+                    'deployCashbackReview',
+                    new ContractFunctionParameters()
+                        .addUint32(bSeconds)
+                        .addUint32(bNanoseconds)
+                        .addUint64(cashback)
+                        .addAddress(shopOwner)
+                        .addUint32(iSeconds),
+                )
+                .setPayableAmount(Hbar.fromTinybars(amount))
+                .freezeWithSigner(signer);
+
+            let response = await transaction.executeWithSigner(signer);
+            // console.log(response);
+
+            //Confirm the transaction was executed successfully
+            const transactionId = response.transactionId.toString();
+            // console.log('Transaction ID:', transactionId);
+            let receipt = await response.getReceiptWithSigner(signer);
+            // console.log(receipt);
+            console.log('The transaction status is ' + receipt.status.toString());
+            if (receipt.status._code === 22) {
+                // add transactionId to url and redirect
+                setQueryParamAndRedirect(transactionId);
+            } else {
+                console.log('Oops');
+            }
+        });
+    }
 
     let metadata = document.querySelector('#hederapay-app-metadata');
 
@@ -95,13 +173,8 @@ import { LedgerId } from '@hashgraph/sdk';
             if (receipt.status.toString() === 'SUCCESS') {
                 // executed from woocommerce gateway
                 if (transactionData.store === true) {
-                    const currentUrl = new URL(window.location.href);
-                    // Add the parameter to the URL
-                    let urlTransactionId = transactionId.replace('@', '-');
-                    currentUrl.searchParams.set('transaction_id', urlTransactionId);
-
-                    // Redirect to the new URL with the additional parameter
-                    window.location.href = currentUrl.href;
+                    // transaction data needs to be stored (for reviewing later)
+                    setQueryParamAndRedirect(transactionId);
                 } else {
                     transactionNotices.innerText += 'Payment received. Thank you! ';
                 }
@@ -156,88 +229,40 @@ import { LedgerId } from '@hashgraph/sdk';
     });
 
     let reviewForm = document.querySelector('#write-review');
-    const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
-    const rating = ratingWrapper.querySelector('.selected-rating');
-    let ratingValue;
+    if (reviewForm) {
+        const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
+        const rating = ratingWrapper.querySelector('.selected-rating');
+        let ratingValue;
 
-    const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
-    [...stars].forEach((star) => {
-        star.addEventListener('click', function () {
-            // reset active states
-            [...stars].forEach((star) => {
-                star.classList.remove('is-active');
+        const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
+        [...stars].forEach((star) => {
+            star.addEventListener('click', function () {
+                // reset active states
+                [...stars].forEach((star) => {
+                    star.classList.remove('is-active');
+                });
+
+                ratingValue = star.id;
+                rating.innerText = ratingValue;
+                star.classList.add('is-active');
             });
-
-            ratingValue = star.id;
-            rating.innerText = ratingValue;
-            star.classList.add('is-active');
         });
-    });
 
-    reviewForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+        reviewForm.addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        const name = reviewForm.querySelector('#name').value;
-        const message = reviewForm.querySelector('#message').value;
+            const name = reviewForm.querySelector('#name').value;
+            const message = reviewForm.querySelector('#message').value;
 
-        console.log(ratingValue);
-        console.log(name);
-        console.log(message);
+            console.log(ratingValue);
+            console.log(name);
+            console.log(message);
 
-        // todo: create contract
-    });
+            // todo: create contract
+        });
+    }
 
     displayWriteReviewButtons();
-
-    function displayWriteReviewButtons() {
-        let localAccountId = localStorage.getItem('accountId');
-        console.log('localAccountId :>> ', localAccountId);
-
-        if (localAccountId) {
-            let writeReviewWrappers = document.querySelectorAll('.realviews-write-review-wrapper');
-            [...writeReviewWrappers].forEach((writeReviewWrapper) => {
-                let accountIds = decodeData(writeReviewWrapper.dataset.encoded);
-
-                if (accountIds.includes(localAccountId)) {
-                    writeReviewWrapper.classList.add('is-active');
-                } else {
-                    console.log('Different account');
-                }
-            });
-        }
-    }
-
-    async function getTinybarAmount(transactionWrapper, transactionData) {
-        let transactionInput = transactionWrapper.querySelector('.hederapay-transaction-input');
-        let transactionNotices = transactionWrapper.querySelector('.hederapay-transaction-notices');
-        transactionNotices.innerText = ''; // reset
-
-        let currency = transactionData.currency;
-        let amount = transactionData.amount;
-
-        if (!amount) {
-            // check for user input
-            if (transactionInput) {
-                if (transactionInput.value != '') {
-                    let amountInputValue = transactionInput.value;
-                    return await convertCurrencyToTinybar(amountInputValue, currency);
-                } else {
-                    transactionNotices.innerText += 'Please enter the amount.';
-                    return null; // do nothing; amount missing
-                }
-            } else {
-                return null; // do nothing; amount missing and input field missing
-            }
-        } else {
-            return await convertCurrencyToTinybar(amount, currency);
-        }
-    }
-
-    function getNetworkId(network) {
-        if (network == 'mainnet') return LedgerId.MAINNET;
-        if (network == 'previewnet') return LedgerId.PREVIEWNET;
-        return LedgerId.TESTNET;
-    }
 
     async function init(network) {
         // Create the hashconnect instance
@@ -276,63 +301,5 @@ import { LedgerId } from '@hashgraph/sdk';
         hashconnect.connectionStatusChangeEvent.on((connectionStatus) => {
             state = connectionStatus;
         });
-    }
-
-    //helper functions
-
-    function setVisibleAccountId(pairedAccount) {
-        let pairedAccountDisplays = document.querySelectorAll('.hederapay-paired-account');
-        [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
-            if (pairedAccount) {
-                pairedAccountDisplay.innerHTML = pairedAccount;
-                pairedAccountDisplay.style.display = 'inline';
-            } else {
-                pairedAccountDisplay.innerHTML = '';
-                pairedAccountDisplay.style.display = 'none';
-            }
-        });
-    }
-
-    function setConnectButtonsText(attribute) {
-        let connectButtons = document.querySelectorAll('.hederapay-connect-button');
-        [...connectButtons].forEach((connectButton) => {
-            let connectButtonData = decodeData(connectButton.dataset.attributes);
-            let connectButtonText = connectButton.querySelector('.hederapay-connect-button-text');
-            connectButtonText.innerText = connectButtonData[attribute];
-        });
-    }
-
-    async function getHbarPrice(currency) {
-        const url = 'https://api.coingecko.com/api/v3/simple/price?ids=hedera-hashgraph&vs_currencies=' + currency;
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            return data['hedera-hashgraph'][currency];
-        } catch (error) {
-            console.error('Error fetching HBAR price:', error);
-            throw error;
-        }
-    }
-
-    async function convertCurrencyToTinybar(amount, currency) {
-        try {
-            const hbarPriceInCurrency = await getHbarPrice(currency);
-            if (hbarPriceInCurrency === undefined) {
-                throw new Error('Failed to retrieve HBAR price');
-            }
-            return Math.round((amount / hbarPriceInCurrency) * 1e8);
-        } catch (error) {
-            console.error('Error converting HBAR to currency:', error);
-            throw error;
-        }
-    }
-
-    function decodeData(encodedData) {
-        let jsonData = atob(encodedData);
-        return JSON.parse(jsonData);
     }
 })();
