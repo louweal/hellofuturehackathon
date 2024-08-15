@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Template:       		shortcodes.php
- * Description:    		Adds shortcodes to the page
- */
-
-
 add_shortcode('realviews_latest_reviews', 'realviews_latest_reviews_function', 5);
 function realviews_latest_reviews_function($atts)
 {
@@ -27,21 +20,29 @@ function realviews_latest_reviews_function($atts)
     $button_text = get_field("button_text") ?: 'All reviews';
     $title = getTitle();
 
-    $product_id = $product->get_id();
+    if (is_product()) {
+        $post_id = $product->get_id();
+    } else {
+        global $post;
+        $post_id = $post->ID;
+    }
 
-    $transaction_ids = get_post_meta($product_id, '_transaction_ids', true);
+    $transaction_ids = get_post_meta($post_id, '_transaction_ids', true);
 
     $account_ids = [];
-    for ($i = count($transaction_ids) - 1; $i >= 0; $i--) {
-        $transaction_id = $transaction_ids[$i];
+    if ($transaction_ids) {
+        for ($i = count($transaction_ids) - 1; $i >= 0; $i--) {
+            $transaction_id = $transaction_ids[$i];
+            echo $transaction_id;
 
-        $exploded_transaction_id = explode("-", $transaction_id);
-        $account_id = $exploded_transaction_id[0];
-        $timestamp = $exploded_transaction_id[1];
-        $formatted_timestamp = str_replace(".", "-", $timestamp);
+            $exploded_transaction_id = explode("-", $transaction_id);
+            $account_id = $exploded_transaction_id[0];
+            $timestamp = $exploded_transaction_id[1];
+            $formatted_timestamp = str_replace(".", "-", $timestamp);
 
-        if (!in_array($account_id, $account_ids)) {
-            $account_ids[] = $account_id; // add account id to list
+            if (!in_array($account_id, $account_ids)) {
+                $account_ids[] = $account_id; // add account id to list
+            }
         }
     }
 
@@ -275,10 +276,4 @@ function realviews_latest_reviews_function($atts)
     </section>
 <?php
     return ob_get_clean();
-}
-
-add_shortcode('realviews_num_reviews', 'realviews_num_reviews_function');
-function realviews_num_reviews_function()
-{
-    return 5;
 }

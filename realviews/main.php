@@ -18,7 +18,9 @@ function init_realviews_function()
     require_once plugin_dir_path(__FILE__) . 'lib/admin.php';
     require_once plugin_dir_path(__FILE__) . 'lib/enqueue.php';
     require_once plugin_dir_path(__FILE__) . 'lib/helpers.php';
-    require_once plugin_dir_path(__FILE__) . 'lib/shortcodes.php';
+    require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/latest-reviews.php';
+    require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/num-reviews.php';
+    require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/test.php';
     require_once plugin_dir_path(__FILE__) . 'lib/product.php';
 }
 
