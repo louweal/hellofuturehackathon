@@ -39,12 +39,15 @@ body.realviews-modal-open {
 }
 
 .realviews-review {
+    position: relative;
     padding: 1rem;
     border: 1px solid #111;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     transition: all 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+    flex: 1 1 100%;
+    max-width: calc(100%);
 
     @media (min-width: 48em) {
         flex: 1 1 calc(50% - var(--gap) / 2);
@@ -53,8 +56,8 @@ body.realviews-modal-open {
 }
 
 .realviews-review.is-loading {
-    border-color: rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
 .realviews-review.is-loading .realviews-review__header,
@@ -62,6 +65,20 @@ body.realviews-modal-open {
 .realviews-review.is-loading .realviews-review__body {
     filter: blur(4px);
     opacity: 0.5;
+}
+
+.realviews-review__badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: #000;
+    color: #fff;
+    padding: 0px 6px;
+    font-size: 0.5625rem;
+    letter-spacing: 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: none;
 }
 
 .realviews-review__header {
@@ -85,7 +102,7 @@ body.realviews-modal-open {
 }
 .realviews-review__subheader {
     display: flex;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     gap: 0.75rem;
     align-items: center;
 }
@@ -110,6 +127,11 @@ body.realviews-modal-open {
     display: flex;
     gap: 0.3rem;
     align-items: center;
+}
+
+.realviews-review__date1 time:hover,
+.realviews-review__date2 time:hover {
+    word-break: break-all;
 }
 
 .realviews-review__date1 svg,
