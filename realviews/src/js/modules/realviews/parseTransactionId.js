@@ -4,3 +4,10 @@ export const parseTransactionId = function parseTransactionId(transactionId) {
     let timestamp = splitId[1].replace('.', '-');
     return `${accountId}-${timestamp}`;
 };
+
+export const unparseTransactionId = function unparseTransactionId(transactionId) {
+    const index = transactionId.indexOf('-');
+    let newString = transactionId.slice(0, index) + '@' + transactionId.slice(index + 1);
+    console.log(newString);
+    return newString.replace('-', '.');
+};

@@ -13,6 +13,10 @@ export const displayWriteReviewButtons = function displayWriteReviewButtons() {
                 const transactionId = transactionIds[i];
                 if (transactionId.includes(localAccountId)) {
                     writeReviewWrapper.classList.add('is-active');
+                    let writeReviewButton = writeReviewWrapper.querySelector('.realviews-write-review');
+                    let writeReviewModal = writeReviewButton.nextElementSibling;
+                    let submitButton = writeReviewModal.querySelector('.realviews-submit-review');
+                    submitButton.dataset.transactionId = transactionId;
                     break;
                 }
             }

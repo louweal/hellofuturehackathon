@@ -1,12 +1,12 @@
 <?php
 ?>
-<div class="realviews-review" id="<?php echo $review_transaction_id; ?>">
+<div class="realviews-review is-loading" id="<?php echo $review_transaction_id; ?>">
 
     <div class="realviews-review__header">
-        <div class="realviews-review__icon">
+        <div class="realviews-review__icon">N
         </div>
         <div class="realviews-review__user">
-            <div class="realviews-review__username"></div>
+            <div class="realviews-review__username">Name</div>
         </div>
     </div>
     <div class="realviews-review__subheader">
@@ -14,7 +14,7 @@
             <?php
             for ($j = 1; $j <= 5; $j++) {
             ?>
-                <div class="realviews-review__star" id="<?php echo $j; ?>"></div>
+                <div class="realviews-review__star is-solid" id="<?php echo $j; ?>"></div>
             <?php
             } //for
             ?>
@@ -46,6 +46,6 @@
         </a>
     </div>
     <div class="realviews-review__body">
-        <p></p>
+        <p>This is a review</p>
     </div>
 </div>

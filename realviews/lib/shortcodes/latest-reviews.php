@@ -28,19 +28,18 @@ function realviews_latest_reviews_function($atts)
 
     // delete_post_meta($post_id, '_transaction_ids');
     // delete_post_meta($post_id, '_contract_ids');
-
     // delete_post_meta($post_id, '_review_transaction_ids');
 
 
     $transaction_ids = get_post_meta($post_id, '_transaction_ids', true);
-    // debug($transaction_ids);
+    debug($transaction_ids);
 
     // $contract_ids = get_post_meta($post_id, '_contract_ids', true);
     // debug($contract_ids);
 
 
     $review_transaction_ids = get_post_meta($post_id, '_review_transaction_ids', true);
-    // debug($review_transaction_ids);
+    debug($review_transaction_ids);
 
     $encodedTransactionIds = base64_encode(json_encode($transaction_ids));     // Encode the JSON string using Base64
 
@@ -52,6 +51,10 @@ function realviews_latest_reviews_function($atts)
         ?>
 
         <h2>Reviews (<?php echo $num_reviews; ?>)</h2>
+
+        <p style="border:1px solid red; padding: 1rem; margin-top: 1rem; font-style:italic; font-size:14px">Test instructions: Buy this item with HederaPay and 'use' it for the minimum required (demo) timespan of 2 minutes. Then reconnect to this website with the same wallet you bought the item with and a 'Write review' button appears!</p>
+
+
         <div class="realviews-wrapper">
 
             <?php if ($num_reviews > 0) { ?>
@@ -107,6 +110,7 @@ function realviews_latest_reviews_function($atts)
                 <?php } else { ?>
                     <p>Success</p>
                     <?php
+                    // remove transaction id to avoid double reviews
                     add_meta_to_post($post_id, '_review_transaction_ids', $review_transaction_id_param);
                     ?>
                 <?php } ?>
@@ -126,7 +130,7 @@ function realviews_latest_reviews_function($atts)
 
                         <div class="realviews-modal__body">
                             <form id="write-review" class="realviews-modal__form">
-
+                                <p>Write a review for </p>
                                 <div class="realviews-rating" id="rating-wrapper">
                                     <span>Rating:</span>
                                     <div class="realviews-stars">
@@ -140,6 +144,7 @@ function realviews_latest_reviews_function($atts)
                                 <input type="text" id="name" name="name" placeholder="Name">
                                 <textarea name="message" id="message" placeholder="Message"></textarea>
                                 <button type="submit" class="btn realviews-submit-review">Submit</button>
+                                <div class="write-review-notices"></div>
                             </form>
                         </div>
                     </div>

@@ -12,11 +12,9 @@ import { setVisibleAccountId } from './modules/setVisibleAccountId';
 
 // Realviews
 import { handleAllReviewsToggle } from './modules/realviews/handleAllReviewsToggle';
-// import { handleContractCreateTest } from './modules/realviews/handleContractCreateTest';
 import { handleWriteReviewToggle } from './modules/realviews/handleWriteReviewToggle';
 import { handleModalsHide } from './modules/realviews/handleModalsHide';
 import { displayWriteReviewButtons } from './modules/realviews/displayWriteReviewButtons';
-// import { fetchMirrornodeTransaction } from './modules/realviews/fetchMirrornodeTransaction';
 import { parseTransactionId } from './modules/realviews/parseTransactionId';
 import { fetchMirrornodeLogData } from './modules/realviews/fetchMirrornodeLogData';
 import { loadReviews } from './modules/realviews/loadReviews';
@@ -25,13 +23,16 @@ import { loadReviews } from './modules/realviews/loadReviews';
 (function () {
     'use strict';
 
-    // refresh page if it has url param contract_id
-    if (new URLSearchParams(new URL(window.location.href).search).get('review_transaction_id')) {
+    async function redirect() {
+        await new Promise((resolve) => setTimeout(resolve, 9000)); // mirror node will have received the transaction after ±10 seconds
         const urlWithoutParams = window.location.origin + window.location.pathname;
         window.location.href = urlWithoutParams;
     }
 
-    fetchMirrornodeLogData('0.0.4505361@1723884935.870049393');
+    // refresh page if it has url param contract_id - i.e. a new review was just added
+    if (new URLSearchParams(new URL(window.location.href).search).get('review_transaction_id')) {
+        redirect();
+    }
 
     let hashconnect;
     let state = `HashConnectConnectionState`.Disconnected;
@@ -190,6 +191,7 @@ import { loadReviews } from './modules/realviews/loadReviews';
         if (reviewForm) {
             const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
             const ratingDisplay = ratingWrapper.querySelector('.selected-rating');
+            const notices = reviewForm.querySelector('.write-review-notices');
             let rating;
 
             const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
@@ -208,19 +210,38 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
             reviewForm.addEventListener('submit', function (event) {
                 event.preventDefault();
+                notices.innerText = ''; // reset notices
 
-                const transactionId = reviewForm.dataset.transactionId;
+                let submitButton = reviewForm.querySelector('.realviews-submit-review');
+                const transactionId = submitButton.dataset.transactionId;
+                if (!transactionId) {
+                    console.log('transaction id missing');
+                    return;
+                }
                 const name = reviewForm.querySelector('#name').value;
                 const message = reviewForm.querySelector('#message').value;
-                const timestamp = Math.round(Date.now() / 1000); // timestamp in seconds
 
-                console.log(timestamp);
-                console.log(rating);
-                console.log(name);
-                console.log(message);
+                if (!name || name === '' || name.length <= 2) {
+                    notices.innerText += 'Name is required. ';
+                }
+
+                if (!message || message === '') {
+                    notices.innerText += 'Message is required. ';
+                }
+
+                if (!rating) {
+                    notices.innerText += 'Rating is required. ';
+                }
+
+                if (!(rating > 0 && rating <= 5)) {
+                    notices.innerText += 'Rating is invalid. ';
+                }
+
+                if (message.length > 900) {
+                    notices.innerText += 'Review is too long. ';
+                }
 
                 let review = {
-                    timestamp, // review timestamp
                     transactionId, // pay transaction
                     rating,
                     name,
@@ -228,9 +249,6 @@ import { loadReviews } from './modules/realviews/loadReviews';
                 };
 
                 const reviewString = JSON.stringify(review);
-
-                // console.log('localAccountId :>>', localAccountId);
-
                 deployReviewContract(reviewString);
             });
         }
