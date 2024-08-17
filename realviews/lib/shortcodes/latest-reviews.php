@@ -10,20 +10,22 @@ function realviews_latest_reviews_function($atts)
         $post_id = $post->ID;
     }
 
+    // global settings
+
     // Define the default attributes
     $atts = shortcode_atts(
         array(
-            'max_reviews' => 6,
-            'button_text' => 'All reviews'
+            'max_reviews' =>  null,
+            'button_text' => null,
         ),
         $atts,
         'realviews_latest_reviews'
     );
 
-    $max_reviews = esc_html($atts['max_reviews']);
-    $button_text = esc_html($atts['button_text']);
+    $settings = get_option('realviews_settings');
+    $max_reviews = isset($atts['max_reviews']) ? esc_html($atts['max_reviews']) : esc_html($settings['max_reviews']);
+    $button_text = $atts['button_text'] ? esc_html($atts['button_text']) : esc_html($settings['button_text']);
 
-    $button_text = get_field("button_text") ?: 'All reviews';
     $title = getTitle();
 
     // delete_post_meta($post_id, '_transaction_ids');
@@ -46,13 +48,13 @@ function realviews_latest_reviews_function($atts)
     ob_start();
 
 ?>
-    <section class="realviews">
+    <section class="realviews-latest-reviews">
         <?php $num_reviews = $review_transaction_ids ? count($review_transaction_ids) : 0;
         ?>
 
         <h2>Reviews (<?php echo $num_reviews; ?>)</h2>
 
-        <p style="border:1px solid red; padding: 1rem; margin-top: 1rem; font-style:italic; font-size:14px">Test instructions: Buy this item with HederaPay and 'use' it for the minimum required (demo) timespan of 2 minutes. Then reconnect to this website with the same wallet you bought the item with and a 'Write review' button appears!</p>
+        <!-- <p style="border:1px solid red; padding: 1rem; margin-top: 1rem; font-style:italic; font-size:14px">Test instructions: Buy this item with HederaPay and 'use' it for the minimum required (demo) timespan of 2 minutes. Then reconnect to this website with the same wallet you bought the item with and a 'Write review' button appears!</p> -->
 
 
         <div class="realviews-wrapper">
