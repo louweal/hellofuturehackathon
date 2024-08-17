@@ -130,7 +130,6 @@ function realviews_latest_reviews_function($atts)
 
                         <div class="realviews-modal__body">
                             <form id="write-review" class="realviews-modal__form">
-                                <p>Write a review for </p>
                                 <div class="realviews-rating" id="rating-wrapper">
                                     <span>Rating:</span>
                                     <div class="realviews-stars">

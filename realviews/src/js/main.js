@@ -43,21 +43,12 @@ import { loadReviews } from './modules/realviews/loadReviews';
         localStorage.removeItem('accountId');
     }
 
-    let createContractButton = document.querySelector('.create-contract-button');
-    if (createContractButton) {
-        createContractButton.addEventListener('click', async function () {
-            if (!pairingData) {
-                await init('testnet');
-            }
-
-            // deployReviewContract(pairingData, );
-        });
-    }
+    console.log(pairingData);
 
     let localAccountId = localStorage.getItem('accountId');
 
     setVisibleAccountId(localAccountId);
-    setConnectButtonsText(localAccountId ? 'disconnect_text' : 'connect_text');
+    setConnectButtonsText(undefined, localAccountId ? 'disconnect_text' : 'connect_text');
 
     let connectButtons = document.querySelectorAll('.hederapay-connect-button');
     [...connectButtons].forEach((connectButton) => {
@@ -160,15 +151,15 @@ import { loadReviews } from './modules/realviews/loadReviews';
         hashconnect.pairingEvent.on((newPairing) => {
             pairingData = newPairing;
             localStorage.setItem('accountId', pairingData.accountIds[0]); // set id in local browser storage
-            setConnectButtonsText('disconnect_text');
+            setConnectButtonsText(pairingData.network, 'disconnect_text');
             setVisibleAccountId(pairingData.accountIds[0]);
             displayWriteReviewButtons();
         });
 
         hashconnect.disconnectionEvent.on(() => {
+            setConnectButtonsText(pairingData.network, 'connect_text');
             pairingData = null;
             localStorage.removeItem('accountId'); // remove from browser storage
-            setConnectButtonsText('connect_text');
             setVisibleAccountId(undefined);
             displayWriteReviewButtons();
         });
@@ -222,19 +213,19 @@ import { loadReviews } from './modules/realviews/loadReviews';
                 const message = reviewForm.querySelector('#message').value;
 
                 if (!name || name === '' || name.length <= 2) {
-                    notices.innerText += 'Name is required. ';
+                    notices.innerText += ' Name is required. ';
                 }
 
                 if (!message || message === '') {
-                    notices.innerText += 'Message is required. ';
+                    notices.innerText += ' Message is required. ';
                 }
 
                 if (!rating) {
-                    notices.innerText += 'Rating is required. ';
+                    notices.innerText += ' Rating is required. ';
                 }
 
                 if (!(rating > 0 && rating <= 5)) {
-                    notices.innerText += 'Rating is invalid. ';
+                    notices.innerText += ' Rating is invalid. ';
                 }
 
                 if (message.length > 900) {
@@ -287,12 +278,6 @@ import { loadReviews } from './modules/realviews/loadReviews';
         console.log('The transaction status is ' + receipt.status.toString());
         if (receipt.status._code === 22) {
             setQueryParamAndRedirect('review_transaction_id', transactionId);
-
-            // fetchMirrornodeTransaction(transactionId);
-
-            // fetchMirrornodeLogData(transactionId);
-            // add transactionId to url and redirect
-            // setQueryParamAndRedirect(transactionId);
         } else {
             console.log('Oops');
         }

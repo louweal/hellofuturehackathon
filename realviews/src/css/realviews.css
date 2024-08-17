@@ -114,6 +114,7 @@ body.realviews-modal-open {
 
 .realviews-review__date1 svg,
 .realviews-review__date2 svg {
+    flex-shrink: 0;
     opacity: 0.5;
 }
 
