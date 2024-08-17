@@ -15,13 +15,9 @@
 @import 'layout/section';
 
 /* Components */
-@import 'components/menu';
 @import 'components/hero';
-@import 'components/hero-home';
 @import 'components/btn';
-@import 'components/toggle';
 @import 'components/editor';
-@import 'components/card';
 @import 'components/slider';
 @import 'components/form';
 

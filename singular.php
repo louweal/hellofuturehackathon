@@ -17,7 +17,7 @@ get_header();
             the_post();
 
     ?>
-            <?php get_hero('home'); ?>
+            <?php get_hero(); ?>
 
 
             <?php if (!empty(get_the_content())) { ?>
