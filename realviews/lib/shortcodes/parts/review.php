@@ -1,7 +1,7 @@
 <?php
 ?>
 <div class="realviews-review is-loading" id="<?php echo $review_transaction_id; ?>">
-
+    <span class="realviews-review__badge"></span>
     <div class="realviews-review__header">
         <div class="realviews-review__icon">N
         </div>
