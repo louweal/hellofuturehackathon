@@ -187,16 +187,6 @@ function add_hederapay_field_groups()
                             'width' => '50%',
                         ),
                     ),
-                    array(
-                        'key' => 'field_store',
-                        'label' => 'Store transaction',
-                        'name' => 'field_store',
-                        'type' => 'true_false',
-                        'instructions' => 'Store transaction in page data.',
-                        'ui' => 1,
-                        'required' => 0,
-                        'default_value' => 0,
-                    ),
                 ),
                 'location' => array(
                     array(

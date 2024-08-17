@@ -21,6 +21,10 @@ function init_realviews_function()
     require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/latest-reviews.php';
     require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/num-reviews.php';
     require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/test.php';
+
+
+    // load these only if woocommerce is active
+    if (!class_exists('WooCommerce')) return;
     require_once plugin_dir_path(__FILE__) . 'lib/product.php';
 }
 
@@ -34,56 +38,6 @@ function enable_hederapay()
 }
 add_action('init', 'enable_hederapay');
 
-// must be hooked from main ?!
-add_action('acf/init', 'realviews_block_init', 10);
-function realviews_block_init()
-{
-    // Check function exists.
-    if (function_exists('acf_register_block_type')) {
-        // Register the realviews transaction button block.
-        acf_register_block_type(array(
-            'name'              => 'realviews-transaction-button',
-            'title'             => __('Realviews Transaction Button', 'hfh'),
-            'description'       => __('Button for payments on Hedera with optional refund after review', 'hfh'),
-            'render_template'   => dirname(plugin_dir_path(__FILE__)) . '/realviews/blocks/realviews-transaction-button.php',
-            'mode'              => 'edit',
-            'category'          => 'common',
-            'icon'              => 'money-alt',
-            'keywords'          => array('hederapay', 'hedera', 'transaction', 'button', 'realviews', 'review'),
-        ));
-    }
-}
-
-add_action('acf/init', 'add_cashback_field_group', 12);
-function add_cashback_field_group()
-{
-    if (function_exists('acf_add_local_field_group')) {
-        acf_add_local_field_group(array(
-            'key' => 'group_realviews_cashback_field',
-            'title' => 'Cashback field',
-            'fields' => array(
-                array(
-                    'key' => 'field_cashback',
-                    'label' => 'Cashback after review',
-                    'name' => 'field_cashback',
-                    'type' => 'text',
-                    'required' => 0,
-                    'instructions' => 'Can be an amount in [currency] or a percentage (use %). Leave empty to disable.',
-                    'default_value' => '3%'
-                ),
-            ),
-            'location' => array(
-                array(
-                    array(
-                        'param' => 'block',
-                        'operator' => '==',
-                        'value' => 'acf/realviews-transaction-button',
-                    ),
-                ),
-            ),
-        ));
-    }
-}
 
 
 // must be hooked from main ?!
@@ -120,9 +74,9 @@ function add_latest_reviews_field_groups()
                     'label' => 'Number of reviews',
                     'name' => 'max_reviews',
                     'type' => 'number',
-                    'instructions' => 'Leave empty to show all reviews',
+                    'instructions' => 'Set to -1 to show all reviews',
                     'required' => 0,
-                    'placeholder' => '6',
+                    'default_value' => 2,
                 ),
                 array(
                     'key' => 'button_text',
@@ -130,7 +84,7 @@ function add_latest_reviews_field_groups()
                     'name' => 'button_text',
                     'type' => 'text',
                     'required' => 0,
-                    'placeholder' => 'All reviews',
+                    'default_value' => 'All reviews',
                 ),
             ),
             'location' => array(
@@ -156,137 +110,14 @@ function add_realviews_field_groups()
                 'title' => 'Realviews Transaction Button',
                 'fields' => array(
                     array(
-                        'key' => 'field_network',
-                        'label' => 'Network',
-                        'name' => 'network',
-                        'type' => 'select',
+                        'key' => 'field_store',
+                        'label' => 'Store transactions',
+                        'name' => 'field_store',
+                        'type' => 'true_false',
+                        'instructions' => 'Store transaction IDs in page metadata for reviewing.',
+                        'ui' => 1,
                         'required' => 0,
-                        'choices' => array(
-                            'testnet' => 'Testnet',
-                            'previewnet' => 'Previewnet',
-                            'mainnet' => 'Mainnet',
-                        ),
-                        'wrapper' => array(
-                            'width' => '50%',
-                        ),
-                        'allow_null' => 0, // Do not allow null value
-                    ),
-                    array(
-                        'key' => 'testnet_account',
-                        'label' => 'Account ID',
-                        'name' => 'testnet_account',
-                        'type' => 'text',
-                        // 'instructions' => 'Enter the Account Id here.',
-                        'required' => 0,
-                        'wrapper' => array(
-                            'width' => '50%',
-                        ),
-                        'conditional_logic' => array(
-                            array(
-                                array(
-                                    'field' => 'field_network',
-                                    'operator' => '==',
-                                    'value' => 'testnet',
-                                ),
-                            ),
-                        ),
-                        'placeholder' => 'Testnet',
-                    ),
-                    array(
-                        'key' => 'previewnet_account',
-                        'label' => 'Account ID',
-                        'name' => 'previewnet_account',
-                        'type' => 'text',
-                        'required' => 0,
-                        'wrapper' => array(
-                            'width' => '50%',
-                        ),
-                        'conditional_logic' => array(
-                            array(
-                                array(
-                                    'field' => 'field_network',
-                                    'operator' => '==',
-                                    'value' => 'previewnet',
-                                ),
-                            ),
-                        ),
-                        'placeholder' => 'Previewnet',
-                    ),
-                    array(
-                        'key' => 'mainnet_account',
-                        'label' => 'Account ID',
-                        'name' => 'mainnet_account',
-                        'type' => 'text',
-                        'required' => 0,
-                        'wrapper' => array(
-                            'width' => '50%',
-                        ),
-                        'conditional_logic' => array(
-                            array(
-                                array(
-                                    'field' => 'field_network',
-                                    'operator' => '==',
-                                    'value' => 'mainnet',
-                                ),
-                            ),
-                        ),
-                        'placeholder' => 'Mainnet',
-                    ),
-                    array(
-                        'key' => 'field_title',
-                        'label' => 'Button text',
-                        'name' => 'title',
-                        'type' => 'text',
-                        'required' => 0,
-                        'default_value' => 'Pay',
-                    ),
-                    array(
-                        'key' => 'field_memo',
-                        'label' => 'Memo',
-                        'name' => 'memo',
-                        'type' => 'text',
-                        'required' => 0,
-                    ),
-                    array(
-                        'key' => 'field_amount',
-                        'label' => 'Amount',
-                        'name' => 'amount',
-                        'type' => 'number',
-                        'instructions' => 'Leave empty to show an input field.',
-                        'required' => 0,
-                        'min' => 0,
-                        'wrapper' => array(
-                            'width' => '50%',
-                        ),
-                    ),
-                    array(
-                        'key' => 'field_currency',
-                        'label' => 'Currency',
-                        'name' => 'currency',
-                        'type' => 'select',
-                        'instructions' => 'Select the currency the amount is in. It will be converted to HBAR using the CoinGecko API.',
-                        'required' => 0,
-                        'choices' => array(
-                            'usd' => 'USD',
-                            'eur' => 'EUR',
-                            'jpy' => 'JPY',
-                            'gbp' => 'GBP',
-                            'aud' => 'AUD',
-                            'cad' => 'CAD',
-                            'cny' => 'CNY',
-                            'inr' => 'INR',
-                            'brl' => 'BRL',
-                            'zar' => 'ZAR',
-                            'chf' => 'CHF',
-                            'rub' => 'RUB',
-                            'nzd' => 'NZD',
-                            'mxn' => 'MXN',
-                            'sgd' => 'SGD',
-                        ),
-                        'default_value' => 'usd',
-                        'wrapper' => array(
-                            'width' => '50%',
-                        ),
+                        'default_value' => 0,
                     ),
                 ),
                 'location' => array(
@@ -294,7 +125,7 @@ function add_realviews_field_groups()
                         array(
                             'param' => 'block',
                             'operator' => '==',
-                            'value' => 'acf/realviews-transaction-button',
+                            'value' => 'acf/hederapay-transaction-button',
                         ),
                     ),
                 ),
@@ -304,6 +135,6 @@ function add_realviews_field_groups()
 }
 
 
-add_action('plugins_loaded', function () {
-    error_log('Realviews has been loaded.');
-});
+// add_action('plugins_loaded', function () {
+//     error_log('Realviews has been loaded.');
+// });
