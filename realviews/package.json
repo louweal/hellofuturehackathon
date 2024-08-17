@@ -9,10 +9,14 @@
     "author": "HashPress Pioneers",
     "license": "ISC",
     "dependencies": {
+        "@ethersproject/abi": "^5.7.0",
         "@hashgraph/sdk": "^2.49.2",
         "buffer": "^6.0.3",
         "crypto": "^1.0.1",
+        "dotenv": "^16.4.5",
+        "ethers": "^6.13.2",
         "hashconnect": "^3.0.13",
+        "ipfs-http-client": "^60.0.1",
         "path-browserify": "^1.0.1"
     },
     "devDependencies": {

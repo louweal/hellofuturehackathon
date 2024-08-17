@@ -1,5 +1,7 @@
 import { HashConnect, HashConnectConnectionState } from 'hashconnect';
 import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
+import { ContractId, ContractExecuteTransaction, ContractFunctionParameters } from '@hashgraph/sdk';
+
 import { setAppMetadata } from './modules/setAppMetadata';
 import { setQueryParamAndRedirect } from './modules/setQueryParamsAndRedirect';
 import { decodeData } from './modules/decodeData';
@@ -10,16 +12,26 @@ import { setVisibleAccountId } from './modules/setVisibleAccountId';
 
 // Realviews
 import { handleAllReviewsToggle } from './modules/realviews/handleAllReviewsToggle';
-import { handleContractCreateTest } from './modules/realviews/handleContractCreateTest';
+// import { handleContractCreateTest } from './modules/realviews/handleContractCreateTest';
 import { handleWriteReviewToggle } from './modules/realviews/handleWriteReviewToggle';
 import { handleModalsHide } from './modules/realviews/handleModalsHide';
-import { handleReviewSubmit } from './modules/realviews/handleReviewSubmit';
 import { displayWriteReviewButtons } from './modules/realviews/displayWriteReviewButtons';
-import { fetchMirrornodeTransaction } from './modules/realviews/fetchMirrornodeTransaction';
-import { getCashbackContractId } from './modules/realviews/getCashbackContractId';
+// import { fetchMirrornodeTransaction } from './modules/realviews/fetchMirrornodeTransaction';
+import { parseTransactionId } from './modules/realviews/parseTransactionId';
+import { fetchMirrornodeLogData } from './modules/realviews/fetchMirrornodeLogData';
+import { loadReviews } from './modules/realviews/loadReviews';
+
 // Main thread
 (function () {
     'use strict';
+
+    // refresh page if it has url param contract_id
+    if (new URLSearchParams(new URL(window.location.href).search).get('review_transaction_id')) {
+        const urlWithoutParams = window.location.origin + window.location.pathname;
+        window.location.href = urlWithoutParams;
+    }
+
+    fetchMirrornodeLogData('0.0.4505361@1723884935.870049393');
 
     let hashconnect;
     let state = `HashConnectConnectionState`.Disconnected;
@@ -30,7 +42,16 @@ import { getCashbackContractId } from './modules/realviews/getCashbackContractId
         localStorage.removeItem('accountId');
     }
 
-    handleContractCreateTest(pairingData);
+    let createContractButton = document.querySelector('.create-contract-button');
+    if (createContractButton) {
+        createContractButton.addEventListener('click', async function () {
+            if (!pairingData) {
+                await init('testnet');
+            }
+
+            // deployReviewContract(pairingData, );
+        });
+    }
 
     let localAccountId = localStorage.getItem('accountId');
 
@@ -98,9 +119,9 @@ import { getCashbackContractId } from './modules/realviews/getCashbackContractId
             // Check if the transaction was successful
             if (receipt.status.toString() === 'SUCCESS') {
                 // executed from woocommerce gateway
-                if (transactionData.store === true) {
+                if (transactionData.store === true || transactionData.store === 'true') {
                     // transaction data needs to be stored (for reviewing later)
-                    setQueryParamAndRedirect(transactionId);
+                    setQueryParamAndRedirect('transaction_id', parseTransactionId(transactionId));
                 } else {
                     transactionNotices.innerText += 'Payment received. Thank you! ';
                 }
@@ -162,4 +183,116 @@ import { getCashbackContractId } from './modules/realviews/getCashbackContractId
     handleModalsHide(); // hide all active modals on click
     handleReviewSubmit(); // handle submission of the write review form
     displayWriteReviewButtons(); // handle visibility of the 'write review' button (active account must have a transaction record)
+    loadReviews();
+
+    function handleReviewSubmit() {
+        let reviewForm = document.querySelector('#write-review');
+        if (reviewForm) {
+            const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
+            const ratingDisplay = ratingWrapper.querySelector('.selected-rating');
+            let rating;
+
+            const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
+            [...stars].forEach((star) => {
+                star.addEventListener('click', function () {
+                    // reset active states
+                    [...stars].forEach((star) => {
+                        star.classList.remove('is-active');
+                    });
+
+                    rating = +star.id;
+                    ratingDisplay.innerText = +rating;
+                    star.classList.add('is-active');
+                });
+            });
+
+            reviewForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const transactionId = reviewForm.dataset.transactionId;
+                const name = reviewForm.querySelector('#name').value;
+                const message = reviewForm.querySelector('#message').value;
+                const timestamp = Math.round(Date.now() / 1000); // timestamp in seconds
+
+                console.log(timestamp);
+                console.log(rating);
+                console.log(name);
+                console.log(message);
+
+                let review = {
+                    timestamp, // review timestamp
+                    transactionId, // pay transaction
+                    rating,
+                    name,
+                    message,
+                };
+
+                const reviewString = JSON.stringify(review);
+
+                // console.log('localAccountId :>>', localAccountId);
+
+                deployReviewContract(reviewString);
+            });
+        }
+    }
+
+    async function deployReviewContract(data) {
+        const factoryContractId = ContractId.fromString('0.0.4687987');
+        console.log(factoryContractId.toString());
+
+        console.log('pairingData :>> ', pairingData);
+
+        // let localAccountId = localStorage.getItem('accountId');
+        // console.log('localAccountId :>> ', localAccountId);
+
+        let fromAccount = AccountId.fromString(pairingData.accountIds[0]);
+        let signer = hashconnect.getSigner(fromAccount);
+
+        //Create the transaction to deploy a new CashbackReview contract
+        let transaction = await new ContractExecuteTransaction()
+            //Set the ID of the contract
+            .setContractId(factoryContractId)
+            //Set the gas for the call
+            .setGas(2000000)
+            //Set the function of the contract to call
+            .setFunction('deployReview', new ContractFunctionParameters().addString(data))
+            .freezeWithSigner(signer);
+
+        let response = await transaction.executeWithSigner(signer);
+        // console.log(response);
+
+        //Confirm the transaction was executed successfully
+        const transactionId = response.transactionId.toString();
+        // console.log('Transaction ID:', transactionId);
+        let receipt = await response.getReceiptWithSigner(signer);
+        // console.log(receipt);
+        console.log('The transaction status is ' + receipt.status.toString());
+        if (receipt.status._code === 22) {
+            setQueryParamAndRedirect('review_transaction_id', transactionId);
+
+            // fetchMirrornodeTransaction(transactionId);
+
+            // fetchMirrornodeLogData(transactionId);
+            // add transactionId to url and redirect
+            // setQueryParamAndRedirect(transactionId);
+        } else {
+            console.log('Oops');
+        }
+    }
+
+    async function getReviews() {
+        const contractQuery = await new ContractCallQuery()
+            //Set the gas for the query
+            .setGas(100000)
+            //Set the contract ID to return the request for
+            .setContractId(newContractId)
+            //Set the contract function to call
+            .setFunction('data')
+            //Set the query payment for the node returning the request
+            //This value must cover the cost of the request otherwise will fail
+            .setQueryPayment(new Hbar(2));
+
+        //Submit to a Hedera network
+        const getMessage = await contractQuery.execute(client);
+    }
 })();

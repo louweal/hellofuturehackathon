@@ -1,12 +1,5 @@
-export const setQueryParamAndRedirect = function setQueryParamAndRedirect(transactionId) {
-    let splitId = transactionId.split('@');
-    let accountId = splitId[0];
-    let timestamp = splitId[1].replace('.', '-');
-    let urlTransactionId = `${accountId}-${timestamp}`;
-
+export const setQueryParamAndRedirect = function setQueryParamAndRedirect(key, value) {
     const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('transaction_id', urlTransactionId); // Add the parameter to the URL
-
-    // Redirect to the new URL with the additional parameter
-    window.location.href = currentUrl.href;
+    currentUrl.searchParams.set(key, value); // Add the parameter to the URL
+    window.location.href = currentUrl.href; // Redirect to the new URL with the additional parameter
 };

@@ -161,7 +161,7 @@ class WC_Gateway_Hederapay extends WC_Payment_Gateway
                 // add meta info to products
                 foreach ($order->get_items() as $item_id => $item) {
                     $product_id = $item->get_product_id();
-                    add_transaction_id_to_post($product_id, $transaction_id);
+                    add_meta_to_post($product_id, '_transaction_ids', $transaction_id);
                 }
             }
         } else {

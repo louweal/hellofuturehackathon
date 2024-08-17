@@ -1,5 +1,9 @@
 # Realviews
 
+## Dependencies / Required Plugins
+
+HederaPay
+
 ## Shortcodes
 
 ## [realviews_latest_reviews]

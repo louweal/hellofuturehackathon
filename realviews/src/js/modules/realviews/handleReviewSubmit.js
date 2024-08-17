@@ -1,41 +1,52 @@
-import { addReviewToIPFS } from './addReviewToIPFS';
+// import { deployReviewContract } from './deployReviewContract';
 
-export const handleReviewSubmit = function handleReviewSubmit() {
-    let reviewForm = document.querySelector('#write-review');
-    if (reviewForm) {
-        const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
-        const rating = ratingWrapper.querySelector('.selected-rating');
-        let ratingValue;
+// export const handleReviewSubmit = function handleReviewSubmit(pairingData) {
+//     let reviewForm = document.querySelector('#write-review');
+//     if (reviewForm) {
+//         const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
+//         const ratingDisplay = ratingWrapper.querySelector('.selected-rating');
+//         let rating;
 
-        const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
-        [...stars].forEach((star) => {
-            star.addEventListener('click', function () {
-                // reset active states
-                [...stars].forEach((star) => {
-                    star.classList.remove('is-active');
-                });
+//         const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
+//         [...stars].forEach((star) => {
+//             star.addEventListener('click', function () {
+//                 // reset active states
+//                 [...stars].forEach((star) => {
+//                     star.classList.remove('is-active');
+//                 });
 
-                ratingValue = star.id;
-                rating.innerText = ratingValue;
-                star.classList.add('is-active');
-            });
-        });
+//                 rating = +star.id;
+//                 ratingDisplay.innerText = +rating;
+//                 star.classList.add('is-active');
+//             });
+//         });
 
-        // addReviewToIPFS();
+//         reviewForm.addEventListener('submit', function (event) {
+//             event.preventDefault();
 
-        reviewForm.addEventListener('submit', function (event) {
-            event.preventDefault();
+//             const transactionId = reviewForm.dataset.transactionId;
+//             const name = reviewForm.querySelector('#name').value;
+//             const message = reviewForm.querySelector('#message').value;
+//             const timestamp = Math.round(Date.now() / 1000); // timestamp in seconds
 
-            console.log(reviewForm.dataset.transactionId);
+//             console.log(timestamp);
+//             console.log(rating);
+//             console.log(name);
+//             console.log(message);
 
-            const name = reviewForm.querySelector('#name').value;
-            const message = reviewForm.querySelector('#message').value;
+//             let review = {
+//                 timestamp, // review timestamp
+//                 transactionId, // pay transaction
+//                 rating,
+//                 name,
+//                 message,
+//             };
 
-            console.log(ratingValue);
-            console.log(name);
-            console.log(message);
+//             const reviewString = JSON.stringify(review);
 
-            // todo: create contract
-        });
-    }
-};
+//             // console.log('localAccountId :>>', localAccountId);
+
+//             deployReviewContract(reviewString);
+//         });
+//     }
+// };
