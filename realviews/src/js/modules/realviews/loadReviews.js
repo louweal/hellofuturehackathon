@@ -6,8 +6,9 @@ export const loadReviews = async function loadReviews() {
     let reviews = document.querySelectorAll('.realviews-review');
 
     [...reviews].forEach(async (review) => {
-        let reviewTransactionId = review.id;
-        if (reviewTransactionId) {
+        let rId = review.id;
+        if (rId) {
+            let badge = review.querySelector('.realviews-review__badge');
             let icon = review.querySelector('.realviews-review__icon');
             let name = review.querySelector('.realviews-review__username');
             let stars = review.querySelectorAll('.realviews-review__star');
@@ -17,7 +18,18 @@ export const loadReviews = async function loadReviews() {
             let reviewDateTime = review.querySelector('.realviews-review__date2 time');
             let body = review.querySelector('.realviews-review__body p');
 
-            let reviewData = JSON.parse(await fetchMirrornodeLogData(reviewTransactionId));
+            // let network, reviewData;
+
+            let { network, reviewData } = await fetchMirrornodeLogData(rId);
+            let baseUrl = `https://${network}.mirrornode.hedera.com/api/v1/contracts/results/`;
+
+            reviewData = JSON.parse(reviewData);
+
+            // show testnet and previewnet badge
+            if (network != 'mainnet') {
+                badge.innerText = network;
+                badge.style.display = 'block';
+            }
 
             // set stars
             let i = 1;
@@ -35,28 +47,25 @@ export const loadReviews = async function loadReviews() {
             body.innerText = reviewData.message; // set message
 
             // set buy date info
-            buyDate.setAttribute('href', 'https://hashscan.io/testnet/transactionsById/' + reviewData.transactionId);
-            let unparsedTransactionId = unparseTransactionId(reviewData.transactionId);
-            let formattedBuyDate = formatTimestamp(unparsedTransactionId.split('@')[1]);
+            buyDate.setAttribute('href', `${baseUrl}${reviewData.transactionId}`);
+            let bId = unparseTransactionId(reviewData.transactionId);
+            let formattedBuyDate = formatTimestamp(bId.split('@')[1]);
             // console.log(unparsedTransactionId.split('@')[1]);
             buyDateTime.innerText = formattedBuyDate;
             buyDateTime.addEventListener('mouseover', function () {
-                buyDateTime.innerText = unparsedTransactionId;
+                buyDateTime.innerText = bId.substring(0, 7) + '...' + bId.substring(bId.length - 7);
             });
             buyDateTime.addEventListener('mouseout', function () {
                 buyDateTime.innerText = formattedBuyDate;
             });
 
             // Set review date info
-            reviewDate.setAttribute(
-                'href',
-                'https://hashscan.io/testnet/transactionsById/' + parseTransactionId(reviewTransactionId),
-            );
+            reviewDate.setAttribute('href', `${baseUrl}${parseTransactionId(rId)}`);
 
-            let formattedReviewDate = formatTimestamp(reviewTransactionId.split('@')[1]);
+            let formattedReviewDate = formatTimestamp(rId.split('@')[1]);
             reviewDateTime.innerText = formattedReviewDate;
             reviewDateTime.addEventListener('mouseover', function () {
-                reviewDateTime.innerText = reviewTransactionId;
+                reviewDateTime.innerText = rId.substring(0, 7) + '...' + rId.substring(rId.length - 7);
             });
             reviewDateTime.addEventListener('mouseout', function () {
                 reviewDateTime.innerText = formattedReviewDate;
