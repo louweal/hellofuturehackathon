@@ -112,6 +112,7 @@ function custom_admin_inline_styles()
 {
 ?>
     <style>
+        input[type="number"],
         input[type="text"],
         input[type="email"],
         input[type="url"],
