@@ -3,7 +3,7 @@ import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
 import { ContractId, ContractExecuteTransaction, ContractFunctionParameters } from '@hashgraph/sdk';
 
 import { setAppMetadata } from './modules/setAppMetadata';
-import { setQueryParamAndRedirect } from './modules/setQueryParamsAndRedirect';
+import { setQueryParamAndRedirect } from './modules/setQueryParamAndRedirect';
 import { decodeData } from './modules/decodeData';
 import { getTinybarAmount } from './modules/getTinybarAmount';
 import { getNetworkId } from './modules/getNetworkId';
@@ -16,7 +16,6 @@ import { handleWriteReviewToggle } from './modules/realviews/handleWriteReviewTo
 import { handleModalsHide } from './modules/realviews/handleModalsHide';
 import { displayWriteReviewButtons } from './modules/realviews/displayWriteReviewButtons';
 import { parseTransactionId } from './modules/realviews/parseTransactionId';
-import { fetchMirrornodeLogData } from './modules/realviews/fetchMirrornodeLogData';
 import { loadReviews } from './modules/realviews/loadReviews';
 
 // Main thread
@@ -35,15 +34,13 @@ import { loadReviews } from './modules/realviews/loadReviews';
     }
 
     let hashconnect;
-    let state = `HashConnectConnectionState`.Disconnected;
+    let state = HashConnectConnectionState.Disconnected;
     let pairingData;
     let appMetadata = setAppMetadata();
 
     if (!hashconnect) {
         localStorage.removeItem('accountId');
     }
-
-    console.log(pairingData);
 
     let localAccountId = localStorage.getItem('accountId');
 
@@ -58,7 +55,7 @@ import { loadReviews } from './modules/realviews/loadReviews';
             if (!pairingData) {
                 await init(buttonData.network); //connect
             } else {
-                hashconnect.disconnect(); // disconnect wallet
+                await hashconnect.disconnect(); // disconnect wallet
             }
         });
     });
@@ -69,12 +66,18 @@ import { loadReviews } from './modules/realviews/loadReviews';
         let transactionButton = transactionWrapper.querySelector('.hederapay-transaction-button');
         transactionButton.addEventListener('click', async function () {
             let transactionData = decodeData(transactionButton.dataset.attributes);
+            let network = transactionData.network;
 
             let tinybarAmount = await getTinybarAmount(transactionWrapper, transactionData);
             if (!tinybarAmount) return;
 
+            // connected to wrong network
+            if (pairingData && pairingData.network != network) {
+                await hashconnect.disconnect(); // disconnect wallet
+            }
+
             if (!pairingData) {
-                await init(transactionData.network);
+                await init(network);
             }
 
             handleTransaction(transactionWrapper, transactionData);
@@ -110,7 +113,6 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
             // Check if the transaction was successful
             if (receipt.status.toString() === 'SUCCESS') {
-                // executed from woocommerce gateway
                 if (transactionData.store === true || transactionData.store === 'true') {
                     // transaction data needs to be stored (for reviewing later)
                     setQueryParamAndRedirect('transaction_id', parseTransactionId(transactionId));
@@ -132,7 +134,14 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
     async function init(network) {
         // Create the hashconnect instance
-        hashconnect = new HashConnect(getNetworkId(network), '606201a2da45f68c8084e2eea1f14ad7', appMetadata, true);
+        hashconnect = null;
+        let debugMode = true;
+        hashconnect = new HashConnect(
+            getNetworkId(network),
+            '606201a2da45f68c8084e2eea1f14ad7',
+            appMetadata,
+            debugMode,
+        );
 
         setUpHashConnectEvents(); // Register events
 
@@ -166,6 +175,10 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
         hashconnect.connectionStatusChangeEvent.on((connectionStatus) => {
             state = connectionStatus;
+            console.log(state);
+            // if (state === 'Disconnected') {
+            //     pairingData = null;
+            // }
         });
     }
 
@@ -247,12 +260,6 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
     async function deployReviewContract(data) {
         const factoryContractId = ContractId.fromString('0.0.4687987');
-        console.log(factoryContractId.toString());
-
-        console.log('pairingData :>> ', pairingData);
-
-        // let localAccountId = localStorage.getItem('accountId');
-        // console.log('localAccountId :>> ', localAccountId);
 
         let fromAccount = AccountId.fromString(pairingData.accountIds[0]);
         let signer = hashconnect.getSigner(fromAccount);
@@ -267,35 +274,28 @@ import { loadReviews } from './modules/realviews/loadReviews';
             .setFunction('deployReview', new ContractFunctionParameters().addString(data))
             .freezeWithSigner(signer);
 
-        let response = await transaction.executeWithSigner(signer);
-        // console.log(response);
+        let transactionId;
+        try {
+            let response = await transaction.executeWithSigner(signer);
 
-        //Confirm the transaction was executed successfully
-        const transactionId = response.transactionId.toString();
-        // console.log('Transaction ID:', transactionId);
-        let receipt = await response.getReceiptWithSigner(signer);
-        // console.log(receipt);
-        console.log('The transaction status is ' + receipt.status.toString());
-        if (receipt.status._code === 22) {
-            setQueryParamAndRedirect('review_transaction_id', transactionId);
-        } else {
-            console.log('Oops');
+            //Confirm the transaction was executed successfully
+            transactionId = response.transactionId.toString();
+            let receipt = await response.getReceiptWithSigner(signer);
+            console.log('The transaction status is ' + receipt.status.toString());
+            if (receipt.status._code === 22) {
+                console.log('redirect..');
+                setQueryParamAndRedirect('review_transaction_id', transactionId);
+            } else {
+                console.log(receipt.status);
+            }
+        } catch (e) {
+            console.log(e);
+
+            // ignore weird hashconnect errors for now..
+            console.log(transactionId);
+            if (transactionId) {
+                setQueryParamAndRedirect('review_transaction_id', transactionId);
+            }
         }
-    }
-
-    async function getReviews() {
-        const contractQuery = await new ContractCallQuery()
-            //Set the gas for the query
-            .setGas(100000)
-            //Set the contract ID to return the request for
-            .setContractId(newContractId)
-            //Set the contract function to call
-            .setFunction('data')
-            //Set the query payment for the node returning the request
-            //This value must cover the cost of the request otherwise will fail
-            .setQueryPayment(new Hbar(2));
-
-        //Submit to a Hedera network
-        const getMessage = await contractQuery.execute(client);
     }
 })();
