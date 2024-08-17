@@ -18,9 +18,15 @@ On the Realviews admin page you can select the number of reviews you want to sho
 
 ## Shortcodes
 
+### [hederapay_transaction_button]
+
+Realviews adds toggle to the Hederapay transaction button that allows you to save the transaction IDs to the page data such that they can be used to enable reviewing on that page.
+
+![Store transactions](https://github.com/louweal/hellofuturehackathon/blob/master/realviews/assets/store-transactions.png)
+
 ### [realviews_latest_reviews]
 
-Retrieves all reviews for the current product/page from the Hedera Mirror [REST API]().
+Retrieves all reviews for the current product/page from the Hedera Mirror [REST API](https://docs.hedera.com/hedera/sdks-and-apis/rest-api).
 
 > The reviews have small badge in the top right corner when they are from the `testnet` or `previewnet` network.
 
