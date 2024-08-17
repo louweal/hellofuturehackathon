@@ -48,4 +48,10 @@
         background-color: var(--color-primary);
         border-radius: 0;
     }
+
+    .woocommerce-Tabs-panel--description {
+        h2 {
+            display: none;
+        }
+    }
 }
