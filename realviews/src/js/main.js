@@ -24,8 +24,9 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
     async function redirect() {
         await new Promise((resolve) => setTimeout(resolve, 9000)); // mirror node will have received the transaction after ±10 seconds
-        const urlWithoutParams = window.location.origin + window.location.pathname;
-        window.location.href = urlWithoutParams;
+        // Construct the new URL without query parameters
+        const cleanURL = window.location.origin + window.location.pathname + '?cache_buster=' + new Date().getTime();
+        window.location.href = cleanURL;
     }
 
     // refresh page if it has url param contract_id - i.e. a new review was just added
@@ -65,6 +66,9 @@ import { loadReviews } from './modules/realviews/loadReviews';
     [...transactionWrappers].forEach((transactionWrapper) => {
         let transactionButton = transactionWrapper.querySelector('.hederapay-transaction-button');
         transactionButton.addEventListener('click', async function () {
+            let transactionNotices = transactionWrapper.querySelector('.hederapay-transaction-notices');
+            transactionNotices.innerText = ''; // reset
+
             let transactionData = decodeData(transactionButton.dataset.attributes);
             let network = transactionData.network;
 
@@ -73,11 +77,22 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
             // connected to wrong network
             if (pairingData && pairingData.network != network) {
+                console.log('wrong network');
+                transactionNotices.innerText += "You're connected to the wrong network. Please reload and try again.";
                 await hashconnect.disconnect(); // disconnect wallet
+                // await new Promise((resolve) => setTimeout(resolve, 3000)); // mirror node will have received the transaction after ±10 seconds
+                // location.reload(true);
+                return;
             }
 
             if (!pairingData) {
                 await init(network);
+            }
+
+            if (!pairingData) {
+                transactionNotices.innerText +=
+                    'Something went wrong with switching networks. Please reload and try again.';
+                return;
             }
 
             handleTransaction(transactionWrapper, transactionData);
@@ -86,7 +101,6 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
     async function handleTransaction(transactionWrapper, transactionData) {
         let transactionNotices = transactionWrapper.querySelector('.hederapay-transaction-notices');
-        transactionNotices.innerText = ''; // reset
 
         let tinybarAmount = await getTinybarAmount(transactionWrapper, transactionData);
         if (!tinybarAmount) return;
@@ -224,25 +238,41 @@ import { loadReviews } from './modules/realviews/loadReviews';
                 }
                 const name = reviewForm.querySelector('#name').value;
                 const message = reviewForm.querySelector('#message').value;
+                let invalid = false;
 
-                if (!name || name === '' || name.length <= 2) {
+                if (!name || name === '') {
                     notices.innerText += ' Name is required. ';
+                    invalid = true;
+                } else {
+                    if (name.length <= 2) {
+                        notices.innerText += ' Name is too short. ';
+                        invalid = true;
+                    }
                 }
 
                 if (!message || message === '') {
                     notices.innerText += ' Message is required. ';
+                    invalid = true;
                 }
 
                 if (!rating) {
                     notices.innerText += ' Rating is required. ';
-                }
-
-                if (!(rating > 0 && rating <= 5)) {
-                    notices.innerText += ' Rating is invalid. ';
+                    invalid = true;
+                } else {
+                    if (!(rating > 0 && rating <= 5)) {
+                        notices.innerText += ' Rating is invalid. ';
+                        invalid = true;
+                    }
                 }
 
                 if (message.length > 900) {
                     notices.innerText += 'Review is too long. ';
+                    invalid = true;
+                }
+
+                if (invalid) {
+                    // invalid fields in form
+                    return;
                 }
 
                 let review = {
@@ -259,7 +289,7 @@ import { loadReviews } from './modules/realviews/loadReviews';
     }
 
     async function deployReviewContract(data) {
-        const factoryContractId = ContractId.fromString('0.0.4687987');
+        const contractId = ContractId.fromString('0.0.4688625'); //0.0.4687987
 
         let fromAccount = AccountId.fromString(pairingData.accountIds[0]);
         let signer = hashconnect.getSigner(fromAccount);
@@ -267,11 +297,11 @@ import { loadReviews } from './modules/realviews/loadReviews';
         //Create the transaction to deploy a new CashbackReview contract
         let transaction = await new ContractExecuteTransaction()
             //Set the ID of the contract
-            .setContractId(factoryContractId)
+            .setContractId(contractId)
             //Set the gas for the call
             .setGas(2000000)
             //Set the function of the contract to call
-            .setFunction('deployReview', new ContractFunctionParameters().addString(data))
+            .setFunction('writeReview', new ContractFunctionParameters().addString(data))
             .freezeWithSigner(signer);
 
         let transactionId;
@@ -283,7 +313,7 @@ import { loadReviews } from './modules/realviews/loadReviews';
             let receipt = await response.getReceiptWithSigner(signer);
             console.log('The transaction status is ' + receipt.status.toString());
             if (receipt.status._code === 22) {
-                console.log('redirect..');
+                // console.log(transactionId);
                 setQueryParamAndRedirect('review_transaction_id', transactionId);
             } else {
                 console.log(receipt.status);
