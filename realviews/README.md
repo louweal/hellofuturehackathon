@@ -1,18 +1,26 @@
 # Realviews
 
+Integrate Hedera Smart Contracts into your WordPress website to get verifiable reviews.
+
 ## Dependencies / Required Plugins
 
 -   [HederaPay](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay#readme)
+-   (OPTIONAL) [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
+    -   If ACF PRO is installed, the plugin adds easy to use Gutenberg blocks (these blocks have the same functionality as the shortcodes).
+-   (OPTIONAL) [WooCommerce](https://woocommerce.com/)
+    -   If WooCommerce is installed the HederaPay option is added to the Payment options in the WooCommerce check-out and a Reviews section is added to the product pages.
 
 ## Installation
 
-Download the [realviews.zip](https://github.com/louweal/hellofuturehackathon/blob/master/realviews.zip) file from the root of this repository. Go to the `WP dashboard` **>** `Plugins`. Click `Add New Plugin` **>** `Upload Plugin` and upload the downloaded zipfile. This will upload and install the plugin, next click `Activate` to activate the plugin.
+Install [HederaPay](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay#readme) if not yet installed. Then download the [realviews.zip](https://github.com/louweal/hellofuturehackathon/blob/master/realviews.zip) file from the root of this repository. Go to the `WP dashboard` **>** `Plugins`. Click `Add New Plugin` **>** `Upload Plugin` and upload the downloaded zipfile. This will upload and install the plugin, next click `Activate` to activate the plugin.
 
-> We are currently in the process of getting the plugin listed in the build-in WordPress Plugin Store.
+> Plugin will soon be listed in the build-in WordPress Plugin Store for easier installation.
 
 ## Configuration for WooCommerce shops _(optional)_
 
-On the Realviews admin page you can select the number of reviews you want to show on a product page and set the button text for showing more reviews (if available).
+On the Realviews admin page you can select the number of reviews you want to show on a product page and set the button text for showing more reviews (if available). This button triggers a modal showing all reviews. Set the number of reviews to `-1` to show all reviews in-page.
+
+> Set the number of reviews to `0` to hide the whole review section.
 
 ![Realviews Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/realviews/assets/admin.png)
 

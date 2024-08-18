@@ -13,7 +13,7 @@ HederaPay allows users to integrate Hedera transactions into their WordPress web
 
 Download the [hederapay.zip](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay.zip) file from the root of this repository. Go to the `WP dashboard` **>** `Plugins`. Click `Add New Plugin` **>** `Upload Plugin` and upload the downloaded zipfile. This will upload and install the plugin, next click `Activate` to activate the plugin.
 
-> We are currently in the process of getting the plugin listed in the build-in WordPress Plugin Store.
+> Plugin will soon be listed in the build-in WordPress Plugin Store for easier installation.
 
 ## Configuration _(optional)_
 
