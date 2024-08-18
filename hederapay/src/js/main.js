@@ -11,6 +11,7 @@ import { getTinybarAmount } from './modules/getTinybarAmount';
 import { getNetworkId } from './modules/getNetworkId';
 import { setConnectButtonsText } from './modules/setConnectButtonsText';
 import { setVisibleAccountId } from './modules/setVisibleAccountId';
+import { setWalletConnectId } from './modules/setWalletConnectId';
 
 // Main thread
 (function () {
@@ -21,11 +22,14 @@ import { setVisibleAccountId } from './modules/setVisibleAccountId';
     let pairingData;
     let appMetadata = setAppMetadata();
 
-    if (!hashconnect) {
-        localStorage.removeItem('accountId');
-    }
+    let projectId = setWalletConnectId();
+    console.log(projectId);
 
     let localAccountId = localStorage.getItem('accountId');
+
+    if (!hashconnect && localAccountId) {
+        localStorage.removeItem('accountId');
+    }
 
     setVisibleAccountId(localAccountId);
     setConnectButtonsText(undefined, localAccountId ? 'disconnect_text' : 'connect_text');
@@ -126,12 +130,7 @@ import { setVisibleAccountId } from './modules/setVisibleAccountId';
         // Create the hashconnect instance
         hashconnect = null;
         let debugMode = true;
-        hashconnect = new HashConnect(
-            getNetworkId(network),
-            '606201a2da45f68c8084e2eea1f14ad7',
-            appMetadata,
-            debugMode,
-        );
+        hashconnect = new HashConnect(getNetworkId(network), projectId, appMetadata, debugMode);
 
         setUpHashConnectEvents(); // Register events
 

@@ -36,6 +36,14 @@ function hederapay_settings_init()
     );
 
     add_settings_field(
+        'project-id',
+        'WalletConnect Project ID',
+        'hederapay_project_id_field_callback',
+        'hederapay-settings',
+        'hederapay_settings_section'
+    );
+
+    add_settings_field(
         'name',
         'Name',
         'hederapay_name_field_callback',
@@ -67,10 +75,17 @@ function hederapay_settings_init()
 
 function hederapay_settings_section_callback()
 {
-    echo "This metadata is shown in the transaction modal.";
+    // echo "This metadata is shown in the transaction modal.";
 }
 
-
+function hederapay_project_id_field_callback()
+{
+    $settings = get_option('hederapay_settings');
+    $project_id = isset($settings['project_id']) ? esc_html($settings['project_id']) : '';
+?>
+    <input type="text" name="hederapay_settings[project_id]" value="<?php echo $project_id; ?>">
+<?php
+}
 
 function hederapay_name_field_callback()
 {
