@@ -5,6 +5,11 @@
  * Description:			Hero template
  */
 
+if (in_array('advanced-custom-fields-pro/acf.php', apply_filters('active_plugins', get_option('active_plugins'))) == false) {
+    //acf pro is not active
+    return;
+}
+
 $title = get_field('hero_title');
 $link = get_field('hero_link');
 $image_1 = get_field('hero_image_1');
@@ -16,7 +21,6 @@ $image_6 = get_field('hero_image_6');
 $images = [$image_1, $image_2, $image_3, $image_4, $image_5, $image_6];
 
 if ($title) {
-
 ?>
 
     <header class="hero">
