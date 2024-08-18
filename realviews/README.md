@@ -82,15 +82,16 @@ All reviews written using Realviews are stored on the Hedera network, connected 
 The following two steps allow everyone to check the raw transaction data on Hedera to verify the review.
 
 **Step 1**  
-Click on the review date of the review you wish to inspect. This brings up the raw transaction data on the Hedera Mirrornode. Look for the decoded string inside `"logs"`**>**`"data"` and copy it.
+Click on the review date of the review you wish to inspect. This brings up the raw transaction data on the Hedera Mirrornode. Look for the encoded string inside `"logs"`**>**`"data"` and copy it.  
 **Step 2**  
-Ask ChatGPT to decode it.
+Ask [ChatGPT](https://chatgpt.com/) to decode it.
 
 > **Example**:  
 > `decode without explanation: 0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000006e7b227472616e73616374696f6e4964223a22302e302e343530353336312d313732333733363334312d313731353239303633222c22726174696e67223a352c226e616d65223a22426f626279222c226d657373616765223a22477265617420626f6f6b21205468616e6b7321227d000000000000000000000000000000000000`
 
-ChatGPT will respond with the human-readable string: For example:
+ChatGPT will respond with the decoded string.
 
+> **Example**:
 > `{"transactionId":"0.0.4505361-1723736341-171529063","rating":5,"name":"Bobby","message":"Great book! Thanks!"}`
 
 **Step 3** (optional)  
