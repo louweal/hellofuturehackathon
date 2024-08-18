@@ -1,6 +1,6 @@
 # Realviews
 
-Integrate Hedera Smart Contracts into your WordPress website to get verifiable reviews.
+Integrate Hedera Smart Contracts into your WordPress website to get verifiable reviews. All reviews written using Realviews are stored on the Hedera network, connected to the purchase transaction and signed by the customer using their wallet. Therefore you can be sure that every review is, indeed, [real](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay#review-verification).
 
 ## Dependencies / Required Plugins
 
