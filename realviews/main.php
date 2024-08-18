@@ -25,15 +25,16 @@ function init_realviews_function()
 
     // load these only if woocommerce is active
     if (!class_exists('WooCommerce')) return;
+
     require_once plugin_dir_path(__FILE__) . 'lib/product.php';
 }
 
 function enable_hederapay()
 {
-    $plugin = 'hederapay/main.php';
+    $hederapay = 'hederapay/main.php';
 
-    if (!is_plugin_active($plugin)) {
-        activate_plugin($plugin);
+    if (in_array($hederapay, apply_filters('active_plugins', get_option('active_plugins'))) == false) {
+        activate_plugin($hederapay);
     }
 }
 add_action('init', 'enable_hederapay');
