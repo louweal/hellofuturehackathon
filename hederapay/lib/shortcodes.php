@@ -14,6 +14,7 @@ function hederapay_paired_account_function()
 
 // Register the hederapay connect wallet shortcode
 add_shortcode('hederapay_connect_button', 'hederapay_connect_button_function');
+
 function hederapay_connect_button_function($atts)
 {
     // Define the default attributes
@@ -53,48 +54,79 @@ function hederapay_connect_button_function($atts)
 }
 
 // Register the hederapay transaction button shortcode
-add_shortcode('hederapay_transaction_button', 'hederapay_transaction_button_function');
-function hederapay_transaction_button_function($atts)
+add_shortcode('hederapay_transaction_button', 'hederapay_transaction_button_wrapper_function');
+function hederapay_transaction_button_wrapper_function($atts)
 {
+    $shortcode = true;
+    echo hederapay_transaction_button_function($atts, $shortcode);
+}
+
+function hederapay_transaction_button_function($atts, $shortcode)
+{
+    if ($shortcode) {
+        // Define the default attributes
+        $atts = shortcode_atts(
+            array(
+                'title' => 'Pay',
+                'memo' => null,
+                'amount' => null,
+                'currency' => 'hbar',
+                'testnet_account' => null,
+                'previewnet_account' => null,
+                'mainnet_account' => null,
+                'store' => false, // executed from WooCommerce
+            ),
+            $atts,
+            'hederapay_transaction_button'
+        );
+        $num_accounts = isset($atts['testnet_account']) + isset($atts['previewnet_account']) + isset($atts['mainnet_account']);
+
+        if ($num_accounts != 1) {
+            return "Please specify one receiver wallet.";
+        }
+
+        // Extract the attributes
+        $title = esc_html($atts['title']);
+        $memo = esc_html($atts['memo']);
+        $amount = floatval(esc_html($atts['amount'])); // convert string to float
+        $currency = strtolower(esc_html($atts['currency']));
+        $store =  esc_html($atts['store']);
 
 
-    // Define the default attributes
-    $atts = shortcode_atts(
-        array(
-            'title' => 'Pay',
-            'memo' => null,
-            'amount' => null,
-            'currency' => 'hbar',
-            'testnet_account' => null,
-            'previewnet_account' => null,
-            'mainnet_account' => null,
-            'store' => false, // executed from WooCommerce
-        ),
-        $atts,
-        'hederapay_transaction_button'
-    );
+        $result = getAccountAndNetwork($atts['testnet_account'], $atts['previewnet_account'], $atts['mainnet_account']);
+        $network = $result["network"];
+        $account = $result["account"];
+    } else {
+        $network = get_field("field_network");
 
-    $num_accounts = isset($atts['testnet_account']) + isset($atts['previewnet_account']) + isset($atts['mainnet_account']);
+        switch ($network) {
+            case "testnet";
+                $account = get_field("testnet_account");
+                break;
+            case "previewnet":
+                $account = get_field("previewnet_account");
+                break;
+            case "mainnet":
+                $account = get_field("mainnet_account");
+                break;
+            default:
+                $account = get_field("testnet_account");
+        }
 
-    if ($num_accounts != 1) {
-        return "Please specify one receiver wallet.";
+        $title = get_field("field_title");
+        $memo = get_field("field_memo");
+        $amount = get_field("field_amount");
+        $currency = get_field("field_currency");
+        $store = get_field("field_store");
+
+        if (!$account) {
+            echo "<p>Receiver Account ID missing.</p>";
+            return;
+        }
     }
 
-    // Extract the attributes
-    $title = esc_html($atts['title']);
-    $memo = esc_html($atts['memo']);
-    $amount = floatval(esc_html($atts['amount'])); // convert string to float
-    $currency = strtolower(esc_html($atts['currency']));
-    $store =  esc_html($atts['store']);
-
-
-    $result = getAccountAndNetwork($atts['testnet_account'], $atts['previewnet_account'], $atts['mainnet_account']);
-    $network = $result["network"];
-    $account = $result["account"];
-
-
     if (!str_starts_with($account, '0.0.')) {
-        return "A Hedera Account ID should look like this: 0.0.xxxxxxx";
+        return "A Hedera Account ID should start with 0.0.";
     }
 
     $badge = "";
