@@ -73,6 +73,31 @@ On websites with Gutenberg (WordPress version >= 5.0) and [Advanced Custom Field
 
 Displays the total number of reviews for the current product/page.
 
+## Review verification
+
+All reviews written using Realviews are stored on the Hedera network, connected to the purchase transaction and signed by the customer using their wallet. Therefore you can be sure that every review is, indeed, **real**.
+
+### Inspecting transaction data
+
+The following two steps allow everyone to check the raw transaction data on Hedera to verify the review.
+
+**Step 1**  
+Click on the review date of the review you wish to inspect. This brings up the raw transaction data on the Hedera Mirrornode. Look for the decoded string inside `"logs"`**>**`"data"` and copy it.
+**Step 2**  
+Ask ChatGPT to decode it.
+
+> **Example**:  
+> `decode without explanation: 0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000006e7b227472616e73616374696f6e4964223a22302e302e343530353336312d313732333733363334312d313731353239303633222c22726174696e67223a352c226e616d65223a22426f626279222c226d657373616765223a22477265617420626f6f6b21205468616e6b7321227d000000000000000000000000000000000000`
+
+ChatGPT will respond with the human-readable string: For example:
+
+> `{"transactionId":"0.0.4505361-1723736341-171529063","rating":5,"name":"Bobby","message":"Great book! Thanks!"}`
+
+**Step 3** (optional)  
+If you also want to inspect the buy transaction connected to this review, you can simply copy the `transactionId` from ChatGPT and look it up using a Network Inspector such as [Hashscan](https://hashscan.io/).
+
+> Tip: Make sure you select the right network in the network inspector.
+
 ## Other Plugins by HashPress Pioneers
 
 -   [HederaPay](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay)
