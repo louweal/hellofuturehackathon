@@ -5,7 +5,7 @@ HederaPay allows users to integrate Hedera transactions into their WordPress web
 ## Dependencies (OPTIONAL)
 
 -   (OPTIONAL) [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
-    -   If ACF PRO is installed, the plugin adds easy to use Gutenberg blocks (these blocks have the same functionality as the shortcodes).
+    -   If ACF PRO is installed, the plugin adds an easy to use Gutenberg block (these blocks have the same functionality as the shortcodes).
 -   (OPTIONAL) [WooCommerce](https://woocommerce.com/)
     -   If WooCommerce is installed the HederaPay option is added to the Payment options in the WooCommerce check-out.
 
@@ -17,11 +17,11 @@ Download the [hederapay.zip](https://github.com/louweal/hellofuturehackathon/blo
 
 ## Configuration
 
-On the HederaPay settings page you can set your site-specific WalletConnect project ID\* and the metadata that is shown in the transaction modal.
+On the HederaPay settings page you can set your site-specific WalletConnect Project ID\* and the metadata that is shown in the transaction modal.
+
+\* You will need a WalletConnect Project ID. You can get one by going to [WalletConnect](https://cloud.walletconnect.com/) and setting up a new `WalletKit` project.
 
 ![Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/admin-settings.png)
-
-> \* You will need a WalletConnect Project ID. You can get one by going to [WalletConnect](https://cloud.walletconnect.com/) and setting up a new `WalletKit` project.
 
 ## Configuration for WooCommerce shops
 
@@ -58,11 +58,9 @@ The currencies aren't case-sensitive.
 
 ##### Amount
 
-Amounts are converted to `HBAR` using the [CoinGecko API](https://docs.coingecko.com/v3.0.1/reference/simple-price). Subsequently, the `HBAR` amount is converted to `tinybar` and rounded to an integer value.
+Amounts are converted to `HBAR` using the [CoinGecko API](https://docs.coingecko.com/v3.0.1/reference/simple-price). Subsequently, the `HBAR` amount is converted to `tinybar` and rounded to an integer value. When no amount is provided an input-field appears in which the user can enter an amount.
 
 > 1 HBAR = 100.000.000 tinybar.
-
-When no amount is provided an `<input>` field appears in which the user can enter an amount.
 
 ##### Accounts
 
@@ -108,7 +106,7 @@ Useful when you want to allow the user to connect their wallet without sending a
 
 ### [hederapay_paired_account] _(optional)_
 
-Displays the Account ID of the paired wallet. It is hidden when no wallet is connected. Clicking the element opens the account in network inspector [Dragonglass](https://app.dragonglass.me/) in a new browser tab.
+Displays the Account ID of the paired wallet. It is hidden when no wallet is connected.
 
 ## Other Plugins by HashPress Pioneers
 
