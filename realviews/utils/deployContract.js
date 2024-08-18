@@ -4,11 +4,18 @@ var fs = require('fs');
 
 const { Client, AccountId, PrivateKey, ContractCreateFlow } = require('@hashgraph/sdk');
 
+const args = process.argv.slice(2);
+
 async function main() {
     const operatorId = AccountId.fromString(process.env.MY_ACCOUNT_ID);
     const operatorKey = PrivateKey.fromString(process.env.MY_PRIVATE_KEY);
 
-    const client = Client.forTestnet().setOperator(operatorId, operatorKey);
+    let client;
+    if (args[0] == 'mainnet') {
+        client = Client.forMainnet().setOperator(operatorId, operatorKey);
+    } else {
+        client = Client.forTestnet().setOperator(operatorId, operatorKey);
+    }
 
     // const contractName = "Storage";
     const contractName = 'Review';
