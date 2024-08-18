@@ -7,7 +7,7 @@ Additional instructions for developers.
 Create a new plugin zip, containing all files except the `node_modules`
 
 ```
-zip -r realviews.zip hederapay -x "realviews/node_modules/*"
+zip -r realviews.zip realviews -x "realviews/node_modules/*"
 ```
 
 ## Compiling contracts

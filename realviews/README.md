@@ -54,7 +54,7 @@ Realviews also adds a `Store transactions` toggle to the Gutenberg block.
 
 Retrieves all reviews for the current product/page from the Hedera Mirror [REST API](https://docs.hedera.com/hedera/sdks-and-apis/rest-api).
 
-> The reviews have small badge in the top right corner when they are from the `testnet` or `previewnet` network.
+> The reviews have a small badge in the top right corner when they are from the `testnet` or `previewnet` network.
 
 #### Attributes
 
@@ -87,12 +87,12 @@ Click on the review date of the review you wish to inspect. This brings up the r
 Ask [ChatGPT](https://chatgpt.com/) to decode it.
 
 > **Example**:  
-> `decode without explanation: 0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000006e7b227472616e73616374696f6e4964223a22302e302e343530353336312d313732333733363334312d313731353239303633222c22726174696e67223a352c226e616d65223a22426f626279222c226d657373616765223a22477265617420626f6f6b21205468616e6b7321227d000000000000000000000000000000000000`
+> `decode without explanation: 0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000c57b227472616e73616374696f6e4964223a22302e302e343530353336312d313732333937363938312d373134383035333734222c22726174696e67223a352c226e616d65223a22416c6578204d2e222c226d657373616765223a225468697320747261636b20697320612062616e676572212054686520656e65726779206973206f66662074686520636861727473e280947065726665637420666f722067657474696e672070756d706564207570206265666f72652061206e69676874206f75742e227d000000000000000000000000000000000000000000000000000000`
 
 ChatGPT will respond with the decoded string.
 
-> **Example**:
-> `{"transactionId":"0.0.4505361-1723736341-171529063","rating":5,"name":"Bobby","message":"Great book! Thanks!"}`
+> **Example**:  
+> `{"transactionId":"0.0.4505361-1723976981-714805374","rating":5,"name":"Alex M.","message":"This track is a banger! The energy is off the charts—perfect for getting pumped up before a night out."}`
 
 **Step 3** (optional)  
 If you also want to inspect the buy transaction connected to this review, you can simply copy the `transactionId` from ChatGPT and look it up using a Network Inspector such as [Hashscan](https://hashscan.io/).

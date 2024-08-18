@@ -15,11 +15,13 @@ Download the [hederapay.zip](https://github.com/louweal/hellofuturehackathon/blo
 
 > Plugin will soon be listed in the build-in WordPress Plugin Store for easier installation.
 
-## Configuration _(optional)_
+## Configuration
 
-The HederaPay settings page allows you to change the site metadata that is shown in the transaction modal.
+On the HederaPay settings page you can set your site-specific WalletConnect project ID\* and the metadata that is shown in the transaction modal.
 
 ![Admin Settings](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/admin-settings.png)
+
+> \* You will need a WalletConnect Project ID. You can get one by going to [WalletConnect](https://cloud.walletconnect.com/) and setting up a new `WalletKit` project.
 
 ## Configuration for WooCommerce shops
 
@@ -33,7 +35,7 @@ On the HederaPay for WooCommerce admin page (`WP Dashboard` **>** `WooCommerce` 
 
 Adds a transaction button for sending transactions on Hedera. It uses [WalletConnect](https://walletconnect.com/) to establish a a secure connection with cryptocurrency wallets.
 
-> The button has small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet.
+> The button has a small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet.
 
 #### Attributes
 
@@ -89,7 +91,7 @@ Adds a connect/disconnect button.
 
 Useful when you want to allow the user to connect their wallet without sending a transaction. After connecting the button acts as a disconnect button. It uses [WalletConnect](https://walletconnect.com/) to establish a a secure connection with cryptocurrency wallets.
 
-> The button has small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet.
+> The button has a small badge in the top right corner when the active network is `testnet` or `previewnet` to warn the user/developer that the code isn't running on the mainnet.
 
 #### Attributes _(all attributes are optional)_
 
@@ -100,7 +102,7 @@ Useful when you want to allow the user to connect their wallet without sending a
 | disconnect_text | Button text after connection is established     | Disconnect wallet |
 
 **Example:**  
-`[hederapay-connect-button network="testnet" connect_text="Connect" disconnect_text="Disconnect"]`
+`[hederapay_connect_button network="testnet" connect_text="Connect" disconnect_text="Disconnect"]`
 
 ![Connect / disconnect button](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/connect-button.png)
 
