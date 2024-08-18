@@ -2,8 +2,16 @@ import { fetchMirrornodeLogData } from './fetchMirrornodeLogData';
 import { formatTimestamp } from './formatTimestamp';
 import { parseTransactionId, unparseTransactionId } from './parseTransactionId';
 
-export const loadReviews = async function loadReviews() {
-    let reviews = document.querySelectorAll('.realviews-review');
+export const loadReviews = async function loadReviews(loadModalReviews = false) {
+    let reviews;
+
+    if (loadModalReviews) {
+        reviews = document.querySelectorAll('.realviews-modal .realviews-review.is-loading');
+    } else {
+        reviews = document.querySelectorAll(
+            '.realviews-latest-reviews > .realviews-wrapper > .realviews-review.is-loading',
+        );
+    }
 
     [...reviews].forEach(async (review) => {
         let rId = review.id;
@@ -42,7 +50,7 @@ export const loadReviews = async function loadReviews() {
                 i += 1;
             });
 
-            icon.innerText = reviewData.name[0]; // set icon
+            icon.innerText = reviewData.name[0].toUpperCase(); // set icon
             name.innerText = reviewData.name; // set name
             body.innerText = reviewData.message; // set message
 

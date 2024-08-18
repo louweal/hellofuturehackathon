@@ -17,22 +17,14 @@ import { handleModalsHide } from './modules/realviews/handleModalsHide';
 import { displayWriteReviewButtons } from './modules/realviews/displayWriteReviewButtons';
 import { parseTransactionId } from './modules/realviews/parseTransactionId';
 import { loadReviews } from './modules/realviews/loadReviews';
+import { validateForm } from './modules/realviews/validateForm';
+import { redirectPage } from './modules/realviews/redirectPage';
 
 // Main thread
 (function () {
     'use strict';
 
-    async function redirect() {
-        await new Promise((resolve) => setTimeout(resolve, 9000)); // mirror node will have received the transaction after ±10 seconds
-        // Construct the new URL without query parameters
-        const cleanURL = window.location.origin + window.location.pathname + '?cache_buster=' + new Date().getTime();
-        window.location.href = cleanURL;
-    }
-
-    // refresh page if it has url param contract_id - i.e. a new review was just added
-    if (new URLSearchParams(new URL(window.location.href).search).get('review_transaction_id')) {
-        redirect();
-    }
+    //realviews
 
     let hashconnect;
     let state = HashConnectConnectionState.Disconnected;
@@ -87,12 +79,6 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
             if (!pairingData) {
                 await init(network);
-            }
-
-            if (!pairingData) {
-                transactionNotices.innerText +=
-                    'Something went wrong with switching networks. Please reload and try again.';
-                return;
             }
 
             handleTransaction(transactionWrapper, transactionData);
@@ -190,9 +176,6 @@ import { loadReviews } from './modules/realviews/loadReviews';
         hashconnect.connectionStatusChangeEvent.on((connectionStatus) => {
             state = connectionStatus;
             console.log(state);
-            // if (state === 'Disconnected') {
-            //     pairingData = null;
-            // }
         });
     }
 
@@ -204,12 +187,16 @@ import { loadReviews } from './modules/realviews/loadReviews';
     displayWriteReviewButtons(); // handle visibility of the 'write review' button (active account must have a transaction record)
     loadReviews();
 
+    // refresh page if it has url param contract_id - i.e. a new review was just added
+    if (new URLSearchParams(new URL(window.location.href).search).get('review_transaction_id')) {
+        redirectPage();
+    }
+
     function handleReviewSubmit() {
         let reviewForm = document.querySelector('#write-review');
         if (reviewForm) {
             const ratingWrapper = reviewForm.querySelector('#rating-wrapper');
             const ratingDisplay = ratingWrapper.querySelector('.selected-rating');
-            const notices = reviewForm.querySelector('.write-review-notices');
             let rating;
 
             const stars = ratingWrapper.querySelectorAll('.realviews-stars__star');
@@ -228,67 +215,15 @@ import { loadReviews } from './modules/realviews/loadReviews';
 
             reviewForm.addEventListener('submit', function (event) {
                 event.preventDefault();
-                notices.innerText = ''; // reset notices
+                let { passed, reviewString } = validateForm(reviewForm, rating);
+                if (!passed) return; //form validation failed
 
-                let submitButton = reviewForm.querySelector('.realviews-submit-review');
-                const transactionId = submitButton.dataset.transactionId;
-                if (!transactionId) {
-                    console.log('transaction id missing');
-                    return;
-                }
-                const name = reviewForm.querySelector('#name').value;
-                const message = reviewForm.querySelector('#message').value;
-                let invalid = false;
-
-                if (!name || name === '') {
-                    notices.innerText += ' Name is required. ';
-                    invalid = true;
-                } else {
-                    if (name.length <= 2) {
-                        notices.innerText += ' Name is too short. ';
-                        invalid = true;
-                    }
-                }
-
-                if (!message || message === '') {
-                    notices.innerText += ' Message is required. ';
-                    invalid = true;
-                }
-
-                if (!rating) {
-                    notices.innerText += ' Rating is required. ';
-                    invalid = true;
-                } else {
-                    if (!(rating > 0 && rating <= 5)) {
-                        notices.innerText += ' Rating is invalid. ';
-                        invalid = true;
-                    }
-                }
-
-                if (message.length > 900) {
-                    notices.innerText += 'Review is too long. ';
-                    invalid = true;
-                }
-
-                if (invalid) {
-                    // invalid fields in form
-                    return;
-                }
-
-                let review = {
-                    transactionId, // pay transaction
-                    rating,
-                    name,
-                    message,
-                };
-
-                const reviewString = JSON.stringify(review);
-                deployReviewContract(reviewString);
+                executeReviewTransaction(reviewString);
             });
         }
     }
 
-    async function deployReviewContract(data) {
+    async function executeReviewTransaction(data) {
         const contractId = ContractId.fromString('0.0.4688625'); //0.0.4687987
 
         let fromAccount = AccountId.fromString(pairingData.accountIds[0]);

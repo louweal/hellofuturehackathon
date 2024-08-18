@@ -3,6 +3,7 @@ import { parseTransactionId } from './parseTransactionId';
 
 export const fetchMirrornodeLogData = async function fetchMirrornodeLogData(transactionId) {
     let networks = ['testnet', 'mainnet', 'previewnet'];
+    // console.log('fetch');
 
     for (let network of networks) {
         let url = `https://${network}.mirrornode.hedera.com/api/v1/contracts/results/${parseTransactionId(transactionId)}`;
