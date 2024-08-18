@@ -79,7 +79,7 @@ Always provide a `mainnet_account` **or** a `previewnet_account` **or** a `testn
 
 #### Gutenberg block
 
-On websites with Gutenberg and [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) you can also the _HederaPay Transaction Button_-Gutenberg block instead of the `[hederapay_transaction_button]`. The functionality and output are the same as the shortcode.
+On websites with Gutenberg (WordPress version >= 5.0) and [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) you can use the _HederaPay Transaction Button_-Gutenberg block instead of the shortcode. The functionality and output are the same as the shortcode.
 
 ![Gutenberg block](https://github.com/louweal/hellofuturehackathon/blob/master/hederapay/assets/gutenberg-block.png)
 

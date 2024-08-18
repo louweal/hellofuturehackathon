@@ -4,7 +4,7 @@ Integrate Hedera Smart Contracts into your WordPress website to get verifiable r
 
 ## Dependencies / Required Plugins
 
--   [HederaPay](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay#readme)
+-   [HederaPay](https://github.com/louweal/hellofuturehackathon/tree/master/hederapay#readme) - HederaPay adds all functionality needed to connect to the Hedera network and make payments on Hedera.
 -   (OPTIONAL) [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
     -   If ACF PRO is installed, the plugin adds easy to use Gutenberg blocks (these blocks have the same functionality as the shortcodes).
 -   (OPTIONAL) [WooCommerce](https://woocommerce.com/)
@@ -28,7 +28,25 @@ On the Realviews admin page you can select the number of reviews you want to sho
 
 ### [hederapay_transaction_button]
 
-Realviews adds toggle to the Hederapay transaction button that allows you to save the transaction IDs to the page data such that they can be used to enable reviewing on that page.
+Realviews adds attribute `store` to the Hederapay transaction button that allows you to save the transaction IDs to the page metadata such that they can be used to enable reviewing on that page.
+
+| Attribute          | Description                                            | Default value |
+| :----------------- | :----------------------------------------------------- | :------------ |
+| title              | Button text                                            | Pay           |
+| amount             | Amount to be send in _currency_ (see details)          | null          |
+| currency           | Currency the _amount_ is in (see details)              | USD           |
+| memo               | Message to send along with the transaction             | null          |
+| testnet_account    | Receiver Account ID on the testnet                     | null          |
+| previewnet_account | Receiver Account ID on the previewnet                  | null          |
+| mainnet_account    | Receiver Account ID on the mainnet                     | null          |
+| **store**          | **Store transaction id in page metadata (true/false)** | **false**     |
+
+**Example**  
+`[hederapay_transaction_button amount="5" currency="eur" title="Buy ebook" testnet_account="0.0.4505361" memo="Ebook purchase" store="true"]`
+
+#### Gutenberg
+
+Realviews also adds a `Store transactions` toggle to the Gutenberg block.
 
 ![Store transactions](https://github.com/louweal/hellofuturehackathon/blob/master/realviews/assets/store-transactions.png)
 
@@ -47,7 +65,7 @@ Retrieves all reviews for the current product/page from the Hedera Mirror [REST 
 
 #### Gutenberg block
 
-On websites with Gutenberg and [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) you can also the _Latest Reviews (Realviews)_-Gutenberg block instead of the `[realviews_latest_reviews]`. The functionality and output are the same as the shortcode.
+On websites with Gutenberg (WordPress version >= 5.0) and [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/) you can use the _Latest Reviews (Realviews)_-Gutenberg block instead of the shortcode. The functionality and output are the same as the shortcode.
 
 ![Gutenberg block](https://github.com/louweal/hellofuturehackathon/blob/master/realviews/assets/gutenberg-block.png)
 
