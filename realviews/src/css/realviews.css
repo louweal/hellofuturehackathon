@@ -255,6 +255,7 @@ body.realviews-modal-open {
 .realviews-actions {
     display: flex;
     gap: 1rem;
+    align-items: center;
 }
 
 .realviews-write-review {
