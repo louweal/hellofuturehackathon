@@ -1,30 +1,25 @@
+/* IMPORTANT: THIS SCRIPT IS NOT ENQUEUED WHEN REALVIEWS IS ACTIVE */
+
 import { HashConnect, HashConnectConnectionState } from 'hashconnect';
 import { TransferTransaction, Hbar, AccountId } from '@hashgraph/sdk';
-import { LedgerId } from '@hashgraph/sdk';
+// import { ContractId, ContractExecuteTransaction, ContractFunctionParameters } from '@hashgraph/sdk';
 
-/* IMPORTANT: THIS SCRIPT IS NOT ENQUEUED WHEN REALVIEWS IS ACTIVE */
+import { setAppMetadata } from './modules/setAppMetadata';
+import { setQueryParamAndRedirect } from './modules/setQueryParamAndRedirect';
+import { decodeData } from './modules/decodeData';
+import { getTinybarAmount } from './modules/getTinybarAmount';
+import { getNetworkId } from './modules/getNetworkId';
+import { setConnectButtonsText } from './modules/setConnectButtonsText';
+import { setVisibleAccountId } from './modules/setVisibleAccountId';
 
 // Main thread
 (function () {
     'use strict';
 
-    let metadata = document.querySelector('#hederapay-app-metadata');
-
-    let appMetadata = {};
-    if (metadata) {
-        let metadataData = decodeData(metadata.dataset.attributes);
-
-        appMetadata = {
-            name: metadataData.name,
-            description: metadataData.description,
-            icons: [metadataData.icon],
-            url: metadataData.url,
-        };
-    }
-
     let hashconnect;
     let state = HashConnectConnectionState.Disconnected;
     let pairingData;
+    let appMetadata = setAppMetadata();
 
     if (!hashconnect) {
         localStorage.removeItem('accountId');
@@ -33,7 +28,7 @@ import { LedgerId } from '@hashgraph/sdk';
     let localAccountId = localStorage.getItem('accountId');
 
     setVisibleAccountId(localAccountId);
-    setConnectButtonsText(localAccountId ? 'disconnect_text' : 'connect_text');
+    setConnectButtonsText(undefined, localAccountId ? 'disconnect_text' : 'connect_text');
 
     let connectButtons = document.querySelectorAll('.hederapay-connect-button');
     [...connectButtons].forEach((connectButton) => {
@@ -43,7 +38,7 @@ import { LedgerId } from '@hashgraph/sdk';
             if (!pairingData) {
                 await init(buttonData.network); //connect
             } else {
-                hashconnect.disconnect(); // disconnect wallet
+                await hashconnect.disconnect(); // disconnect wallet
             }
         });
     });
@@ -53,13 +48,27 @@ import { LedgerId } from '@hashgraph/sdk';
     [...transactionWrappers].forEach((transactionWrapper) => {
         let transactionButton = transactionWrapper.querySelector('.hederapay-transaction-button');
         transactionButton.addEventListener('click', async function () {
+            let transactionNotices = transactionWrapper.querySelector('.hederapay-transaction-notices');
+            transactionNotices.innerText = ''; // reset
+
             let transactionData = decodeData(transactionButton.dataset.attributes);
+            let network = transactionData.network;
 
             let tinybarAmount = await getTinybarAmount(transactionWrapper, transactionData);
             if (!tinybarAmount) return;
 
+            // connected to wrong network
+            if (pairingData && pairingData.network != network) {
+                console.log('wrong network');
+                transactionNotices.innerText += "You're connected to the wrong network. Please reload and try again.";
+                await hashconnect.disconnect(); // disconnect wallet
+                // await new Promise((resolve) => setTimeout(resolve, 3000)); // mirror node will have received the transaction after ±10 seconds
+                // location.reload(true);
+                return;
+            }
+
             if (!pairingData) {
-                await init(transactionData.network);
+                await init(network);
             }
 
             handleTransaction(transactionWrapper, transactionData);
@@ -68,7 +77,6 @@ import { LedgerId } from '@hashgraph/sdk';
 
     async function handleTransaction(transactionWrapper, transactionData) {
         let transactionNotices = transactionWrapper.querySelector('.hederapay-transaction-notices');
-        transactionNotices.innerText = ''; // reset
 
         let tinybarAmount = await getTinybarAmount(transactionWrapper, transactionData);
         if (!tinybarAmount) return;
@@ -95,18 +103,11 @@ import { LedgerId } from '@hashgraph/sdk';
 
             // Check if the transaction was successful
             if (receipt.status.toString() === 'SUCCESS') {
-                // executed from woocommerce gateway
                 if (transactionData.store === true || transactionData.store === 'true') {
-                    const currentUrl = new URL(window.location.href);
-                    // Add the parameter to the URL
-                    let urlTransactionId = transactionId.replace('@', '-');
-                    currentUrl.searchParams.set('transaction_id', urlTransactionId);
-
-                    // Redirect to the new URL with the additional parameter
-                    window.location.href = currentUrl.href;
+                    // transaction data needs to be stored (for reviewing later)
+                    setQueryParamAndRedirect('transaction_id', parseTransactionId(transactionId));
                 } else {
                     transactionNotices.innerText += 'Payment received. Thank you! ';
-                    console.log(transactionData.store);
                 }
                 return;
             }
@@ -121,41 +122,16 @@ import { LedgerId } from '@hashgraph/sdk';
         return;
     }
 
-    async function getTinybarAmount(transactionWrapper, transactionData) {
-        let transactionInput = transactionWrapper.querySelector('.hederapay-transaction-input');
-        let transactionNotices = transactionWrapper.querySelector('.hederapay-transaction-notices');
-        transactionNotices.innerText = ''; // reset
-
-        let currency = transactionData.currency;
-        let amount = transactionData.amount;
-
-        if (!amount) {
-            // check for user input
-            if (transactionInput) {
-                if (transactionInput.value != '') {
-                    let amountInputValue = transactionInput.value;
-                    return await convertCurrencyToTinybar(amountInputValue, currency);
-                } else {
-                    transactionNotices.innerText += 'Please enter the amount.';
-                    return null; // do nothing; amount missing
-                }
-            } else {
-                return null; // do nothing; amount missing and input field missing
-            }
-        } else {
-            return await convertCurrencyToTinybar(amount, currency);
-        }
-    }
-
-    function getNetworkId(network) {
-        if (network == 'mainnet') return LedgerId.MAINNET;
-        if (network == 'previewnet') return LedgerId.PREVIEWNET;
-        return LedgerId.TESTNET;
-    }
-
     async function init(network) {
         // Create the hashconnect instance
-        hashconnect = new HashConnect(getNetworkId(network), '606201a2da45f68c8084e2eea1f14ad7', appMetadata, true);
+        hashconnect = null;
+        let debugMode = true;
+        hashconnect = new HashConnect(
+            getNetworkId(network),
+            '606201a2da45f68c8084e2eea1f14ad7',
+            appMetadata,
+            debugMode,
+        );
 
         setUpHashConnectEvents(); // Register events
 
@@ -174,77 +150,22 @@ import { LedgerId } from '@hashgraph/sdk';
         hashconnect.pairingEvent.on((newPairing) => {
             pairingData = newPairing;
             localStorage.setItem('accountId', pairingData.accountIds[0]); // set id in local browser storage
-            setConnectButtonsText('disconnect_text');
+            setConnectButtonsText(pairingData.network, 'disconnect_text');
             setVisibleAccountId(pairingData.accountIds[0]);
+            displayWriteReviewButtons();
         });
 
         hashconnect.disconnectionEvent.on(() => {
+            setConnectButtonsText(pairingData.network, 'connect_text');
             pairingData = null;
             localStorage.removeItem('accountId'); // remove from browser storage
-            setConnectButtonsText('connect_text');
             setVisibleAccountId(undefined);
+            displayWriteReviewButtons();
         });
 
         hashconnect.connectionStatusChangeEvent.on((connectionStatus) => {
             state = connectionStatus;
+            console.log(state);
         });
-    }
-
-    //helper functions
-
-    function setVisibleAccountId(pairedAccount) {
-        let pairedAccountDisplays = document.querySelectorAll('.hederapay-paired-account');
-        [...pairedAccountDisplays].forEach((pairedAccountDisplay) => {
-            if (pairedAccount) {
-                pairedAccountDisplay.innerHTML = pairedAccount;
-                pairedAccountDisplay.style.display = 'inline';
-            } else {
-                pairedAccountDisplay.innerHTML = '';
-                pairedAccountDisplay.style.display = 'none';
-            }
-        });
-    }
-
-    function setConnectButtonsText(attribute) {
-        let connectButtons = document.querySelectorAll('.hederapay-connect-button');
-        [...connectButtons].forEach((connectButton) => {
-            let connectButtonData = decodeData(connectButton.dataset.attributes);
-            let connectButtonText = connectButton.querySelector('.hederapay-connect-button-text');
-            connectButtonText.innerText = connectButtonData[attribute];
-        });
-    }
-
-    async function getHbarPrice(currency) {
-        const url = 'https://api.coingecko.com/api/v3/simple/price?ids=hedera-hashgraph&vs_currencies=' + currency;
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            return data['hedera-hashgraph'][currency];
-        } catch (error) {
-            console.error('Error fetching HBAR price:', error);
-            throw error;
-        }
-    }
-
-    async function convertCurrencyToTinybar(amount, currency) {
-        try {
-            const hbarPriceInCurrency = await getHbarPrice(currency);
-            if (hbarPriceInCurrency === undefined) {
-                throw new Error('Failed to retrieve HBAR price');
-            }
-            return Math.round((amount / hbarPriceInCurrency) * 1e8);
-        } catch (error) {
-            console.error('Error converting HBAR to currency:', error);
-            throw error;
-        }
-    }
-
-    function decodeData(encodedData) {
-        let jsonData = atob(encodedData);
-        return JSON.parse(jsonData);
     }
 })();
