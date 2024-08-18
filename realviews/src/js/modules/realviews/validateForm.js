@@ -27,7 +27,6 @@ export const validateForm = function validateForm(reviewForm, rating) {
         passed = false;
     }
 
-    console.log('rating :>> ', rating);
     if (!rating) {
         notices.innerText += ' Rating is required. ';
         passed = false;

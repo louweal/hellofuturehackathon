@@ -23,7 +23,6 @@ import { setWalletConnectId } from './modules/setWalletConnectId';
     let appMetadata = setAppMetadata();
 
     let projectId = setWalletConnectId();
-    console.log(projectId);
 
     let localAccountId = localStorage.getItem('accountId');
 
@@ -66,8 +65,7 @@ import { setWalletConnectId } from './modules/setWalletConnectId';
                 console.log('wrong network');
                 transactionNotices.innerText += "You're connected to the wrong network. Please reload and try again.";
                 await hashconnect.disconnect(); // disconnect wallet
-                // await new Promise((resolve) => setTimeout(resolve, 3000)); // mirror node will have received the transaction after ±10 seconds
-                // location.reload(true);
+
                 return;
             }
 
@@ -151,7 +149,6 @@ import { setWalletConnectId } from './modules/setWalletConnectId';
             localStorage.setItem('accountId', pairingData.accountIds[0]); // set id in local browser storage
             setConnectButtonsText(pairingData.network, 'disconnect_text');
             setVisibleAccountId(pairingData.accountIds[0]);
-            displayWriteReviewButtons();
         });
 
         hashconnect.disconnectionEvent.on(() => {
@@ -159,12 +156,11 @@ import { setWalletConnectId } from './modules/setWalletConnectId';
             pairingData = null;
             localStorage.removeItem('accountId'); // remove from browser storage
             setVisibleAccountId(undefined);
-            displayWriteReviewButtons();
         });
 
         hashconnect.connectionStatusChangeEvent.on((connectionStatus) => {
             state = connectionStatus;
-            console.log(state);
+            // console.log(state);
         });
     }
 })();

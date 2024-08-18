@@ -84,7 +84,7 @@ import { redirectPage } from './modules/realviews/redirectPage';
                 await init(network);
             }
 
-            handleTransaction(transactionWrapper, transactionData);
+            await handleTransaction(transactionWrapper, transactionData);
         }); // eventlistener
     }); //foreach
 
@@ -109,7 +109,7 @@ import { redirectPage } from './modules/realviews/redirectPage';
             console.log(response);
 
             const transactionId = response.transactionId.toString();
-            console.log('Transaction ID:', transactionId);
+            // console.log('Transaction ID:', transactionId);
             let receipt = await response.getReceiptWithSigner(signer);
 
             console.log(receipt);

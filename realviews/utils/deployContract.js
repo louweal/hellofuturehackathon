@@ -29,7 +29,7 @@ async function main() {
     const createContractRx = await createContractTx.getReceipt(client);
     const contractId = createContractRx.contractId;
 
-    console.log(`New ${contractName} contract created with ID: ${contractId}`);
+    // console.log(`New ${contractName} contract created with ID: ${contractId}`);
 
     process.exit();
 }

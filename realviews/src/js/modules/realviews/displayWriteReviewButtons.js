@@ -2,7 +2,6 @@ import { decodeData } from '../decodeData';
 
 export const displayWriteReviewButtons = function displayWriteReviewButtons() {
     let localAccountId = localStorage.getItem('accountId');
-    // console.log('localAccountId :>> ', localAccountId);
 
     if (localAccountId) {
         let writeReviewWrappers = document.querySelectorAll('.realviews-write-review-wrapper');

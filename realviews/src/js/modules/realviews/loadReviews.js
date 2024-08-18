@@ -26,10 +26,9 @@ export const loadReviews = async function loadReviews(loadModalReviews = false) 
             let reviewDateTime = review.querySelector('.realviews-review__date2 time');
             let body = review.querySelector('.realviews-review__body p');
 
-            // let network, reviewData;
-
             let { network, reviewData } = await fetchMirrornodeLogData(rId);
-            let baseUrl = `https://${network}.mirrornode.hedera.com/api/v1/contracts/results/`;
+            let baseUrl = `https://${network}.mirrornode.hedera.com/api/v1/transactions/`;
+            let contractBaseUrl = `https://${network}.mirrornode.hedera.com/api/v1/contracts/results/`;
 
             reviewData = JSON.parse(reviewData);
 
@@ -58,7 +57,6 @@ export const loadReviews = async function loadReviews(loadModalReviews = false) 
             buyDate.setAttribute('href', `${baseUrl}${reviewData.transactionId}`);
             let bId = unparseTransactionId(reviewData.transactionId);
             let formattedBuyDate = formatTimestamp(bId.split('@')[1]);
-            // console.log(unparsedTransactionId.split('@')[1]);
             buyDateTime.innerText = formattedBuyDate;
             buyDateTime.addEventListener('mouseover', function () {
                 buyDateTime.innerText = bId.substring(0, 7) + '...' + bId.substring(bId.length - 7);
@@ -68,7 +66,7 @@ export const loadReviews = async function loadReviews(loadModalReviews = false) 
             });
 
             // Set review date info
-            reviewDate.setAttribute('href', `${baseUrl}${parseTransactionId(rId)}`);
+            reviewDate.setAttribute('href', `${contractBaseUrl}${parseTransactionId(rId)}`);
 
             let formattedReviewDate = formatTimestamp(rId.split('@')[1]);
             reviewDateTime.innerText = formattedReviewDate;
