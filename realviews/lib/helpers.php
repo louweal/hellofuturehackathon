@@ -70,12 +70,8 @@ function realviews_latest_reviews_function($atts, $shortcode)
     $transaction_ids = get_post_meta($post_id, '_transaction_ids', true);
     // debug($transaction_ids);
 
-    // $contract_ids = get_post_meta($post_id, '_contract_ids', true);
-    // debug($contract_ids);
-
-
     $review_transaction_ids = get_post_meta($post_id, '_review_transaction_ids', true);
-    debug($review_transaction_ids);
+    // debug($review_transaction_ids);
 
     $encodedTransactionIds = base64_encode(json_encode($transaction_ids));     // Encode the JSON string using Base64
 
