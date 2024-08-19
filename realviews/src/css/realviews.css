@@ -200,6 +200,7 @@ body.realviews-modal-open {
 .realviews-modal__header {
     position: sticky;
     background-color: #fff;
+    z-index: 2;
     top: 0;
     left: 0;
     right: 0;
