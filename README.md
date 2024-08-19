@@ -1,14 +1,11 @@
 # hellofuturehackathon
 
-## Setup
+WordPress Plugins for the Hedera Hello Future Hackathon 2024.
 
-Make sure you have the latest version of node.js installed on your device. If not, you can download it [here](https://nodejs.org/en/).
-After installing node open the terminal and go to the folder of your theme.
-Type the following below to install all the dependencies needed for this project.
+## Plugin 1: HederaPay
 
-```
-npm i
-```
+Please head over to the README in the /hederapay directory.
 
-After all the packages have been installed, type in `npm run watch` to startup the Webpack process.
-This will startup a few of the processes like Autoprefixing CSS, bundling JS and / or other tasks you might add.
+## Plugin 2: Realviews
+
+Please head over to the README in the /realviews directory.
