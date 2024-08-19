@@ -185,7 +185,7 @@ import { redirectPage } from './modules/realviews/redirectPage';
     displayWriteReviewButtons(); // handle visibility of the 'write review' button (active account must have a transaction record)
     loadReviews();
 
-    // refresh page if it has url param contract_id - i.e. a new review was just added
+    // refresh page if a new review was just added
     if (new URLSearchParams(new URL(window.location.href).search).get('review_transaction_id')) {
         redirectPage();
     }
@@ -255,10 +255,10 @@ import { redirectPage } from './modules/realviews/redirectPage';
             console.log(e);
 
             // ignore weird hashconnect errors for now..
-            console.log(transactionId);
-            if (transactionId) {
-                setQueryParamAndRedirect('review_transaction_id', transactionId);
-            }
+            // console.log(transactionId);
+            // if (transactionId) {
+            //     setQueryParamAndRedirect('review_transaction_id', transactionId);
+            // }
         }
     }
 })();
