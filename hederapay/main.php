@@ -4,6 +4,7 @@ Plugin Name: HederaPay
 Description: Integrate Hedera transactions into your WordPress website or WooCommerce store. 
 Version: 0.1
 Author: HashPress Pioneers
+Author URI: https://hashpresspioneers.com/
 */
 
 // Exit if accessed directly.

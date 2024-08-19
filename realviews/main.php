@@ -4,6 +4,7 @@ Plugin Name: Realviews
 Description: Integrate Hedera Smart Contracts into your WordPress website to get verifiable reviews.
 Version: 0.1
 Author: HashPress Pioneers
+Author URI: https://hashpresspioneers.com/
 */
 
 // Exit if accessed directly.
