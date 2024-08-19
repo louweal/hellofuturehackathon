@@ -10,25 +10,26 @@ function getTitle()
 {
     global $post;
 
-    // if (is_page()) {
-    //     return get_the_title();
-    // }
-    if (is_product()) {
-        $product = wc_get_product($post->ID);
-        return $product->get_title();
-    } else {
-        return get_the_title();
+    $title = get_the_title();
+    if (function_exists('is_product')) {
+        if (is_product()) {
+            $product = wc_get_product($post->ID);
+            $title = $product->get_title();
+        }
     }
+    return $title;
 }
 
 function realviews_latest_reviews_function($atts, $shortcode)
 {
-    if (is_product()) {
-        global $product;
-        $post_id = $product->get_id();
-    } else {
-        global $post;
-        $post_id = $post->ID;
+    global $post;
+    $post_id = $post->ID;
+
+    if (function_exists('is_product')) {
+        if (is_product()) {
+            global $product;
+            $post_id = $product->get_id();
+        }
     }
 
     $review_file =  __DIR__ . '/shortcodes/parts/review.php';
