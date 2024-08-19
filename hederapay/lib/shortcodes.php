@@ -58,7 +58,8 @@ add_shortcode('hederapay_transaction_button', 'hederapay_transaction_button_wrap
 function hederapay_transaction_button_wrapper_function($atts)
 {
     $shortcode = true;
-    echo hederapay_transaction_button_function($atts, $shortcode);
+    $output = hederapay_transaction_button_function($atts, $shortcode);
+    return $output;
 }
 
 function hederapay_transaction_button_function($atts, $shortcode)
@@ -149,23 +150,41 @@ function hederapay_transaction_button_function($atts, $shortcode)
     $jsonData = json_encode($data);     // Encode to JSON
     $encodedData = base64_encode($jsonData);     // Encode the JSON string using Base64
 
+    ob_start();
+    if (!is_admin()) {
 
 ?>
-    <div class="hederapay-transaction-wrapper">
-        <div style="display: flex">
-            <?php if ($amount == null) { ?>
-                <input type="number" class="hederapay-transaction-input" placeholder="<?php echo strtoupper($currency); ?>">
-            <?php }; //if 
+        <div class="hederapay-transaction-wrapper">
+            <div style="display: flex">
+                <?php if ($amount == null) { ?>
+                    <input type="number" class="hederapay-transaction-input" placeholder="<?php echo strtoupper($currency); ?>">
+                <?php }; //if 
+                ?>
+
+                <button type="button" class="btn hederapay-transaction-button" data-attributes="<?php echo $encodedData; ?>">
+                    <?php echo $title; ?><?php echo $badge; ?>
+                </button>
+            </div>
+
+            <div class="hederapay-transaction-notices"></div>
+
+            <?php
+            global $post;
+            $post_id = $post->ID;
+
+            $transaction_id = isset($_GET['transaction_id']) ? $_GET['transaction_id'] : null;
+            if ($transaction_id) {
+                add_meta_to_post($post_id, '_transaction_ids', $transaction_id); ?>
+                <p>Payment received. Thank you! (You might to <a href="<?php echo $_SERVER['REQUEST_URI']; ?>?cache_buster=<?php echo time(); ?>">refresh</a> and reconnect if you want to write a review directly)</p>
+            <?php
+            }
+
             ?>
-
-            <button type="button" class="btn hederapay-transaction-button" data-attributes="<?php echo $encodedData; ?>">
-                <?php echo $title; ?><?php echo $badge; ?>
-            </button>
         </div>
-
-        <div class="hederapay-transaction-notices"></div>
-    </div>
 <?php
+    }
+    $output = ob_get_clean();
+    return $output;
 }
 
 function getAccountAndNetwork($testnet_account, $previewnet_account, $mainnet_account)
