@@ -174,9 +174,7 @@ function hederapay_transaction_button_function($atts, $shortcode)
 
             $transaction_id = isset($_GET['transaction_id']) ? $_GET['transaction_id'] : null;
             if ($transaction_id) {
-                add_meta_to_post($post_id, '_transaction_ids', $transaction_id); ?>
-                <p>Payment received. Thank you! (You might to <a href="<?php echo $_SERVER['REQUEST_URI']; ?>?cache_buster=<?php echo time(); ?>">refresh</a> and reconnect if you want to write a review directly)</p>
-            <?php
+                add_meta_to_post($post_id, '_transaction_ids', $transaction_id);
             }
 
             ?>

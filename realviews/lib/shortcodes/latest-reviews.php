@@ -3,5 +3,6 @@ add_shortcode('realviews_latest_reviews', 'realviews_latest_reviews_wrapper_func
 function realviews_latest_reviews_wrapper_function($atts)
 {
     $shortcode = true;
-    echo realviews_latest_reviews_function($atts, $shortcode);
+    $output = realviews_latest_reviews_function($atts, $shortcode);
+    return $output;
 }

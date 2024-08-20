@@ -78,124 +78,127 @@ function realviews_latest_reviews_function($atts, $shortcode)
 
     ob_start();
 
-    if ($max_reviews != 0) {
+    if (!is_admin()) {
+
+        if ($max_reviews != 0) {
 ?>
-        <section class="realviews-latest-reviews">
-            <?php $num_reviews = $review_transaction_ids ? count($review_transaction_ids) : 0;
-            ?>
+            <section class="realviews-latest-reviews">
+                <?php $num_reviews = $review_transaction_ids ? count($review_transaction_ids) : 0;
+                ?>
 
-            <h2>Reviews (<?php echo $num_reviews; ?>)</h2>
+                <h2>Reviews (<?php echo $num_reviews; ?>)</h2>
 
-            <!-- <p style="border:1px solid red; padding: 1rem; margin-top: 1rem; font-style:italic; font-size:14px">Test instructions: Buy this item with HederaPay and 'use' it for the minimum required (demo) timespan of 2 minutes. Then reconnect to this website with the same wallet you bought the item with and a 'Write review' button appears!</p> -->
+                <!-- <p style="border:1px solid red; padding: 1rem; margin-top: 1rem; font-style:italic; font-size:14px">Test instructions: Buy this item with HederaPay and 'use' it for the minimum required (demo) timespan of 2 minutes. Then reconnect to this website with the same wallet you bought the item with and a 'Write review' button appears!</p> -->
 
 
-            <div class="realviews-wrapper">
+                <div class="realviews-wrapper">
 
-                <?php if ($num_reviews > 0) { ?>
-                    <?php for ($i = ($num_reviews - 1); $i >= ($num_reviews - min($num_reviews, $max_reviews)); $i--) {
-                        $review_transaction_id = $review_transaction_ids[$i];
-                    ?>
-                        <?php
-                        if (file_exists($review_file)) {
-                            require $review_file;
-                        } else {
-                            echo "File not found: $review_file";
-                        }
+                    <?php if ($num_reviews > 0) { ?>
+                        <?php for ($i = ($num_reviews - 1); $i >= ($num_reviews - min($num_reviews, $max_reviews)); $i--) {
+                            $review_transaction_id = $review_transaction_ids[$i];
                         ?>
-                    <?php } //foreach 
-                    ?>
-                <?php } else { ?>
-                    <p>No reviews yet.</p>
-                <?php } ?>
-            </div>
+                            <?php
+                            if (file_exists($review_file)) {
+                                require $review_file;
+                            } else {
+                                echo "File not found: $review_file";
+                            }
+                            ?>
+                        <?php } //foreach 
+                        ?>
+                    <?php } else { ?>
+                        <p>No reviews yet.</p>
+                    <?php } ?>
+                </div>
 
 
-            <div class="realviews-actions">
+                <div class="realviews-actions">
 
-                <?php if ($num_reviews > $max_reviews) { ?>
-                    <div class="btn show-realviews-modal"><?php echo $button_text; ?></div>
+                    <?php if ($num_reviews > $max_reviews) { ?>
+                        <div class="btn show-realviews-modal"><?php echo $button_text; ?></div>
 
-                    <div class="realviews-modal">
-                        <div class="realviews-modal__bg"></div>
+                        <div class="realviews-modal">
+                            <div class="realviews-modal__bg"></div>
 
-                        <div class="realviews-modal__inner">
-                            <div class="realviews-modal__header">
-                                <button class="realviews-modal__close">
-                                    <svg width="15" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M13.383 5.883a1.252 1.252 0 0 0-1.77-1.77L7.5 8.23 3.383 4.117a1.252 1.252 0 0 0-1.77 1.77L5.73 10l-4.113 4.117a1.252 1.252 0 0 0 1.77 1.77L7.5 11.77l4.117 4.113a1.252 1.252 0 0 0 1.77-1.77L9.27 10l4.113-4.117Z" fill="#000" />
-                                    </svg>
-                                </button>
+                            <div class="realviews-modal__inner">
+                                <div class="realviews-modal__header">
+                                    <button class="realviews-modal__close">
+                                        <svg width="15" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M13.383 5.883a1.252 1.252 0 0 0-1.77-1.77L7.5 8.23 3.383 4.117a1.252 1.252 0 0 0-1.77 1.77L5.73 10l-4.113 4.117a1.252 1.252 0 0 0 1.77 1.77L7.5 11.77l4.117 4.113a1.252 1.252 0 0 0 1.77-1.77L9.27 10l4.113-4.117Z" fill="#000" />
+                                        </svg>
+                                    </button>
 
-                                <h2>Reviews (<?php echo $num_reviews; ?>)</h2>
-                            </div>
+                                    <h2>Reviews (<?php echo $num_reviews; ?>)</h2>
+                                </div>
 
-                            <div class="realviews-modal__body">
-                                <div class="realviews-wrapper">
-                                    <?php for ($i = ($num_reviews - 1); $i >= 0; $i--) {
-                                        // <?php for ($i = 0; $i < $num_reviews; $i++) {
-                                        $review_transaction_id = $review_transaction_ids[$i];
-                                        if (file_exists($review_file)) {
-                                            require $review_file;
-                                        } else {
-                                            echo "File not found: $review_file";
-                                        }
-                                    } ?>
+                                <div class="realviews-modal__body">
+                                    <div class="realviews-wrapper">
+                                        <?php for ($i = ($num_reviews - 1); $i >= 0; $i--) {
+                                            // <?php for ($i = 0; $i < $num_reviews; $i++) {
+                                            $review_transaction_id = $review_transaction_ids[$i];
+                                            if (file_exists($review_file)) {
+                                                require $review_file;
+                                            } else {
+                                                echo "File not found: $review_file";
+                                            }
+                                        } ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div><!-- modal -->
-                <?php }; //if 
-                ?>
-                <?php $review_transaction_id_param = isset($_GET['review_transaction_id']) ? $_GET['review_transaction_id'] : null; ?>
-                <?php if ($review_transaction_id_param) {
-                    add_meta_to_post($post_id, '_review_transaction_ids', $review_transaction_id_param);
-                ?>
-                    <p>Thanks for your review, it will appear within 10 seconds.</p>
-                <?php } ?>
-                <div class="realviews-write-review-wrapper" data-encoded="<?php echo $encodedTransactionIds; ?>">
-                    <?php $review_transaction_id_param = isset($_GET['review_transaction_id']) ? $_GET['review_transaction_id'] : null;
-                    if (!$review_transaction_id_param) { ?>
-                        <div class="btn realviews-write-review">Write review</div>
-                        <?php ?>
+                        </div><!-- modal -->
+                    <?php }; //if 
+                    ?>
+                    <?php $review_transaction_id_param = isset($_GET['review_transaction_id']) ? $_GET['review_transaction_id'] : null; ?>
+                    <?php if ($review_transaction_id_param) {
+                        add_meta_to_post($post_id, '_review_transaction_ids', $review_transaction_id_param);
+                    ?>
+                        <p>Thanks for your review, it will appear within 10 seconds.</p>
                     <?php } ?>
-                    <div class="realviews-modal">
-                        <div class="realviews-modal__bg"></div>
-                        <div class="realviews-modal__inner">
-                            <div class="realviews-modal__header">
-                                <button class="realviews-modal__close">
-                                    <svg width="15" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M13.383 5.883a1.252 1.252 0 0 0-1.77-1.77L7.5 8.23 3.383 4.117a1.252 1.252 0 0 0-1.77 1.77L5.73 10l-4.113 4.117a1.252 1.252 0 0 0 1.77 1.77L7.5 11.77l4.117 4.113a1.252 1.252 0 0 0 1.77-1.77L9.27 10l4.113-4.117Z" fill="#000" />
-                                    </svg>
-                                </button>
+                    <div class="realviews-write-review-wrapper" data-encoded="<?php echo $encodedTransactionIds; ?>">
+                        <?php $review_transaction_id_param = isset($_GET['review_transaction_id']) ? $_GET['review_transaction_id'] : null;
+                        if (!$review_transaction_id_param) { ?>
+                            <div class="btn realviews-write-review">Write review</div>
+                            <?php ?>
+                        <?php } ?>
+                        <div class="realviews-modal">
+                            <div class="realviews-modal__bg"></div>
+                            <div class="realviews-modal__inner">
+                                <div class="realviews-modal__header">
+                                    <button class="realviews-modal__close">
+                                        <svg width="15" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M13.383 5.883a1.252 1.252 0 0 0-1.77-1.77L7.5 8.23 3.383 4.117a1.252 1.252 0 0 0-1.77 1.77L5.73 10l-4.113 4.117a1.252 1.252 0 0 0 1.77 1.77L7.5 11.77l4.117 4.113a1.252 1.252 0 0 0 1.77-1.77L9.27 10l4.113-4.117Z" fill="#000" />
+                                        </svg>
+                                    </button>
 
-                                <h2>Write a review for <?php echo $title; ?></h2>
-                            </div>
+                                    <h2>Write a review for <?php echo $title; ?></h2>
+                                </div>
 
-                            <div class="realviews-modal__body">
-                                <form id="write-review" class="realviews-modal__form">
-                                    <div class="realviews-rating" id="rating-wrapper">
-                                        <span>Rating:</span>
-                                        <div class="realviews-stars">
-                                            <?php for ($i = 5; $i >= 1; $i--) { ?>
-                                                <div class="realviews-stars__star" id="<?php echo $i; ?>"></div>
-                                            <?php } ?>
+                                <div class="realviews-modal__body">
+                                    <form id="write-review" class="realviews-modal__form">
+                                        <div class="realviews-rating" id="rating-wrapper">
+                                            <span>Rating:</span>
+                                            <div class="realviews-stars">
+                                                <?php for ($i = 5; $i >= 1; $i--) { ?>
+                                                    <div class="realviews-stars__star" id="<?php echo $i; ?>"></div>
+                                                <?php } ?>
+                                            </div>
+                                            <span class="realviews-rating__display"><span class="selected-rating">0</span>/5</span>
                                         </div>
-                                        <span class="realviews-rating__display"><span class="selected-rating">0</span>/5</span>
-                                    </div>
 
-                                    <input type="text" id="name" name="name" placeholder="Name">
-                                    <textarea name="message" id="message" placeholder="Message"></textarea>
-                                    <button type="submit" class="btn realviews-submit-review">Submit</button>
-                                    <div class="write-review-notices"></div>
-                                </form>
+                                        <input type="text" id="name" name="name" placeholder="Name">
+                                        <textarea name="message" id="message" placeholder="Message"></textarea>
+                                        <button type="submit" class="btn realviews-submit-review">Submit</button>
+                                        <div class="write-review-notices"></div>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    </div><!-- modal -->
-                </div><!-- wrapper-->
-            </div><!-- realviews-actions -->
-        </section>
+                        </div><!-- modal -->
+                    </div><!-- wrapper-->
+                </div><!-- realviews-actions -->
+            </section>
 <?php
+        }
     }
-
-    return ob_get_clean();
+    $output = ob_get_clean();
+    return $output;
 }

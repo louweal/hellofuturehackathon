@@ -21,7 +21,6 @@ function init_realviews_function()
     require_once plugin_dir_path(__FILE__) . 'lib/helpers.php';
     require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/latest-reviews.php';
     require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/num-reviews.php';
-    require_once plugin_dir_path(__FILE__) . 'lib/shortcodes/test.php';
 
 
     // load these only if woocommerce is active
