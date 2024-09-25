@@ -23,6 +23,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #fefefe;
 
     @media (--1024) {
         /* padding-top: 0; */
